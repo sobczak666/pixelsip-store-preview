@@ -20,6 +20,22 @@ W `js/store.js` → obiekt `CONFIG`:
 ### 3. Domena
 - W `build_index.py`: `og:image` i `url` w JSON-LD wskazują na `https://pixelsip.pl` — zmień na swoją domenę, uruchom `python3 build_index.py`.
 
+## 📦 Realizacja zamówienia (config → plik do druku)
+
+Sklep nie predefiniuje wariantów — klient konfiguruje (wzór + rozmiar + pozycja paska + kolor), a **plik do druku generujesz z configu**:
+
+1. W mailu zamówienia każda pozycja ma linię, np.:
+   `[config: design=blokowisko-cyberpunk size=tumbler-900 strip=both kolor=#22E0E6]`
+2. Uruchamiasz generator:
+   ```bash
+   python pixel-lab/generate_order.py blokowisko-cyberpunk tumbler-900 both '#22E0E6' [nr_zamowienia]
+   ```
+   - `strip` = `both` / `top` / `bot` / `none`
+   - `kolor` = `glitch` lub `#RRGGBB`
+3. Dostajesz gotowy **PNG + PDF 1:1** (255×228 lub 238×192 mm + 4 mm spad, 300 DPI) w `pixel-lab/orders/` → wysyłasz do drukarni.
+
+> Podgląd 3D w sklepie i plik z generatora używają tej samej logiki (scena + paski), więc to, co klient widzi, to co dostaje na druku.
+
 ## 🟡 WAŻNE (zrób przed lub tuż po starcie)
 
 - **Polityka prywatności — odbiorcy danych (RODO):** w `pages/polityka-prywatnosci.md` uzupełnij realnych dostawców (hosting, operator płatności, kurier, e-mail, ewentualnie analytics). Re-konwersja: `python3 convert_pages.py`.

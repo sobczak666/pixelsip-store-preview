@@ -78,29 +78,30 @@ function init() {
   }
   buildTumbler(6.2);
 
-  function applyTexture(tex) {
-    bodyMat.map = tex; bodyMat.color.set(0xffffff); bodyMat.needsUpdate = true;
-  }
-  function setDesign(url) {
-    if (!url || url === currentTex) return; currentTex = url;
-    loader.load(url, (tex) => {
-      tex.colorSpace = THREE.SRGBColorSpace;
-      tex.wrapS = THREE.RepeatWrapping; tex.wrapT = THREE.ClampToEdgeWrapping;
-      tex.anisotropy = maxAniso;
-      tex.magFilter = THREE.LinearFilter; tex.minFilter = THREE.LinearMipmapLinearFilter;
-      tex.center.set(0.5, 0.5); tex.repeat.x = 1; tex.offset.x = 0.25;  // front = środek wzoru, czytelny tekst
-      applyTexture(tex);
-    });
+  // tekstura składana parametrycznie w store.js -> canvas -> CanvasTexture
+  let canvasTex = null;
+  function setTextureCanvas(canvas) {
+    if (!canvas) return;
+    if (!canvasTex) {
+      canvasTex = new THREE.CanvasTexture(canvas);
+      canvasTex.colorSpace = THREE.SRGBColorSpace;
+      canvasTex.wrapS = THREE.RepeatWrapping; canvasTex.wrapT = THREE.ClampToEdgeWrapping;
+      canvasTex.anisotropy = maxAniso;
+      canvasTex.center.set(0.5, 0.5); canvasTex.offset.x = 0.25;
+      bodyMat.map = canvasTex; bodyMat.color.set(0xffffff); bodyMat.needsUpdate = true;
+    } else { canvasTex.image = canvas; }
+    canvasTex.needsUpdate = true;
   }
   function setSize(cap) {
     if (cap === currentCap) return; currentCap = cap;
-    buildTumbler(cap >= 900 ? 6.2 : 5.1); applyTexture(bodyMat.map);
+    buildTumbler(cap >= 900 ? 6.2 : 5.1);  // bodyMat (z teksturą) jest reużywany w nowym meshu
   }
 
   // API dla store.js
-  window.Tumbler = { setDesign, setSize };
+  window.Tumbler = { setTextureCanvas, setSize };
   window.__t3d = { controls, camera, scene };  // QA
-  if (window.__tumblerWant) { setSize(window.__tumblerWant.cap); setDesign(window.__tumblerWant.tex); }
+  if (window.__tumblerWant) setSize(window.__tumblerWant.cap);
+  if (window.__tumblerCanvas) setTextureCanvas(window.__tumblerCanvas);
 
   function resize() {
     const w = mount.clientWidth, h = mount.clientHeight || w;

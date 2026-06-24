@@ -17,11 +17,21 @@
 
   const state = {
     products: [], designs: [], byId: {}, prodById: {},
-    size: null, designId: null, strip: 'both', cat: 'all', q: '',
+    size: null, designId: null, strip: 'both', stripColor: 'glitch', cat: 'all', q: '',
     freeShip: 199, delivery: [], bundles: [], lastFocus: null,
   };
-  const SUFFIX = { both: '', top: '--top', bot: '--bot', none: '--none' };
-  const STRIP_LABEL = { both: 'Pasek: góra i dół', top: 'Pasek: tylko góra', bot: 'Pasek: tylko dół', none: 'Bez paska' };
+  const STRIP_LABEL = { both: 'góra i dół', top: 'tylko góra', bot: 'tylko dół', none: 'bez paska' };
+  const STRIP_COLORS = [
+    { id: 'glitch', label: 'Glitch', css: 'linear-gradient(90deg,#22E0E6,#fff,#FF2E97)' },
+    { id: '#FFFFFF', label: 'Biały', css: '#FFFFFF' },
+    { id: '#22E0E6', label: 'Cyan', css: '#22E0E6' },
+    { id: '#FF2E97', label: 'Magenta', css: '#FF2E97' },
+    { id: '#9B5DE5', label: 'Fiolet', css: '#9B5DE5' },
+    { id: '#FFD23F', label: 'Żółty', css: '#FFD23F' },
+    { id: '#5DF7A0', label: 'Zielony', css: '#5DF7A0' },
+  ];
+  const colorLabel = (id) => (STRIP_COLORS.find(c => c.id === id) || {}).label || id;
+  const stripDesc = () => `Pasek: ${STRIP_LABEL[state.strip]}${state.strip === 'none' ? '' : ' · ' + colorLabel(state.stripColor)}`;
 
   const CART_KEY = 'pixelsip_cart_v1';
   const loadCart = () => { try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; } catch { return []; } };
@@ -47,7 +57,7 @@
       state.designId = state.designs[0]?.id || null;
     } catch (e) { console.error('Błąd ładowania danych', e); const g = $('#design-gallery'); if (g) g.innerHTML = '<p class="muted">Nie udało się załadować wzorów. Odśwież stronę.</p>'; return; }
 
-    renderGallery(); renderSizes(); renderDelivery(); updatePreview(); bindUI(); renderCart(); cookieBanner();
+    renderGallery(); renderSizes(); renderStripColors(); renderDelivery(); updatePreview(); bindUI(); renderCart(); cookieBanner();
   }
 
   // ——————————————————— GALERIA ———————————————————
@@ -82,32 +92,72 @@
     el.innerHTML = state.delivery.map(d => `
       <li><span>${esc(d.method)} <em class="muted">${esc(d.eta)}</em></span><b>${d.price === 0 ? 'gratis' : PLN(d.price)}</b></li>`).join('');
   }
+  function renderStripColors() {
+    const w = $('#strip-colors'); if (!w) return;
+    w.innerHTML = STRIP_COLORS.map(c => `<button class="swatch${c.id === state.stripColor ? ' is-active' : ''}" data-color="${esc(c.id)}" title="${esc(c.label)}" aria-label="Kolor paska: ${esc(c.label)}" style="background:${c.css}"></button>`).join('');
+  }
+
+  // ——————————————————— TEKSTURA (parametryczna: scena + paski) ———————————————————
+  const TEX = document.createElement('canvas'); TEX.width = 1024; TEX.height = 916;
+  const tctx = TEX.getContext('2d');
+  const imgCache = {};
+  const loadImg = (src) => imgCache[src] || (imgCache[src] = new Promise((res) => { const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = src; }));
+  let wordmark = null, glitch = null, texSeq = 0;
+  function tintStrip(hex) {
+    const c = document.createElement('canvas'); c.width = wordmark.width; c.height = wordmark.height;
+    const x = c.getContext('2d'); x.drawImage(wordmark, 0, 0);
+    x.globalCompositeOperation = 'source-in'; x.fillStyle = hex; x.fillRect(0, 0, c.width, c.height);
+    return c;
+  }
+  async function buildTexture() {
+    const d = state.byId[state.designId]; if (!d) return;
+    const seq = ++texSeq;
+    if (!wordmark) wordmark = await loadImg('assets/brand/wordmark.png');
+    if (!glitch) glitch = await loadImg('assets/brand/strip-glitch.png');
+    const scene = await loadImg(d.file);
+    if (seq !== texSeq || !scene || !wordmark) return;
+    const TW = TEX.width, TH = TEX.height, BAND = Math.round(TH * 0.135);
+    const top = state.strip === 'both' || state.strip === 'top';
+    const bot = state.strip === 'both' || state.strip === 'bot';
+    tctx.imageSmoothingEnabled = false;
+    tctx.fillStyle = '#000'; tctx.fillRect(0, 0, TW, TH);
+    const sy0 = top ? BAND : 0, sy1 = bot ? TH - BAND : TH, sw_ = TW;
+    const s = Math.max(sw_ / scene.width, (sy1 - sy0) / scene.height), iw = scene.width * s, ih = scene.height * s;
+    tctx.drawImage(scene, (sw_ - iw) / 2, sy0 + ((sy1 - sy0) - ih) / 2, iw, ih);
+    const strip = state.stripColor === 'glitch' ? glitch : tintStrip(state.stripColor);
+    const sh = Math.round(BAND * 0.58), bw = Math.round(strip.width * sh / strip.height), mg = Math.round(TW * 0.05);
+    const band = (by) => { tctx.fillStyle = '#000'; tctx.fillRect(0, by, TW, BAND); tctx.imageSmoothingEnabled = false; const yy = by + (BAND - sh) / 2; tctx.drawImage(strip, mg, yy, bw, sh); tctx.drawImage(strip, TW - mg - bw, yy, bw, sh); };
+    if (top) band(0);
+    if (bot) band(TH - BAND);
+    window.__tumblerCanvas = TEX;
+    window.Tumbler?.setTextureCanvas(TEX);
+  }
 
   // ——————————————————— PODGLĄD ———————————————————
   function updatePreview() {
     const d = state.byId[state.designId], p = state.prodById[state.size];
     if (!d || !p) return;
-    const art = $('#preview-art'); if (art) art.style.backgroundImage = `url('${d.file}')`;
     const set = (id, t) => { const el = $(id); if (el) el.textContent = t; };
     set('#preview-name', d.name); set('#preview-blurb', d.blurb || '');
     set('#preview-size', p.sizeLabel); set('#preview-price', PLN(p.retailPrice));
     const cmp = $('#preview-compare');
     if (cmp) { if (p.compareAt && p.compareAt > p.retailPrice) { cmp.textContent = PLN(p.compareAt); cmp.hidden = false; } else cmp.hidden = true; }
-    // podgląd 3D
-    const tex = `assets/mockup/${d.id}${SUFFIX[state.strip] || ''}.jpg`;
-    window.__tumblerWant = { tex, cap: p.capacityMl };
-    if (window.Tumbler) { window.Tumbler.setSize(p.capacityMl); window.Tumbler.setDesign(tex); }
+    // podgląd 3D — rozmiar + tekstura składana parametrycznie
+    window.__tumblerWant = { cap: p.capacityMl };
+    window.Tumbler?.setSize(p.capacityMl);
+    buildTexture();
   }
 
   // ——————————————————— KOSZYK ———————————————————
-  const itemKey = (size, design, strip) => `${size}__${design}__${strip}`;
+  const itemKey = (size, design, strip, color) => `${size}__${design}__${strip}__${color}`;
   function addToCart() {
     const p = state.prodById[state.size], d = state.byId[state.designId];
     if (!p || !d) return;
-    const key = itemKey(p.id, d.id, state.strip);
+    const color = state.strip === 'none' ? '-' : state.stripColor;
+    const key = itemKey(p.id, d.id, state.strip, color);
     const ex = cart.find(i => i.key === key);
     if (ex) ex.qty += 1;
-    else cart.push({ key, size: p.id, sizeLabel: p.sizeLabel, designId: d.id, designName: d.name, strip: state.strip, stripLabel: STRIP_LABEL[state.strip], file: d.file, price: p.retailPrice, qty: 1 });
+    else cart.push({ key, size: p.id, sizeLabel: p.sizeLabel, designId: d.id, designName: d.name, strip: state.strip, stripColor: color, stripDesc: stripDesc(), file: d.file, price: p.retailPrice, qty: 1 });
     saveCart(cart); renderCart(); openCart();
     toast(`Dodano: ${d.name} · ${p.sizeLabel}`);
   }
@@ -134,7 +184,7 @@
       wrap.innerHTML = cart.length ? cart.map(i => `
         <li class="cart-item">
           <span class="cart-item__img" style="background-image:url('${esc(i.file)}')"></span>
-          <span class="cart-item__info"><b>${esc(i.designName)}</b><span class="muted">${esc(i.sizeLabel)} · ${esc(i.stripLabel || '')}</span><span class="cart-item__price">${PLN(i.price)}</span></span>
+          <span class="cart-item__info"><b>${esc(i.designName)}</b><span class="muted">${esc(i.sizeLabel)} · ${esc(i.stripDesc || '')}</span><span class="cart-item__price">${PLN(i.price)}</span></span>
           <span class="qty"><button data-q="-1" data-key="${esc(i.key)}" aria-label="zmniejsz ilość">−</button><b>${i.qty}</b><button data-q="1" data-key="${esc(i.key)}" aria-label="zwiększ ilość">+</button></span>
           <button class="cart-item__rm" data-rm="${esc(i.key)}" aria-label="usuń z koszyka">✕</button>
         </li>`).join('') : `<li class="cart-empty">Twój koszyk jest pusty.<br><span class="muted">Czas zdobyć power-up. 🎮</span></li>`;
@@ -156,7 +206,7 @@
     if (!cart.length) return;
     const m = $('#checkout-modal'); if (!m) return;
     $('#checkout-form').hidden = false; $('#co-success').hidden = true;   // reset
-    $('#co-summary').innerHTML = cart.map(i => `<li>${i.qty}× <b>${esc(i.designName)}</b> (${esc(i.sizeLabel)}, ${esc(i.stripLabel || '')}) — ${PLN(i.price * i.qty)}</li>`).join('');
+    $('#co-summary').innerHTML = cart.map(i => `<li>${i.qty}× <b>${esc(i.designName)}</b> (${esc(i.sizeLabel)}, ${esc(i.stripDesc || '')}) — ${PLN(i.price * i.qty)}</li>`).join('');
     $('#co-total').textContent = PLN(cartTotal());
     const dsel = $('#co-delivery');
     if (dsel) dsel.innerHTML = state.delivery.map((d, idx) => `<option value="${idx}">${esc(d.method)} — ${d.price === 0 ? 'gratis' : PLN(d.price)} (${esc(d.eta)})</option>`).join('');
@@ -179,7 +229,7 @@
     const order = {
       klient: { imie: f.name.value, email: f.email.value, telefon: f.phone.value, adres, uwagi: f.notes.value },
       dostawa: d.method, dostawa_koszt: d.price,
-      pozycje: cart.map(i => `${i.qty}× ${i.designName} (${i.sizeLabel}, ${i.stripLabel || ''}) = ${(i.price * i.qty).toFixed(2)} zł`),
+      pozycje: cart.map(i => `${i.qty}× ${i.designName} (${i.sizeLabel}, ${i.stripDesc || ''}) = ${(i.price * i.qty).toFixed(2)} zł\n   [config: design=${i.designId} size=${i.size} strip=${i.strip} kolor=${i.stripColor}]`),
       suma_produkty: cartTotal().toFixed(2), suma_calosc: (cartTotal() + (d.price || 0)).toFixed(2),
     };
     const btn = $('#co-submit'); btn.disabled = true; btn.textContent = 'Wysyłanie…';
@@ -220,7 +270,9 @@
       const chip = e.target.closest('[data-cat]');
       if (chip) { state.cat = chip.dataset.cat; $$('[data-cat]').forEach(c => c.classList.toggle('is-active', c === chip)); renderGallery(); return; }
       const strip = e.target.closest('[data-strip]');
-      if (strip) { state.strip = strip.dataset.strip; $$('[data-strip]').forEach(s => { const a = s === strip; s.classList.toggle('is-active', a); s.setAttribute('aria-pressed', a); }); updatePreview(); return; }
+      if (strip) { state.strip = strip.dataset.strip; $$('[data-strip]').forEach(s => { const a = s === strip; s.classList.toggle('is-active', a); s.setAttribute('aria-pressed', a); }); $('#strip-colors')?.style.setProperty('opacity', state.strip === 'none' ? '.35' : '1'); updatePreview(); return; }
+      const col = e.target.closest('[data-color]');
+      if (col) { state.stripColor = col.dataset.color; $$('[data-color]').forEach(s => s.classList.toggle('is-active', s === col)); updatePreview(); return; }
       if (e.target.closest('#add-to-cart, #sticky-add')) { addToCart(); return; }
       if (e.target.closest('#cart-toggle, #sticky-cart')) { openCart(); return; }
       if (e.target.closest('#cart-close')) { closeCart(); return; }
