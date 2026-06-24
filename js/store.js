@@ -17,9 +17,11 @@
 
   const state = {
     products: [], designs: [], byId: {}, prodById: {},
-    size: null, designId: null, cat: 'all', q: '',
+    size: null, designId: null, strip: 'both', cat: 'all', q: '',
     freeShip: 199, delivery: [], bundles: [], lastFocus: null,
   };
+  const SUFFIX = { both: '', top: '--top', bot: '--bot', none: '--none' };
+  const STRIP_LABEL = { both: 'Pasek: góra i dół', top: 'Pasek: tylko góra', bot: 'Pasek: tylko dół', none: 'Bez paska' };
 
   const CART_KEY = 'pixelsip_cart_v1';
   const loadCart = () => { try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; } catch { return []; } };
@@ -92,20 +94,20 @@
     const cmp = $('#preview-compare');
     if (cmp) { if (p.compareAt && p.compareAt > p.retailPrice) { cmp.textContent = PLN(p.compareAt); cmp.hidden = false; } else cmp.hidden = true; }
     // podgląd 3D
-    const tex = `assets/mockup/${d.id}.jpg`;
+    const tex = `assets/mockup/${d.id}${SUFFIX[state.strip] || ''}.jpg`;
     window.__tumblerWant = { tex, cap: p.capacityMl };
     if (window.Tumbler) { window.Tumbler.setSize(p.capacityMl); window.Tumbler.setDesign(tex); }
   }
 
   // ——————————————————— KOSZYK ———————————————————
-  const itemKey = (size, design) => `${size}__${design}`;
+  const itemKey = (size, design, strip) => `${size}__${design}__${strip}`;
   function addToCart() {
     const p = state.prodById[state.size], d = state.byId[state.designId];
     if (!p || !d) return;
-    const key = itemKey(p.id, d.id);
+    const key = itemKey(p.id, d.id, state.strip);
     const ex = cart.find(i => i.key === key);
     if (ex) ex.qty += 1;
-    else cart.push({ key, size: p.id, sizeLabel: p.sizeLabel, designId: d.id, designName: d.name, file: d.file, price: p.retailPrice, qty: 1 });
+    else cart.push({ key, size: p.id, sizeLabel: p.sizeLabel, designId: d.id, designName: d.name, strip: state.strip, stripLabel: STRIP_LABEL[state.strip], file: d.file, price: p.retailPrice, qty: 1 });
     saveCart(cart); renderCart(); openCart();
     toast(`Dodano: ${d.name} · ${p.sizeLabel}`);
   }
@@ -132,7 +134,7 @@
       wrap.innerHTML = cart.length ? cart.map(i => `
         <li class="cart-item">
           <span class="cart-item__img" style="background-image:url('${esc(i.file)}')"></span>
-          <span class="cart-item__info"><b>${esc(i.designName)}</b><span class="muted">${esc(i.sizeLabel)}</span><span class="cart-item__price">${PLN(i.price)}</span></span>
+          <span class="cart-item__info"><b>${esc(i.designName)}</b><span class="muted">${esc(i.sizeLabel)} · ${esc(i.stripLabel || '')}</span><span class="cart-item__price">${PLN(i.price)}</span></span>
           <span class="qty"><button data-q="-1" data-key="${esc(i.key)}" aria-label="zmniejsz ilość">−</button><b>${i.qty}</b><button data-q="1" data-key="${esc(i.key)}" aria-label="zwiększ ilość">+</button></span>
           <button class="cart-item__rm" data-rm="${esc(i.key)}" aria-label="usuń z koszyka">✕</button>
         </li>`).join('') : `<li class="cart-empty">Twój koszyk jest pusty.<br><span class="muted">Czas zdobyć power-up. 🎮</span></li>`;
@@ -154,7 +156,7 @@
     if (!cart.length) return;
     const m = $('#checkout-modal'); if (!m) return;
     $('#checkout-form').hidden = false; $('#co-success').hidden = true;   // reset
-    $('#co-summary').innerHTML = cart.map(i => `<li>${i.qty}× <b>${esc(i.designName)}</b> (${esc(i.sizeLabel)}) — ${PLN(i.price * i.qty)}</li>`).join('');
+    $('#co-summary').innerHTML = cart.map(i => `<li>${i.qty}× <b>${esc(i.designName)}</b> (${esc(i.sizeLabel)}, ${esc(i.stripLabel || '')}) — ${PLN(i.price * i.qty)}</li>`).join('');
     $('#co-total').textContent = PLN(cartTotal());
     const dsel = $('#co-delivery');
     if (dsel) dsel.innerHTML = state.delivery.map((d, idx) => `<option value="${idx}">${esc(d.method)} — ${d.price === 0 ? 'gratis' : PLN(d.price)} (${esc(d.eta)})</option>`).join('');
@@ -177,7 +179,7 @@
     const order = {
       klient: { imie: f.name.value, email: f.email.value, telefon: f.phone.value, adres, uwagi: f.notes.value },
       dostawa: d.method, dostawa_koszt: d.price,
-      pozycje: cart.map(i => `${i.qty}× ${i.designName} (${i.sizeLabel}) = ${(i.price * i.qty).toFixed(2)} zł`),
+      pozycje: cart.map(i => `${i.qty}× ${i.designName} (${i.sizeLabel}, ${i.stripLabel || ''}) = ${(i.price * i.qty).toFixed(2)} zł`),
       suma_produkty: cartTotal().toFixed(2), suma_calosc: (cartTotal() + (d.price || 0)).toFixed(2),
     };
     const btn = $('#co-submit'); btn.disabled = true; btn.textContent = 'Wysyłanie…';
@@ -217,6 +219,8 @@
       if (sz) { state.size = sz.dataset.size; renderSizes(); updatePreview(); return; }
       const chip = e.target.closest('[data-cat]');
       if (chip) { state.cat = chip.dataset.cat; $$('[data-cat]').forEach(c => c.classList.toggle('is-active', c === chip)); renderGallery(); return; }
+      const strip = e.target.closest('[data-strip]');
+      if (strip) { state.strip = strip.dataset.strip; $$('[data-strip]').forEach(s => { const a = s === strip; s.classList.toggle('is-active', a); s.setAttribute('aria-pressed', a); }); updatePreview(); return; }
       if (e.target.closest('#add-to-cart, #sticky-add')) { addToCart(); return; }
       if (e.target.closest('#cart-toggle, #sticky-cart')) { openCart(); return; }
       if (e.target.closest('#cart-close')) { closeCart(); return; }
