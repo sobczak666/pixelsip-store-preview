@@ -118,7 +118,9 @@ button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
 .strip-opt{flex:1;min-width:88px;border:1.5px solid var(--line);border-radius:12px;padding:10px 8px;font-size:.86rem;font-weight:700;color:var(--muted);background:var(--card);transition:.15s}
 .strip-opt:hover{border-color:var(--purple);color:var(--txt)}
 .strip-opt.is-active{border-color:var(--cyan);color:var(--txt);box-shadow:var(--glow);background:var(--card2)}
-.strip-colors{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}
+.color-row{display:flex;align-items:center;gap:12px;margin-top:12px}
+.color-lbl{font-size:.82rem;color:var(--muted);min-width:84px}
+.strip-colors{display:flex;gap:9px;flex-wrap:wrap}
 .swatch{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);cursor:pointer;transition:.15s;padding:0}
 .swatch:hover{transform:scale(1.1)}
 .swatch.is-active{border-color:var(--txt);box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--cyan)}

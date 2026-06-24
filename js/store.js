@@ -17,7 +17,7 @@
 
   const state = {
     products: [], designs: [], byId: {}, prodById: {},
-    size: null, designId: null, strip: 'both', stripColor: 'glitch', cat: 'all', q: '',
+    size: null, designId: null, strip: 'both', stripColor: 'glitch', bandColor: '#000000', cat: 'all', q: '',
     freeShip: 199, delivery: [], bundles: [], lastFocus: null,
   };
   const STRIP_LABEL = { both: 'góra i dół', top: 'tylko góra', bot: 'tylko dół', none: 'bez paska' };
@@ -30,8 +30,19 @@
     { id: '#FFD23F', label: 'Żółty', css: '#FFD23F' },
     { id: '#5DF7A0', label: 'Zielony', css: '#5DF7A0' },
   ];
+  const BAND_COLORS = [
+    { id: '#000000', label: 'Czarne', css: '#000000' },
+    { id: '#0B0A16', label: 'Granat', css: '#0B0A16' },
+    { id: '#FFFFFF', label: 'Białe', css: '#FFFFFF' },
+    { id: '#22E0E6', label: 'Cyan', css: '#22E0E6' },
+    { id: '#FF2E97', label: 'Magenta', css: '#FF2E97' },
+    { id: '#9B5DE5', label: 'Fiolet', css: '#9B5DE5' },
+    { id: '#FFD23F', label: 'Żółty', css: '#FFD23F' },
+    { id: '#5DF7A0', label: 'Zielony', css: '#5DF7A0' },
+  ];
   const colorLabel = (id) => (STRIP_COLORS.find(c => c.id === id) || {}).label || id;
-  const stripDesc = () => `Pasek: ${STRIP_LABEL[state.strip]}${state.strip === 'none' ? '' : ' · ' + colorLabel(state.stripColor)}`;
+  const bandLabel = (id) => (BAND_COLORS.find(c => c.id === id) || {}).label || id;
+  const stripDesc = () => `Pasek: ${STRIP_LABEL[state.strip]}${state.strip === 'none' ? '' : ` · napis ${colorLabel(state.stripColor)}, tło ${bandLabel(state.bandColor)}`}`;
 
   const CART_KEY = 'pixelsip_cart_v1';
   const loadCart = () => { try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; } catch { return []; } };
@@ -57,7 +68,7 @@
       state.designId = state.designs[0]?.id || null;
     } catch (e) { console.error('Błąd ładowania danych', e); const g = $('#design-gallery'); if (g) g.innerHTML = '<p class="muted">Nie udało się załadować wzorów. Odśwież stronę.</p>'; return; }
 
-    renderGallery(); renderSizes(); renderStripColors(); renderDelivery(); updatePreview(); bindUI(); renderCart(); cookieBanner();
+    renderGallery(); renderSizes(); renderStripColors(); renderBandColors(); renderDelivery(); updatePreview(); bindUI(); renderCart(); cookieBanner();
   }
 
   // ——————————————————— GALERIA ———————————————————
@@ -94,7 +105,11 @@
   }
   function renderStripColors() {
     const w = $('#strip-colors'); if (!w) return;
-    w.innerHTML = STRIP_COLORS.map(c => `<button class="swatch${c.id === state.stripColor ? ' is-active' : ''}" data-color="${esc(c.id)}" title="${esc(c.label)}" aria-label="Kolor paska: ${esc(c.label)}" style="background:${c.css}"></button>`).join('');
+    w.innerHTML = STRIP_COLORS.map(c => `<button class="swatch${c.id === state.stripColor ? ' is-active' : ''}" data-color="${esc(c.id)}" title="${esc(c.label)}" aria-label="Kolor napisu: ${esc(c.label)}" style="background:${c.css}"></button>`).join('');
+  }
+  function renderBandColors() {
+    const w = $('#band-colors'); if (!w) return;
+    w.innerHTML = BAND_COLORS.map(c => `<button class="swatch${c.id === state.bandColor ? ' is-active' : ''}" data-bandcolor="${esc(c.id)}" title="${esc(c.label)}" aria-label="Kolor tła paska: ${esc(c.label)}" style="background:${c.css}"></button>`).join('');
   }
 
   // ——————————————————— TEKSTURA (parametryczna: scena + paski) ———————————————————
@@ -113,7 +128,7 @@
     const d = state.byId[state.designId]; if (!d) return;
     const seq = ++texSeq;
     if (!wordmark) wordmark = await loadImg('assets/brand/wordmark.png');
-    if (!glitch) glitch = await loadImg('assets/brand/strip-glitch.png');
+    if (!glitch) glitch = await loadImg('assets/brand/strip-glitch-t.png');
     const scene = await loadImg(d.file);
     if (seq !== texSeq || !scene || !wordmark) return;
     const TW = TEX.width, TH = TEX.height, BAND = Math.round(TH * 0.135);
@@ -126,7 +141,7 @@
     tctx.drawImage(scene, (sw_ - iw) / 2, sy0 + ((sy1 - sy0) - ih) / 2, iw, ih);
     const strip = state.stripColor === 'glitch' ? glitch : tintStrip(state.stripColor);
     const sh = Math.round(BAND * 0.58), bw = Math.round(strip.width * sh / strip.height), mg = Math.round(TW * 0.05);
-    const band = (by) => { tctx.fillStyle = '#000'; tctx.fillRect(0, by, TW, BAND); tctx.imageSmoothingEnabled = false; const yy = by + (BAND - sh) / 2; tctx.drawImage(strip, mg, yy, bw, sh); tctx.drawImage(strip, TW - mg - bw, yy, bw, sh); };
+    const band = (by) => { tctx.fillStyle = state.bandColor; tctx.fillRect(0, by, TW, BAND); tctx.imageSmoothingEnabled = false; const yy = by + (BAND - sh) / 2; tctx.drawImage(strip, mg, yy, bw, sh); tctx.drawImage(strip, TW - mg - bw, yy, bw, sh); };
     if (top) band(0);
     if (bot) band(TH - BAND);
     window.__tumblerCanvas = TEX;
@@ -153,11 +168,12 @@
   function addToCart() {
     const p = state.prodById[state.size], d = state.byId[state.designId];
     if (!p || !d) return;
-    const color = state.strip === 'none' ? '-' : state.stripColor;
-    const key = itemKey(p.id, d.id, state.strip, color);
+    const tColor = state.strip === 'none' ? '-' : state.stripColor;
+    const bColor = state.strip === 'none' ? '-' : state.bandColor;
+    const key = itemKey(p.id, d.id, state.strip, tColor + '_' + bColor);
     const ex = cart.find(i => i.key === key);
     if (ex) ex.qty += 1;
-    else cart.push({ key, size: p.id, sizeLabel: p.sizeLabel, designId: d.id, designName: d.name, strip: state.strip, stripColor: color, stripDesc: stripDesc(), file: d.file, price: p.retailPrice, qty: 1 });
+    else cart.push({ key, size: p.id, sizeLabel: p.sizeLabel, designId: d.id, designName: d.name, strip: state.strip, stripColor: tColor, bandColor: bColor, stripDesc: stripDesc(), file: d.file, price: p.retailPrice, qty: 1 });
     saveCart(cart); renderCart(); openCart();
     toast(`Dodano: ${d.name} · ${p.sizeLabel}`);
   }
@@ -229,7 +245,7 @@
     const order = {
       klient: { imie: f.name.value, email: f.email.value, telefon: f.phone.value, adres, uwagi: f.notes.value },
       dostawa: d.method, dostawa_koszt: d.price,
-      pozycje: cart.map(i => `${i.qty}× ${i.designName} (${i.sizeLabel}, ${i.stripDesc || ''}) = ${(i.price * i.qty).toFixed(2)} zł\n   [config: design=${i.designId} size=${i.size} strip=${i.strip} kolor=${i.stripColor}]`),
+      pozycje: cart.map(i => `${i.qty}× ${i.designName} (${i.sizeLabel}, ${i.stripDesc || ''}) = ${(i.price * i.qty).toFixed(2)} zł\n   [config: design=${i.designId} size=${i.size} strip=${i.strip} tekst=${i.stripColor} tlo=${i.bandColor}]`),
       suma_produkty: cartTotal().toFixed(2), suma_calosc: (cartTotal() + (d.price || 0)).toFixed(2),
     };
     const btn = $('#co-submit'); btn.disabled = true; btn.textContent = 'Wysyłanie…';
@@ -273,6 +289,8 @@
       if (strip) { state.strip = strip.dataset.strip; $$('[data-strip]').forEach(s => { const a = s === strip; s.classList.toggle('is-active', a); s.setAttribute('aria-pressed', a); }); $('#strip-colors')?.style.setProperty('opacity', state.strip === 'none' ? '.35' : '1'); updatePreview(); return; }
       const col = e.target.closest('[data-color]');
       if (col) { state.stripColor = col.dataset.color; $$('[data-color]').forEach(s => s.classList.toggle('is-active', s === col)); updatePreview(); return; }
+      const bcol = e.target.closest('[data-bandcolor]');
+      if (bcol) { state.bandColor = bcol.dataset.bandcolor; $$('[data-bandcolor]').forEach(s => s.classList.toggle('is-active', s === bcol)); updatePreview(); return; }
       if (e.target.closest('#add-to-cart, #sticky-add')) { addToCart(); return; }
       if (e.target.closest('#cart-toggle, #sticky-cart')) { openCart(); return; }
       if (e.target.closest('#cart-close')) { closeCart(); return; }
