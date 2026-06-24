@@ -60,18 +60,46 @@
     </div></div>
     <div class="config__panel">
       <div class="field"><label>1 · Pojemność</label><div class="size-opts" id="size-options"></div></div>
-      <div class="field"><label>2 · Wzór <span class="hint">— kliknij kafel, podgląd zaktualizuje się na żywo</span></label>
-        <div class="gallery-tools">
-          <div class="chips" id="kolekcja">
-            <button class="chip is-active" data-cat="all">Wszystkie</button>
-            <button class="chip" data-cat="sceny">Sceny</button>
-            <button class="chip" data-cat="pl">Kolekcja PL</button>
-            <button class="chip" data-cat="abstrakcyjne">Abstrakcyjne</button>
-          </div>
-          <input id="design-search" type="search" placeholder="Szukaj wzoru…" aria-label="szukaj wzoru">
+      <div class="field"><label>2 · Nadruk <span class="hint">— scena, wzór geometryczny albo emblemat (kafelek)</span></label>
+        <div class="base-tabs">
+          <button class="base-tab is-active" data-base="scene" aria-pressed="true">🖼️ Scena</button>
+          <button class="base-tab" data-base="geo" aria-pressed="false">🔷 Wzór</button>
+          <button class="base-tab" data-base="tile" aria-pressed="false">🎯 Emblemat</button>
         </div>
-        <div class="gallery" id="design-gallery"></div>
-        <p class="muted" style="font-size:.82rem;margin-top:8px"><span id="gallery-count">0</span> wzorów</p>
+        <div class="base-panel" id="panel-scene">
+          <div class="gallery-tools">
+            <div class="chips" id="kolekcja">
+              <button class="chip is-active" data-cat="all">Wszystkie</button>
+              <button class="chip" data-cat="sceny">Sceny</button>
+              <button class="chip" data-cat="pl">Kolekcja PL</button>
+              <button class="chip" data-cat="abstrakcyjne">Abstrakcyjne</button>
+            </div>
+            <input id="design-search" type="search" placeholder="Szukaj wzoru…" aria-label="szukaj wzoru">
+          </div>
+          <div class="gallery" id="design-gallery"></div>
+          <p class="muted" style="font-size:.82rem;margin-top:8px"><span id="gallery-count">0</span> wzorów</p>
+        </div>
+        <div class="base-panel off" id="panel-geo">
+          <div class="strip-opts" id="geo-patterns"></div>
+          <div class="color-row"><span class="color-lbl">Kierunek</span><div class="strip-opts" style="flex:1">
+            <button class="strip-opt is-active" data-geodir="skos">Skos</button>
+            <button class="strip-opt" data-geodir="pion">Pion</button>
+            <button class="strip-opt" data-geodir="poziom">Poziom</button>
+          </div></div>
+          <div class="color-row"><span class="color-lbl">Tło</span><div class="strip-colors" id="geo-c1"></div></div>
+          <div class="color-row"><span class="color-lbl">Wzór</span><div class="strip-colors" id="geo-c2"></div></div>
+          <div class="color-row"><span class="color-lbl">Skala</span><input id="geo-scale" class="slider" type="range" min="20" max="140" value="60" aria-label="skala wzoru"></div>
+        </div>
+        <div class="base-panel off" id="panel-tile">
+          <div class="chips" id="emblem-cats"></div>
+          <div class="emb-tray" id="emblem-tray"></div>
+          <div class="color-row"><span class="color-lbl">Tło</span><div class="strip-colors" id="tile-bg"></div></div>
+          <div class="color-row"><span class="color-lbl">Skala</span><input id="tile-scale" class="slider" type="range" min="50" max="200" value="100" aria-label="skala emblematu"></div>
+          <div class="color-row"><span class="color-lbl">Układ</span><div class="strip-opts" style="flex:1">
+            <button class="strip-opt is-active" data-tilelayout="brick">Cegiełka</button>
+            <button class="strip-opt" data-tilelayout="grid">Siatka</button>
+          </div></div>
+        </div>
       </div>
       <div class="field"><label>3 · Pasek „PIXEL SIP" <span class="hint">— pozycja i kolory</span></label>
         <div class="strip-opts" id="strip-options">

@@ -1,0 +1,602 @@
+[
+ {
+  "id": "arcade-cab",
+  "category": "akcenty",
+  "categoryLabel": "Akcenty",
+  "file": "assets/emblems/arcade-cab.png"
+ },
+ {
+  "id": "cloud",
+  "category": "akcenty",
+  "categoryLabel": "Akcenty",
+  "file": "assets/emblems/cloud.png"
+ },
+ {
+  "id": "controller",
+  "category": "akcenty",
+  "categoryLabel": "Akcenty",
+  "file": "assets/emblems/controller.png"
+ },
+ {
+  "id": "dice",
+  "category": "akcenty",
+  "categoryLabel": "Akcenty",
+  "file": "assets/emblems/dice.png"
+ },
+ {
+  "id": "flame",
+  "category": "akcenty",
+  "categoryLabel": "Akcenty",
+  "file": "assets/emblems/flame.png"
+ },
+ {
+  "id": "headphones",
+  "category": "akcenty",
+  "categoryLabel": "Akcenty",
+  "file": "assets/emblems/headphones.png"
+ },
+ {
+  "id": "joystick",
+  "category": "akcenty",
+  "categoryLabel": "Akcenty",
+  "file": "assets/emblems/joystick.png"
+ },
+ {
+  "id": "leaf",
+  "category": "akcenty",
+  "categoryLabel": "Akcenty",
+  "file": "assets/emblems/leaf.png"
+ },
+ {
+  "id": "plus",
+  "category": "akcenty",
+  "categoryLabel": "Akcenty",
+  "file": "assets/emblems/plus.png"
+ },
+ {
+  "id": "sparkle",
+  "category": "akcenty",
+  "categoryLabel": "Akcenty",
+  "file": "assets/emblems/sparkle.png"
+ },
+ {
+  "id": "chip",
+  "category": "cyberpunk-glitch",
+  "categoryLabel": "Cyberpunk",
+  "file": "assets/emblems/chip.png"
+ },
+ {
+  "id": "circuit",
+  "category": "cyberpunk-glitch",
+  "categoryLabel": "Cyberpunk",
+  "file": "assets/emblems/circuit.png"
+ },
+ {
+  "id": "cyber-eye",
+  "category": "cyberpunk-glitch",
+  "categoryLabel": "Cyberpunk",
+  "file": "assets/emblems/cyber-eye.png"
+ },
+ {
+  "id": "datamosh",
+  "category": "cyberpunk-glitch",
+  "categoryLabel": "Cyberpunk",
+  "file": "assets/emblems/datamosh.png"
+ },
+ {
+  "id": "glitch-drop",
+  "category": "cyberpunk-glitch",
+  "categoryLabel": "Cyberpunk",
+  "file": "assets/emblems/glitch-drop.png"
+ },
+ {
+  "id": "pixel-skull",
+  "category": "cyberpunk-glitch",
+  "categoryLabel": "Cyberpunk",
+  "file": "assets/emblems/pixel-skull.png"
+ },
+ {
+  "id": "signal",
+  "category": "cyberpunk-glitch",
+  "categoryLabel": "Cyberpunk",
+  "file": "assets/emblems/signal.png"
+ },
+ {
+  "id": "terminal",
+  "category": "cyberpunk-glitch",
+  "categoryLabel": "Cyberpunk",
+  "file": "assets/emblems/terminal.png"
+ },
+ {
+  "id": "vhs",
+  "category": "cyberpunk-glitch",
+  "categoryLabel": "Cyberpunk",
+  "file": "assets/emblems/vhs.png"
+ },
+ {
+  "id": "warning-icon",
+  "category": "cyberpunk-glitch",
+  "categoryLabel": "Cyberpunk",
+  "file": "assets/emblems/warning-icon.png"
+ },
+ {
+  "id": "banner",
+  "category": "odznaki",
+  "categoryLabel": "Odznaki",
+  "file": "assets/emblems/banner.png"
+ },
+ {
+  "id": "circle-emblem",
+  "category": "odznaki",
+  "categoryLabel": "Odznaki",
+  "file": "assets/emblems/circle-emblem.png"
+ },
+ {
+  "id": "crown",
+  "category": "odznaki",
+  "categoryLabel": "Odznaki",
+  "file": "assets/emblems/crown.png"
+ },
+ {
+  "id": "hex-badge",
+  "category": "odznaki",
+  "categoryLabel": "Odznaki",
+  "file": "assets/emblems/hex-badge.png"
+ },
+ {
+  "id": "laurel",
+  "category": "odznaki",
+  "categoryLabel": "Odznaki",
+  "file": "assets/emblems/laurel.png"
+ },
+ {
+  "id": "medal",
+  "category": "odznaki",
+  "categoryLabel": "Odznaki",
+  "file": "assets/emblems/medal.png"
+ },
+ {
+  "id": "rosette",
+  "category": "odznaki",
+  "categoryLabel": "Odznaki",
+  "file": "assets/emblems/rosette.png"
+ },
+ {
+  "id": "shield-badge",
+  "category": "odznaki",
+  "categoryLabel": "Odznaki",
+  "file": "assets/emblems/shield-badge.png"
+ },
+ {
+  "id": "starburst",
+  "category": "odznaki",
+  "categoryLabel": "Odznaki",
+  "file": "assets/emblems/starburst.png"
+ },
+ {
+  "id": "trophy",
+  "category": "odznaki",
+  "categoryLabel": "Odznaki",
+  "file": "assets/emblems/trophy.png"
+ },
+ {
+  "id": "alien",
+  "category": "postacie",
+  "categoryLabel": "Postacie",
+  "file": "assets/emblems/alien.png"
+ },
+ {
+  "id": "blob-mascot",
+  "category": "postacie",
+  "categoryLabel": "Postacie",
+  "file": "assets/emblems/blob-mascot.png"
+ },
+ {
+  "id": "cat",
+  "category": "postacie",
+  "categoryLabel": "Postacie",
+  "file": "assets/emblems/cat.png"
+ },
+ {
+  "id": "dragon-head",
+  "category": "postacie",
+  "categoryLabel": "Postacie",
+  "file": "assets/emblems/dragon-head.png"
+ },
+ {
+  "id": "frog",
+  "category": "postacie",
+  "categoryLabel": "Postacie",
+  "file": "assets/emblems/frog.png"
+ },
+ {
+  "id": "ghost",
+  "category": "postacie",
+  "categoryLabel": "Postacie",
+  "file": "assets/emblems/ghost.png"
+ },
+ {
+  "id": "hero-sip",
+  "category": "postacie",
+  "categoryLabel": "Postacie",
+  "file": "assets/emblems/hero-sip.png"
+ },
+ {
+  "id": "knight",
+  "category": "postacie",
+  "categoryLabel": "Postacie",
+  "file": "assets/emblems/knight.png"
+ },
+ {
+  "id": "robot",
+  "category": "postacie",
+  "categoryLabel": "Postacie",
+  "file": "assets/emblems/robot.png"
+ },
+ {
+  "id": "skeleton",
+  "category": "postacie",
+  "categoryLabel": "Postacie",
+  "file": "assets/emblems/skeleton.png"
+ },
+ {
+  "id": "slime",
+  "category": "postacie",
+  "categoryLabel": "Postacie",
+  "file": "assets/emblems/slime.png"
+ },
+ {
+  "id": "wizard",
+  "category": "postacie",
+  "categoryLabel": "Postacie",
+  "file": "assets/emblems/wizard.png"
+ },
+ {
+  "id": "battery",
+  "category": "power-ups",
+  "categoryLabel": "Power-upy",
+  "file": "assets/emblems/battery.png"
+ },
+ {
+  "id": "bomb",
+  "category": "power-ups",
+  "categoryLabel": "Power-upy",
+  "file": "assets/emblems/bomb.png"
+ },
+ {
+  "id": "fire-flower",
+  "category": "power-ups",
+  "categoryLabel": "Power-upy",
+  "file": "assets/emblems/fire-flower.png"
+ },
+ {
+  "id": "green-shroom",
+  "category": "power-ups",
+  "categoryLabel": "Power-upy",
+  "file": "assets/emblems/green-shroom.png"
+ },
+ {
+  "id": "lightning",
+  "category": "power-ups",
+  "categoryLabel": "Power-upy",
+  "file": "assets/emblems/lightning.png"
+ },
+ {
+  "id": "magnet",
+  "category": "power-ups",
+  "categoryLabel": "Power-upy",
+  "file": "assets/emblems/magnet.png"
+ },
+ {
+  "id": "mushroom",
+  "category": "power-ups",
+  "categoryLabel": "Power-upy",
+  "file": "assets/emblems/mushroom.png"
+ },
+ {
+  "id": "power-crystal",
+  "category": "power-ups",
+  "categoryLabel": "Power-upy",
+  "file": "assets/emblems/power-crystal.png"
+ },
+ {
+  "id": "power-star",
+  "category": "power-ups",
+  "categoryLabel": "Power-upy",
+  "file": "assets/emblems/power-star.png"
+ },
+ {
+  "id": "shield-bubble",
+  "category": "power-ups",
+  "categoryLabel": "Power-upy",
+  "file": "assets/emblems/shield-bubble.png"
+ },
+ {
+  "id": "speed-boots",
+  "category": "power-ups",
+  "categoryLabel": "Power-upy",
+  "file": "assets/emblems/speed-boots.png"
+ },
+ {
+  "id": "stopwatch",
+  "category": "power-ups",
+  "categoryLabel": "Power-upy",
+  "file": "assets/emblems/stopwatch.png"
+ },
+ {
+  "id": "chest",
+  "category": "rpg-items",
+  "categoryLabel": "RPG",
+  "file": "assets/emblems/chest.png"
+ },
+ {
+  "id": "coin",
+  "category": "rpg-items",
+  "categoryLabel": "RPG",
+  "file": "assets/emblems/coin.png"
+ },
+ {
+  "id": "elixir",
+  "category": "rpg-items",
+  "categoryLabel": "RPG",
+  "file": "assets/emblems/elixir.png"
+ },
+ {
+  "id": "gem",
+  "category": "rpg-items",
+  "categoryLabel": "RPG",
+  "file": "assets/emblems/gem.png"
+ },
+ {
+  "id": "helmet",
+  "category": "rpg-items",
+  "categoryLabel": "RPG",
+  "file": "assets/emblems/helmet.png"
+ },
+ {
+  "id": "key",
+  "category": "rpg-items",
+  "categoryLabel": "RPG",
+  "file": "assets/emblems/key.png"
+ },
+ {
+  "id": "potion-health",
+  "category": "rpg-items",
+  "categoryLabel": "RPG",
+  "file": "assets/emblems/potion-health.png"
+ },
+ {
+  "id": "potion-mana",
+  "category": "rpg-items",
+  "categoryLabel": "RPG",
+  "file": "assets/emblems/potion-mana.png"
+ },
+ {
+  "id": "potion-stamina",
+  "category": "rpg-items",
+  "categoryLabel": "RPG",
+  "file": "assets/emblems/potion-stamina.png"
+ },
+ {
+  "id": "ring",
+  "category": "rpg-items",
+  "categoryLabel": "RPG",
+  "file": "assets/emblems/ring.png"
+ },
+ {
+  "id": "scroll",
+  "category": "rpg-items",
+  "categoryLabel": "RPG",
+  "file": "assets/emblems/scroll.png"
+ },
+ {
+  "id": "shield",
+  "category": "rpg-items",
+  "categoryLabel": "RPG",
+  "file": "assets/emblems/shield.png"
+ },
+ {
+  "id": "sword",
+  "category": "rpg-items",
+  "categoryLabel": "RPG",
+  "file": "assets/emblems/sword.png"
+ },
+ {
+  "id": "wand",
+  "category": "rpg-items",
+  "categoryLabel": "RPG",
+  "file": "assets/emblems/wand.png"
+ },
+ {
+  "id": "cooldown",
+  "category": "ui-hud",
+  "categoryLabel": "UI/HUD",
+  "file": "assets/emblems/cooldown.png"
+ },
+ {
+  "id": "cursor",
+  "category": "ui-hud",
+  "categoryLabel": "UI/HUD",
+  "file": "assets/emblems/cursor.png"
+ },
+ {
+  "id": "healthbar",
+  "category": "ui-hud",
+  "categoryLabel": "UI/HUD",
+  "file": "assets/emblems/healthbar.png"
+ },
+ {
+  "id": "heart-empty",
+  "category": "ui-hud",
+  "categoryLabel": "UI/HUD",
+  "file": "assets/emblems/heart-empty.png"
+ },
+ {
+  "id": "heart-full",
+  "category": "ui-hud",
+  "categoryLabel": "UI/HUD",
+  "file": "assets/emblems/heart-full.png"
+ },
+ {
+  "id": "heart-half",
+  "category": "ui-hud",
+  "categoryLabel": "UI/HUD",
+  "file": "assets/emblems/heart-half.png"
+ },
+ {
+  "id": "level-badge",
+  "category": "ui-hud",
+  "categoryLabel": "UI/HUD",
+  "file": "assets/emblems/level-badge.png"
+ },
+ {
+  "id": "manabar",
+  "category": "ui-hud",
+  "categoryLabel": "UI/HUD",
+  "file": "assets/emblems/manabar.png"
+ },
+ {
+  "id": "staminabar",
+  "category": "ui-hud",
+  "categoryLabel": "UI/HUD",
+  "file": "assets/emblems/staminabar.png"
+ },
+ {
+  "id": "star-empty",
+  "category": "ui-hud",
+  "categoryLabel": "UI/HUD",
+  "file": "assets/emblems/star-empty.png"
+ },
+ {
+  "id": "star-full",
+  "category": "ui-hud",
+  "categoryLabel": "UI/HUD",
+  "file": "assets/emblems/star-full.png"
+ },
+ {
+  "id": "xpbar",
+  "category": "ui-hud",
+  "categoryLabel": "UI/HUD",
+  "file": "assets/emblems/xpbar.png"
+ },
+ {
+  "id": "boombox",
+  "category": "vaporwave",
+  "categoryLabel": "Vaporwave",
+  "file": "assets/emblems/boombox.png"
+ },
+ {
+  "id": "cassette",
+  "category": "vaporwave",
+  "categoryLabel": "Vaporwave",
+  "file": "assets/emblems/cassette.png"
+ },
+ {
+  "id": "dolphin",
+  "category": "vaporwave",
+  "categoryLabel": "Vaporwave",
+  "file": "assets/emblems/dolphin.png"
+ },
+ {
+  "id": "grid-sun",
+  "category": "vaporwave",
+  "categoryLabel": "Vaporwave",
+  "file": "assets/emblems/grid-sun.png"
+ },
+ {
+  "id": "palm",
+  "category": "vaporwave",
+  "categoryLabel": "Vaporwave",
+  "file": "assets/emblems/palm.png"
+ },
+ {
+  "id": "prism",
+  "category": "vaporwave",
+  "categoryLabel": "Vaporwave",
+  "file": "assets/emblems/prism.png"
+ },
+ {
+  "id": "retro-phone",
+  "category": "vaporwave",
+  "categoryLabel": "Vaporwave",
+  "file": "assets/emblems/retro-phone.png"
+ },
+ {
+  "id": "statue-bust",
+  "category": "vaporwave",
+  "categoryLabel": "Vaporwave",
+  "file": "assets/emblems/statue-bust.png"
+ },
+ {
+  "id": "bubble",
+  "category": "woda",
+  "categoryLabel": "Woda",
+  "file": "assets/emblems/bubble.png"
+ },
+ {
+  "id": "canteen",
+  "category": "woda",
+  "categoryLabel": "Woda",
+  "file": "assets/emblems/canteen.png"
+ },
+ {
+  "id": "droplet-face",
+  "category": "woda",
+  "categoryLabel": "Woda",
+  "file": "assets/emblems/droplet-face.png"
+ },
+ {
+  "id": "faucet-drip",
+  "category": "woda",
+  "categoryLabel": "Woda",
+  "file": "assets/emblems/faucet-drip.png"
+ },
+ {
+  "id": "ice-cube",
+  "category": "woda",
+  "categoryLabel": "Woda",
+  "file": "assets/emblems/ice-cube.png"
+ },
+ {
+  "id": "raincloud",
+  "category": "woda",
+  "categoryLabel": "Woda",
+  "file": "assets/emblems/raincloud.png"
+ },
+ {
+  "id": "soda-can",
+  "category": "woda",
+  "categoryLabel": "Woda",
+  "file": "assets/emblems/soda-can.png"
+ },
+ {
+  "id": "sports-bottle",
+  "category": "woda",
+  "categoryLabel": "Woda",
+  "file": "assets/emblems/sports-bottle.png"
+ },
+ {
+  "id": "water-drop",
+  "category": "woda",
+  "categoryLabel": "Woda",
+  "file": "assets/emblems/water-drop.png"
+ },
+ {
+  "id": "water-glass",
+  "category": "woda",
+  "categoryLabel": "Woda",
+  "file": "assets/emblems/water-glass.png"
+ },
+ {
+  "id": "water-splash",
+  "category": "woda",
+  "categoryLabel": "Woda",
+  "file": "assets/emblems/water-splash.png"
+ },
+ {
+  "id": "wave",
+  "category": "woda",
+  "categoryLabel": "Woda",
+  "file": "assets/emblems/wave.png"
+ }
+]

@@ -19,9 +19,18 @@
     products: [], designs: [], byId: {}, prodById: {},
     size: null, designId: null, strip: 'both',
     stripColorTop: 'glitch', bandColorTop: '#000000', stripColorBot: 'glitch', bandColorBot: '#000000',
+    base: 'scene',
+    geo: { pattern: 'paski', c1: '#0B0A16', c2: '#22E0E6', scale: 60, dir: 'skos' },
+    tile: { emblem: 'water-drop', bg: '#0B0A16', scale: 100, layout: 'brick' },
+    emblems: [], embCat: 'all',
     cat: 'all', q: '',
     freeShip: 199, delivery: [], bundles: [], lastFocus: null,
   };
+  const GEO_PATTERNS = [
+    { id: 'paski', label: 'Paski' }, { id: 'szachownica', label: 'Szachownica' },
+    { id: 'romby', label: 'Romby' }, { id: 'kropki', label: 'Kropki' },
+    { id: 'krata', label: 'Krata' }, { id: 'zygzak', label: 'Zygzak' },
+  ];
   const STRIP_LABEL = { both: 'góra i dół', top: 'tylko góra', bot: 'tylko dół', none: 'bez paska' };
   const PALETTE = [
     { id: '#FFFFFF', label: 'Biały', css: '#FFFFFF' },
@@ -68,10 +77,12 @@
   // ——————————————————— INIT ———————————————————
   async function init() {
     try {
-      const [p, d] = await Promise.all([
+      const [p, d, em] = await Promise.all([
         fetch('data/products.json').then(r => r.json()),
         fetch('data/designs.json').then(r => r.json()),
+        fetch('data/emblems.json').then(r => r.json()).catch(() => []),
       ]);
+      state.emblems = em || [];
       state.products = p.products || [];
       state.freeShip = p.freeShippingThreshold ?? 199;
       state.delivery = p.delivery || [];
@@ -83,7 +94,9 @@
       state.designId = state.designs[0]?.id || null;
     } catch (e) { console.error('Błąd ładowania danych', e); const g = $('#design-gallery'); if (g) g.innerHTML = '<p class="muted">Nie udało się załadować wzorów. Odśwież stronę.</p>'; return; }
 
-    renderGallery(); renderSizes(); renderPalettes(); applyStripVisibility(); renderDelivery(); updatePreview(); bindUI(); renderCart(); cookieBanner();
+    renderGallery(); renderSizes(); renderPalettes(); applyStripVisibility();
+    renderGeoControls(); renderEmblems(); applyBaseVisibility();
+    renderDelivery(); updatePreview(); bindUI(); renderCart(); cookieBanner();
   }
 
   // ——————————————————— GALERIA ———————————————————
@@ -132,6 +145,28 @@
     $('#strip-top-group')?.classList.toggle('off', !(state.strip === 'both' || state.strip === 'top'));
     $('#strip-bot-group')?.classList.toggle('off', !(state.strip === 'both' || state.strip === 'bot'));
   }
+  function renderGeoControls() {
+    const pw = $('#geo-patterns');
+    if (pw) pw.innerHTML = GEO_PATTERNS.map(p => `<button class="strip-opt${p.id === state.geo.pattern ? ' is-active' : ''}" data-geopat="${p.id}">${esc(p.label)}</button>`).join('');
+    renderPalette('geo-c1', PALETTE, state.geo.c1, 'g1', 'Kolor tła');
+    renderPalette('geo-c2', PALETTE, state.geo.c2, 'g2', 'Kolor wzoru');
+  }
+  function renderEmblems() {
+    const cats = ['all', ...new Set(state.emblems.map(e => e.category))];
+    const catLbl = { all: 'Wszystkie' }; state.emblems.forEach(e => catLbl[e.category] = e.categoryLabel);
+    const cw = $('#emblem-cats');
+    if (cw) cw.innerHTML = cats.map(c => `<button class="chip${c === state.embCat ? ' is-active' : ''}" data-embcat="${esc(c)}">${esc(catLbl[c] || c)}</button>`).join('');
+    const tray = $('#emblem-tray');
+    if (tray) {
+      const items = state.emblems.filter(e => state.embCat === 'all' || e.category === state.embCat);
+      tray.innerHTML = items.map(e => `<button class="emb${e.id === state.tile.emblem ? ' is-active' : ''}" data-emblem="${esc(e.id)}" title="${esc(e.id)}" aria-label="Emblemat ${esc(e.id)}"><img src="${esc(e.file)}" alt="" loading="lazy" width="64" height="64"></button>`).join('');
+    }
+    renderPalette('tile-bg', PALETTE, state.tile.bg, 'tg', 'Kolor tła');
+  }
+  function applyBaseVisibility() {
+    ['scene', 'geo', 'tile'].forEach(b => $('#panel-' + b)?.classList.toggle('off', state.base !== b));
+    $$('[data-base]').forEach(t => { const a = t.dataset.base === state.base; t.classList.toggle('is-active', a); t.setAttribute('aria-pressed', a); });
+  }
 
   // ——————————————————— TEKSTURA (parametryczna: scena + paski) ———————————————————
   const TEX = document.createElement('canvas'); TEX.width = 1024; TEX.height = 916;
@@ -146,20 +181,21 @@
     return c;
   }
   async function buildTexture() {
-    const d = state.byId[state.designId]; if (!d) return;
     const seq = ++texSeq;
     if (!wordmark) wordmark = await loadImg('assets/brand/wordmark.png');
     if (!glitch) glitch = await loadImg('assets/brand/strip-glitch-t.png');
-    const scene = await loadImg(d.file);
-    if (seq !== texSeq || !scene || !wordmark) return;
+    let baseImg = null;
+    if (state.base === 'scene') { const d = state.byId[state.designId]; if (!d) return; baseImg = await loadImg(d.file); }
+    else if (state.base === 'tile') { if (!state.tile.emblem) return; baseImg = await loadImg('assets/emblems/' + state.tile.emblem + '.png'); }
+    if (seq !== texSeq || !wordmark) return;
+    if ((state.base === 'scene' || state.base === 'tile') && !baseImg) return;
     const TW = TEX.width, TH = TEX.height, BAND = Math.round(TH * 0.135);
     const top = state.strip === 'both' || state.strip === 'top';
     const bot = state.strip === 'both' || state.strip === 'bot';
     tctx.imageSmoothingEnabled = false;
     tctx.fillStyle = '#000'; tctx.fillRect(0, 0, TW, TH);
-    const sy0 = top ? BAND : 0, sy1 = bot ? TH - BAND : TH, sw_ = TW;
-    const s = Math.max(sw_ / scene.width, (sy1 - sy0) / scene.height), iw = scene.width * s, ih = scene.height * s;
-    tctx.drawImage(scene, (sw_ - iw) / 2, sy0 + ((sy1 - sy0) - ih) / 2, iw, ih);
+    const sy0 = top ? BAND : 0, sy1 = bot ? TH - BAND : TH;
+    drawBase(0, sy0, TW, sy1 - sy0, baseImg);
     const sh = Math.round(BAND * 0.58), mg = Math.round(TW * 0.05);
     const band = (by, textColor, bandColorHex) => {
       tctx.fillStyle = bandColorHex; tctx.fillRect(0, by, TW, BAND);
@@ -172,6 +208,58 @@
     if (bot) band(TH - BAND, state.stripColorBot, state.bandColorBot);
     window.__tumblerCanvas = TEX;
     window.Tumbler?.setTextureCanvas(TEX);
+  }
+  function drawCover(img, x, y, w, h) {
+    tctx.imageSmoothingEnabled = false;
+    const s = Math.max(w / img.width, h / img.height), iw = img.width * s, ih = img.height * s;
+    tctx.drawImage(img, x + (w - iw) / 2, y + (h - ih) / 2, iw, ih);
+  }
+  function drawBase(x, y, w, h, img) {
+    if (state.base === 'geo') return drawGeo(x, y, w, h);
+    if (state.base === 'tile') return drawTile(x, y, w, h, img);
+    drawCover(img, x, y, w, h);
+  }
+  function drawGeo(x, y, w, h) {
+    const g = state.geo, sc = Math.max(8, g.scale | 0), P = g.pattern, D = Math.max(w, h);
+    tctx.save(); tctx.beginPath(); tctx.rect(x, y, w, h); tctx.clip();
+    tctx.fillStyle = g.c1; tctx.fillRect(x, y, w, h);
+    tctx.fillStyle = g.c2; tctx.strokeStyle = g.c2;
+    if (P === 'paski') {
+      const ang = g.dir === 'pion' ? 0 : g.dir === 'poziom' ? 90 : 45;
+      tctx.save(); tctx.translate(x + w / 2, y + h / 2); tctx.rotate(ang * Math.PI / 180);
+      const R = D * 1.5; for (let i = -R; i < R; i += sc * 2) tctx.fillRect(i, -R, sc, 2 * R); tctx.restore();
+    } else if (P === 'szachownica' || P === 'romby') {
+      tctx.save();
+      if (P === 'romby') { tctx.translate(x + w / 2, y + h / 2); tctx.rotate(Math.PI / 4); tctx.translate(-(x + w / 2), -(y + h / 2)); }
+      for (let r = -Math.ceil(D / sc) - 1; (y - D + r * sc) < y + h + D; r++)
+        for (let c = -Math.ceil(D / sc) - 1; (x - D + c * sc) < x + w + D; c++)
+          if ((r + c) & 1) tctx.fillRect(x - D + c * sc, y - D + r * sc, sc, sc);
+      tctx.restore();
+    } else if (P === 'kropki') {
+      const rr = sc * 0.3;
+      for (let cy = y + sc / 2; cy < y + h + sc; cy += sc) for (let cx = x + sc / 2; cx < x + w + sc; cx += sc) { tctx.beginPath(); tctx.arc(cx, cy, rr, 0, 7); tctx.fill(); }
+    } else if (P === 'krata') {
+      tctx.lineWidth = Math.max(2, sc * 0.12);
+      for (let cx = x; cx < x + w + sc; cx += sc) { tctx.beginPath(); tctx.moveTo(cx, y); tctx.lineTo(cx, y + h); tctx.stroke(); }
+      for (let cy = y; cy < y + h + sc; cy += sc) { tctx.beginPath(); tctx.moveTo(x, cy); tctx.lineTo(x + w, cy); tctx.stroke(); }
+    } else if (P === 'zygzak') {
+      tctx.lineWidth = Math.max(3, sc * 0.34); tctx.lineJoin = 'miter';
+      for (let yy = y - sc; yy < y + h + sc; yy += sc * 2) { tctx.beginPath(); let up = true; for (let xx = x - sc; xx < x + w + sc; xx += sc) { tctx.lineTo(xx, yy + (up ? 0 : sc)); up = !up; } tctx.stroke(); }
+    }
+    tctx.restore();
+  }
+  function drawTile(x, y, w, h, img) {
+    const t = state.tile, sc = Math.max(24, t.scale | 0);
+    tctx.save(); tctx.beginPath(); tctx.rect(x, y, w, h); tctx.clip();
+    tctx.fillStyle = t.bg; tctx.fillRect(x, y, w, h);
+    tctx.imageSmoothingEnabled = false;
+    const ih = sc * (img.height / img.width); let row = 0;
+    for (let cy = y; cy < y + h + sc; cy += sc) {
+      const off = (t.layout === 'brick' && (row & 1)) ? sc / 2 : 0;
+      for (let cx = x - sc; cx < x + w + sc; cx += sc) tctx.drawImage(img, cx + off, cy, sc, ih);
+      row++;
+    }
+    tctx.restore();
   }
 
   // ——————————————————— PODGLĄD ———————————————————
@@ -190,21 +278,38 @@
   }
 
   // ——————————————————— KOSZYK ———————————————————
-  const itemKey = (size, design, strip, color) => `${size}__${design}__${strip}__${color}`;
+  function thumbURL() {
+    const c = document.createElement('canvas'); c.width = 140; c.height = Math.round(140 * TEX.height / TEX.width);
+    c.getContext('2d').drawImage(TEX, 0, 0, c.width, c.height);
+    try { return c.toDataURL('image/jpeg', 0.7); } catch { return ''; }
+  }
+  function baseConfig() {
+    const g = state.geo, t = state.tile;
+    if (state.base === 'geo') return { base: 'geo', wzor: g.pattern, c1: g.c1, c2: g.c2, skala: g.scale, kier: g.dir };
+    if (state.base === 'tile') return { base: 'tile', emblemat: t.emblem, tlo: t.bg, skala: t.scale, uklad: t.layout };
+    return { base: 'scene', design: state.designId };
+  }
+  function baseName() {
+    if (state.base === 'geo') return `Wzór: ${(GEO_PATTERNS.find(p => p.id === state.geo.pattern) || {}).label || state.geo.pattern}`;
+    if (state.base === 'tile') return `Emblemat: ${state.tile.emblem} (kafelek)`;
+    return (state.byId[state.designId] || {}).name || '—';
+  }
   function addToCart() {
-    const p = state.prodById[state.size], d = state.byId[state.designId];
-    if (!p || !d) return;
+    const p = state.prodById[state.size]; if (!p) return;
+    if (state.base === 'scene' && !state.byId[state.designId]) return;
+    if (state.base === 'tile' && !state.tile.emblem) return;
     const hasT = state.strip === 'both' || state.strip === 'top', hasB = state.strip === 'both' || state.strip === 'bot';
     const cfg = {
       gora_tekst: hasT ? state.stripColorTop : '-', gora_tlo: hasT ? state.bandColorTop : '-',
       dol_tekst: hasB ? state.stripColorBot : '-', dol_tlo: hasB ? state.bandColorBot : '-',
     };
-    const key = itemKey(p.id, d.id, state.strip, `${cfg.gora_tekst}_${cfg.gora_tlo}_${cfg.dol_tekst}_${cfg.dol_tlo}`);
+    const bc = baseConfig();
+    const key = `${p.id}__${JSON.stringify(bc)}__${state.strip}__${cfg.gora_tekst}_${cfg.gora_tlo}_${cfg.dol_tekst}_${cfg.dol_tlo}`;
     const ex = cart.find(i => i.key === key);
     if (ex) ex.qty += 1;
-    else cart.push({ key, size: p.id, sizeLabel: p.sizeLabel, designId: d.id, designName: d.name, strip: state.strip, cfg, stripDesc: stripDesc(), file: d.file, price: p.retailPrice, qty: 1 });
+    else cart.push({ key, size: p.id, sizeLabel: p.sizeLabel, designName: baseName(), baseCfg: bc, strip: state.strip, cfg, stripDesc: stripDesc(), file: thumbURL(), price: p.retailPrice, qty: 1 });
     saveCart(cart); renderCart(); openCart();
-    toast(`Dodano: ${d.name} · ${p.sizeLabel}`);
+    toast(`Dodano: ${baseName()} · ${p.sizeLabel}`);
   }
   function setQty(key, delta) {
     const it = cart.find(i => i.key === key); if (!it) return;
@@ -274,7 +379,7 @@
     const order = {
       klient: { imie: f.name.value, email: f.email.value, telefon: f.phone.value, adres, uwagi: f.notes.value },
       dostawa: d.method, dostawa_koszt: d.price,
-      pozycje: cart.map(i => `${i.qty}× ${i.designName} (${i.sizeLabel}, ${i.stripDesc || ''}) = ${(i.price * i.qty).toFixed(2)} zł\n   [config: design=${i.designId} size=${i.size} strip=${i.strip} gora_tekst=${i.cfg.gora_tekst} gora_tlo=${i.cfg.gora_tlo} dol_tekst=${i.cfg.dol_tekst} dol_tlo=${i.cfg.dol_tlo}]`),
+      pozycje: cart.map(i => `${i.qty}× ${i.designName} (${i.sizeLabel}, ${i.stripDesc || ''}) = ${(i.price * i.qty).toFixed(2)} zł\n   [config: ${Object.entries(i.baseCfg).map(([k, v]) => `${k}=${v}`).join(' ')} size=${i.size} strip=${i.strip} gora_tekst=${i.cfg.gora_tekst} gora_tlo=${i.cfg.gora_tlo} dol_tekst=${i.cfg.dol_tekst} dol_tlo=${i.cfg.dol_tlo}]`),
       suma_produkty: cartTotal().toFixed(2), suma_calosc: (cartTotal() + (d.price || 0)).toFixed(2),
     };
     const btn = $('#co-submit'); btn.disabled = true; btn.textContent = 'Wysyłanie…';
@@ -320,9 +425,22 @@
       if (sw) {
         const pal = sw.dataset.pal, val = sw.dataset.val;
         if (pal === 'tt') state.stripColorTop = val; else if (pal === 'tb') state.bandColorTop = val; else if (pal === 'bt') state.stripColorBot = val; else if (pal === 'bb') state.bandColorBot = val;
+        else if (pal === 'g1') state.geo.c1 = val; else if (pal === 'g2') state.geo.c2 = val; else if (pal === 'tg') state.tile.bg = val;
         $$(`[data-pal="${pal}"]`).forEach(s => s.classList.toggle('is-active', s === sw));
         updatePreview(); return;
       }
+      const bt = e.target.closest('[data-base]');
+      if (bt) { state.base = bt.dataset.base; applyBaseVisibility(); updatePreview(); return; }
+      const gp = e.target.closest('[data-geopat]');
+      if (gp) { state.geo.pattern = gp.dataset.geopat; $$('[data-geopat]').forEach(s => s.classList.toggle('is-active', s === gp)); updatePreview(); return; }
+      const gd = e.target.closest('[data-geodir]');
+      if (gd) { state.geo.dir = gd.dataset.geodir; $$('[data-geodir]').forEach(s => s.classList.toggle('is-active', s === gd)); updatePreview(); return; }
+      const em = e.target.closest('[data-emblem]');
+      if (em) { state.tile.emblem = em.dataset.emblem; $$('[data-emblem]').forEach(s => s.classList.toggle('is-active', s === em)); updatePreview(); return; }
+      const ec = e.target.closest('[data-embcat]');
+      if (ec) { state.embCat = ec.dataset.embcat; renderEmblems(); return; }
+      const tl = e.target.closest('[data-tilelayout]');
+      if (tl) { state.tile.layout = tl.dataset.tilelayout; $$('[data-tilelayout]').forEach(s => s.classList.toggle('is-active', s === tl)); updatePreview(); return; }
       if (e.target.closest('#add-to-cart, #sticky-add')) { addToCart(); return; }
       if (e.target.closest('#cart-toggle, #sticky-cart')) { openCart(); return; }
       if (e.target.closest('#cart-close')) { closeCart(); return; }
@@ -336,6 +454,8 @@
       if (e.target.closest('#nav a')) { $('#nav')?.classList.remove('open'); }
     });
     $('#design-search')?.addEventListener('input', (e) => { state.q = e.target.value.toLowerCase().trim(); renderGallery(); });
+    $('#geo-scale')?.addEventListener('input', (e) => { state.geo.scale = +e.target.value; updatePreview(); });
+    $('#tile-scale')?.addEventListener('input', (e) => { state.tile.scale = +e.target.value; updatePreview(); });
     $('#checkout-form')?.addEventListener('submit', submitOrder);
     $('#co-delivery')?.addEventListener('change', updateGrand);
     document.addEventListener('keydown', (e) => {
