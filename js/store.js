@@ -23,25 +23,32 @@
     freeShip: 199, delivery: [], bundles: [], lastFocus: null,
   };
   const STRIP_LABEL = { both: 'góra i dół', top: 'tylko góra', bot: 'tylko dół', none: 'bez paska' };
-  const STRIP_COLORS = [
-    { id: 'glitch', label: 'Glitch', css: 'linear-gradient(90deg,#22E0E6,#fff,#FF2E97)' },
+  const PALETTE = [
     { id: '#FFFFFF', label: 'Biały', css: '#FFFFFF' },
-    { id: '#22E0E6', label: 'Cyan', css: '#22E0E6' },
-    { id: '#FF2E97', label: 'Magenta', css: '#FF2E97' },
-    { id: '#9B5DE5', label: 'Fiolet', css: '#9B5DE5' },
-    { id: '#FFD23F', label: 'Żółty', css: '#FFD23F' },
-    { id: '#5DF7A0', label: 'Zielony', css: '#5DF7A0' },
-  ];
-  const BAND_COLORS = [
-    { id: '#000000', label: 'Czarne', css: '#000000' },
     { id: '#0B0A16', label: 'Granat', css: '#0B0A16' },
-    { id: '#FFFFFF', label: 'Białe', css: '#FFFFFF' },
+    { id: '#000000', label: 'Czarny', css: '#000000' },
+    { id: '#8A8DA8', label: 'Szary', css: '#8A8DA8' },
     { id: '#22E0E6', label: 'Cyan', css: '#22E0E6' },
-    { id: '#FF2E97', label: 'Magenta', css: '#FF2E97' },
+    { id: '#19C3C9', label: 'Turkus', css: '#19C3C9' },
+    { id: '#3BA7FF', label: 'Błękit', css: '#3BA7FF' },
+    { id: '#3B5BFF', label: 'Niebieski', css: '#3B5BFF' },
+    { id: '#7C3BFF', label: 'Indygo', css: '#7C3BFF' },
     { id: '#9B5DE5', label: 'Fiolet', css: '#9B5DE5' },
+    { id: '#C04BFF', label: 'Purpura', css: '#C04BFF' },
+    { id: '#FF2E97', label: 'Magenta', css: '#FF2E97' },
+    { id: '#FF5D8F', label: 'Róż', css: '#FF5D8F' },
+    { id: '#FF4D4D', label: 'Czerwony', css: '#FF4D4D' },
+    { id: '#FF6B35', label: 'Ceglasty', css: '#FF6B35' },
+    { id: '#FF8A3D', label: 'Pomarańcz', css: '#FF8A3D' },
+    { id: '#FFB23F', label: 'Bursztyn', css: '#FFB23F' },
     { id: '#FFD23F', label: 'Żółty', css: '#FFD23F' },
+    { id: '#EAFF3F', label: 'Cytryna', css: '#EAFF3F' },
+    { id: '#C6F542', label: 'Limonka', css: '#C6F542' },
     { id: '#5DF7A0', label: 'Zielony', css: '#5DF7A0' },
+    { id: '#2EE6B0', label: 'Mięta', css: '#2EE6B0' },
   ];
+  const STRIP_COLORS = [{ id: 'glitch', label: 'Glitch', css: 'linear-gradient(90deg,#22E0E6,#fff,#FF2E97)' }, ...PALETTE];
+  const BAND_COLORS = PALETTE;
   const colorLabel = (id) => (STRIP_COLORS.find(c => c.id === id) || {}).label || id;
   const bandLabel = (id) => (BAND_COLORS.find(c => c.id === id) || {}).label || id;
   const sideLabel = (t, b) => `napis ${colorLabel(t)}, tło ${bandLabel(b)}`;
