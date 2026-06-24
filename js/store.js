@@ -22,7 +22,6 @@
     base: 'scene',
     geo: { pattern: 'paski-pion', c1: '#0B0A16', c2: '#22E0E6', n: 10 },
     tile: { emblem: 'water-drop', bg: '#0B0A16', n: 6 },
-    stripLinked: true,
     emblems: [], embCat: 'all',
     cat: 'all', q: '',
     freeShip: 199, delivery: [], bundles: [], lastFocus: null,
@@ -98,7 +97,7 @@
       state.designId = state.designs[0]?.id || null;
     } catch (e) { console.error('Błąd ładowania danych', e); const g = $('#design-gallery'); if (g) g.innerHTML = '<p class="muted">Nie udało się załadować wzorów. Odśwież stronę.</p>'; return; }
 
-    renderGallery(); renderSizes(); renderPalettes(); applyStripUI();
+    renderGallery(); renderSizes(); renderPalettes(); applyStripVisibility();
     renderGeoControls(); renderEmblems(); applyBaseVisibility();
     renderDelivery(); updatePreview(); bindUI(); renderCart(); cookieBanner();
   }
@@ -144,23 +143,14 @@
     w.innerHTML = sizes.map(s => `<button class="strip-opt${s.n === current ? ' is-active' : ''}" data-size-${kind}="${s.n}">${esc(s.label)}</button>`).join('');
   }
   function renderPalettes() {
-    const onBot = state.strip === 'bot';
-    renderPalette('strip-colors-main', STRIP_COLORS, onBot ? state.stripColorBot : state.stripColorTop, 'mt', 'Kolor napisu');
-    renderPalette('band-colors-main', BAND_COLORS, onBot ? state.bandColorBot : state.bandColorTop, 'mb', 'Kolor tła');
     renderPalette('strip-colors-top', STRIP_COLORS, state.stripColorTop, 'tt', 'Napis górny');
     renderPalette('band-colors-top', BAND_COLORS, state.bandColorTop, 'tb', 'Tło górne');
     renderPalette('strip-colors-bot', STRIP_COLORS, state.stripColorBot, 'bt', 'Napis dolny');
     renderPalette('band-colors-bot', BAND_COLORS, state.bandColorBot, 'bb', 'Tło dolne');
   }
-  function applyStripUI() {
-    const none = state.strip === 'none', both = state.strip === 'both';
-    const split = both && !state.stripLinked;           // dwie osobne pary kolorów (góra/dół)
-    $('#strip-link-row')?.classList.toggle('off', none || !both);
-    $('#strip-main-group')?.classList.toggle('off', none || split);
-    $('#strip-top-group')?.classList.toggle('off', none || !split);
-    $('#strip-bot-group')?.classList.toggle('off', none || !split);
-    const lt = $('[data-striplink]');
-    if (lt) { lt.classList.toggle('is-active', state.stripLinked); lt.setAttribute('aria-pressed', state.stripLinked); }
+  function applyStripVisibility() {
+    $('#strip-top-group')?.classList.toggle('off', !(state.strip === 'both' || state.strip === 'top'));
+    $('#strip-bot-group')?.classList.toggle('off', !(state.strip === 'both' || state.strip === 'bot'));
   }
   function renderGeoControls() {
     const pw = $('#geo-patterns');
@@ -442,22 +432,13 @@
       const chip = e.target.closest('[data-cat]');
       if (chip) { state.cat = chip.dataset.cat; $$('[data-cat]').forEach(c => c.classList.toggle('is-active', c === chip)); renderGallery(); return; }
       const strip = e.target.closest('[data-strip]');
-      if (strip) { state.strip = strip.dataset.strip; $$('[data-strip]').forEach(s => { const a = s === strip; s.classList.toggle('is-active', a); s.setAttribute('aria-pressed', a); }); renderPalettes(); applyStripUI(); updatePreview(); return; }
-      const lk = e.target.closest('[data-striplink]');
-      if (lk) { state.stripLinked = !state.stripLinked; applyStripUI(); updatePreview(); return; }
+      if (strip) { state.strip = strip.dataset.strip; $$('[data-strip]').forEach(s => { const a = s === strip; s.classList.toggle('is-active', a); s.setAttribute('aria-pressed', a); }); applyStripVisibility(); updatePreview(); return; }
       const sw = e.target.closest('[data-pal]');
       if (sw) {
         const pal = sw.dataset.pal, val = sw.dataset.val;
-        if (pal === 'mt' || pal === 'mb') {           // wspólna para kolorów — ustaw aktywne strony
-          const t = state.strip !== 'bot', b = state.strip !== 'top';
-          if (pal === 'mt') { if (t) state.stripColorTop = val; if (b) state.stripColorBot = val; }
-          else { if (t) state.bandColorTop = val; if (b) state.bandColorBot = val; }
-          renderPalettes();
-        } else {
-          if (pal === 'tt') state.stripColorTop = val; else if (pal === 'tb') state.bandColorTop = val; else if (pal === 'bt') state.stripColorBot = val; else if (pal === 'bb') state.bandColorBot = val;
-          else if (pal === 'g1') state.geo.c1 = val; else if (pal === 'g2') state.geo.c2 = val; else if (pal === 'tg') state.tile.bg = val;
-          $$(`[data-pal="${pal}"]`).forEach(s => s.classList.toggle('is-active', s === sw));
-        }
+        if (pal === 'tt') state.stripColorTop = val; else if (pal === 'tb') state.bandColorTop = val; else if (pal === 'bt') state.stripColorBot = val; else if (pal === 'bb') state.bandColorBot = val;
+        else if (pal === 'g1') state.geo.c1 = val; else if (pal === 'g2') state.geo.c2 = val; else if (pal === 'tg') state.tile.bg = val;
+        $$(`[data-pal="${pal}"]`).forEach(s => s.classList.toggle('is-active', s === sw));
         updatePreview(); return;
       }
       const bt = e.target.closest('[data-base]');
