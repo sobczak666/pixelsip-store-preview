@@ -1,0 +1,6 @@
+*.py
+*.swift
+tools/
+data/_workflow_raw.json
+data/designs.base.json
+data/ux.json

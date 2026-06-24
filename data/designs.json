@@ -1,0 +1,730 @@
+[
+ {
+  "id": "arcade-hall",
+  "category": "sceny",
+  "file": "assets/designs/arcade-hall.png",
+  "name": "Salon Gier '88",
+  "blurb": "Rzedy neonowych automatow, ciemna podloga w odbiciach i ten zapach zetonow - cala arkadowa nostalgia w 600 ml.",
+  "categoryLabel": "Sceny",
+  "tags": [
+   "retro",
+   "arcade",
+   "neon"
+  ]
+ },
+ {
+  "id": "cloud-city",
+  "category": "sceny",
+  "file": "assets/designs/cloud-city.png",
+  "name": "Miasto na Chmurze",
+  "blurb": "Pastelowe miasto unoszace sie w niebie z balonami i swiecaca kropla wody jako landmarkiem - chill tier maksymalny.",
+  "categoryLabel": "Sceny",
+  "tags": [
+   "cozy",
+   "fantasy",
+   "pastel"
+  ]
+ },
+ {
+  "id": "cozy-gamer-room",
+  "category": "sceny",
+  "file": "assets/designs/cozy-gamer-room.png",
+  "name": "Jaskinia Gracza",
+  "blurb": "Neonowe szyldy, swiecaca butla na biurku i swiatla miasta za oknem - twoj wymarzony setup, tym razem na tumblerze.",
+  "categoryLabel": "Sceny",
+  "tags": [
+   "cozy",
+   "setup",
+   "neon"
+  ]
+ },
+ {
+  "id": "cyberpunk-desk",
+  "category": "sceny",
+  "file": "assets/designs/cyberpunk-desk.png",
+  "name": "Setup 2099",
+  "blurb": "Izometryczne biurko w deszczu neonu: RGB klawiatura, dwa monitory i butla, ktora swieci jasniej niz twoj K/D.",
+  "categoryLabel": "Sceny",
+  "tags": [
+   "cyberpunk",
+   "setup",
+   "neon"
+  ]
+ },
+ {
+  "id": "desert-oasis",
+  "category": "sceny",
+  "file": "assets/designs/desert-oasis.png",
+  "name": "Neonowa Oaza",
+  "blurb": "Turkusowa sadzawka pod gwiazdami, palmy, kaktusy i pelnia ksiezyca - respawn point posrodku pustyni.",
+  "categoryLabel": "Sceny",
+  "tags": [
+   "neon",
+   "chill",
+   "fantasy"
+  ]
+ },
+ {
+  "id": "floating-island",
+  "category": "sceny",
+  "file": "assets/designs/floating-island.png",
+  "name": "Latajaca Wyspa",
+  "blurb": "Magiczne zrodlo, wodospady i swiecace krysztaly na niebianskiej wyspie - loot z najwyzszej polki.",
+  "categoryLabel": "Sceny",
+  "tags": [
+   "fantasy",
+   "rpg",
+   "cozy"
+  ]
+ },
+ {
+  "id": "forest-camp",
+  "category": "sceny",
+  "file": "assets/designs/forest-camp.png",
+  "name": "Nocny Biwak",
+  "blurb": "Swiecacy namiot, ognisko, lampki miedzy drzewami i swietliki - safe zone z dala od lagu.",
+  "categoryLabel": "Sceny",
+  "tags": [
+   "cozy",
+   "chill",
+   "retro"
+  ]
+ },
+ {
+  "id": "glitch-void",
+  "category": "sceny",
+  "file": "assets/designs/glitch-void.png",
+  "name": "Glitch Void",
+  "blurb": "Plynace neonowe krople, datamosh i siatka perspektywy w cyberprzestrzeni - dla tych, ktorzy lubia bledy w systemie.",
+  "categoryLabel": "Sceny",
+  "tags": [
+   "glitch",
+   "cyberpunk",
+   "neon"
+  ]
+ },
+ {
+  "id": "haunted-arcade",
+  "category": "sceny",
+  "file": "assets/designs/haunted-arcade.png",
+  "name": "Nawiedzony Salon",
+  "blurb": "Opuszczona arkada we mgle, migajace pekniete neony i upiorny fiolet - synthwave horror prosto z lat 80.",
+  "categoryLabel": "Sceny",
+  "tags": [
+   "synthwave",
+   "horror",
+   "retro"
+  ]
+ },
+ {
+  "id": "mountain-lofi",
+  "category": "sceny",
+  "file": "assets/designs/mountain-lofi.png",
+  "name": "Lo-fi o Zmierzchu",
+  "blurb": "Spokojne jezioro odbijajace neonowe niebo, sosny i pierwsze gwiazdy - beaty do nauki w wersji do picia.",
+  "categoryLabel": "Sceny",
+  "tags": [
+   "lofi",
+   "chill",
+   "cozy"
+  ]
+ },
+ {
+  "id": "neon-city",
+  "category": "sceny",
+  "file": "assets/designs/neon-city.png",
+  "name": "Neon City Rain",
+  "blurb": "Cyberpunkowa ulica w ulewie, hologramowe billboardy i gigantyczny neonowy szyld - kazda kaluza odbija miasto.",
+  "categoryLabel": "Sceny",
+  "tags": [
+   "cyberpunk",
+   "neon",
+   "city"
+  ]
+ },
+ {
+  "id": "retro-pc-room",
+  "category": "sceny",
+  "file": "assets/designs/retro-pc-room.png",
+  "name": "Pokoj z CRT",
+  "blurb": "Bezowy komputer z lat 90, wygaszacz z butelka, plakaty i cieple swiatlo lampy - boot sequence do dziecinstwa.",
+  "categoryLabel": "Sceny",
+  "tags": [
+   "retro",
+   "cozy",
+   "nostalgia"
+  ]
+ },
+ {
+  "id": "rooftop-night",
+  "category": "sceny",
+  "file": "assets/designs/rooftop-night.png",
+  "name": "Dach o Polnocy",
+  "blurb": "Automat z napojami, lampki i dwoje znajomych nad swiecaca panorama miasta - AFK na najlepszym spawnie.",
+  "categoryLabel": "Sceny",
+  "tags": [
+   "chill",
+   "city",
+   "neon"
+  ]
+ },
+ {
+  "id": "rpg-tavern",
+  "category": "sceny",
+  "file": "assets/designs/rpg-tavern.png",
+  "name": "Karczma Bohaterow",
+  "blurb": "Polki pelne swiecacych miksturek HP i many, blask pochodni i drewniane beczki - zapisz gre i nalej sobie czegos.",
+  "categoryLabel": "Sceny",
+  "tags": [
+   "rpg",
+   "fantasy",
+   "cozy"
+  ]
+ },
+ {
+  "id": "sakura-shrine",
+  "category": "sceny",
+  "file": "assets/designs/sakura-shrine.png",
+  "name": "Sanktuarium Sakury",
+  "blurb": "Neonowa brama torii, spadajace platki wisni i delikatnie swiecaca misa z woda - hydratacja w trybie zen.",
+  "categoryLabel": "Sceny",
+  "tags": [
+   "neon",
+   "cozy",
+   "fantasy"
+  ]
+ },
+ {
+  "id": "scifi-bar",
+  "category": "sceny",
+  "file": "assets/designs/scifi-bar.png",
+  "name": "Kantyna Sci-Fi",
+  "blurb": "Polki swiecacych neonowych butelek, hologramowe menu i mroczne swiatlo - bar na koncu galaktyki.",
+  "categoryLabel": "Sceny",
+  "tags": [
+   "scifi",
+   "neon",
+   "cyberpunk"
+  ]
+ },
+ {
+  "id": "snowy-cabin",
+  "category": "sceny",
+  "file": "assets/designs/snowy-cabin.png",
+  "name": "Chatka w Sniegu",
+  "blurb": "Cieple okna, zielona zorza nad gorska chatka i dym z komina - najprzytulniejszy save point zimy.",
+  "categoryLabel": "Sceny",
+  "tags": [
+   "cozy",
+   "winter",
+   "chill"
+  ]
+ },
+ {
+  "id": "solarpunk-greenhouse",
+  "category": "sceny",
+  "file": "assets/designs/solarpunk-greenhouse.png",
+  "name": "Szklarnia Jutra",
+  "blurb": "Bujne rosliny, szklana kopula i smugi cieplego slonca nad dystrybutorem wody - solarpunkowy oddech swiezosci.",
+  "categoryLabel": "Sceny",
+  "tags": [
+   "solarpunk",
+   "cozy",
+   "green"
+  ]
+ },
+ {
+  "id": "space-station",
+  "category": "sceny",
+  "file": "assets/designs/space-station.png",
+  "name": "Stacja Orbitalna",
+  "blurb": "Astronauta dryfujacy ze swiecaca butla, gwiazdy i planeta za okraglym oknem - zero grawitacji, sto procent stylu.",
+  "categoryLabel": "Sceny",
+  "tags": [
+   "scifi",
+   "retro",
+   "space"
+  ]
+ },
+ {
+  "id": "subway-station",
+  "category": "sceny",
+  "file": "assets/designs/subway-station.png",
+  "name": "Neonowe Metro",
+  "blurb": "Pusta stacja noca, swiecacy automat z napojami i nadjezdzajacy pociag w odbiciach plytek - liminal vibe.",
+  "categoryLabel": "Sceny",
+  "tags": [
+   "neon",
+   "city",
+   "chill"
+  ]
+ },
+ {
+  "id": "synthwave-highway",
+  "category": "sceny",
+  "file": "assets/designs/synthwave-highway.png",
+  "name": "Synthwave Highway",
+  "blurb": "Widok zza deski rozdzielczej, wielkie retro slonce, palmy i napoj w cupholderze - peln gazu w lata 80.",
+  "categoryLabel": "Sceny",
+  "tags": [
+   "synthwave",
+   "retro",
+   "neon"
+  ]
+ },
+ {
+  "id": "underwater-neon",
+  "category": "sceny",
+  "file": "assets/designs/underwater-neon.png",
+  "name": "Neon Pod Woda",
+  "blurb": "Swiecace meduzy, banki w gore i zatopiony automat arcade w smugach swiatla - sekretny poziom oceanu.",
+  "categoryLabel": "Sceny",
+  "tags": [
+   "neon",
+   "underwater",
+   "retro"
+  ]
+ },
+ {
+  "id": "vaporwave-ocean",
+  "category": "sceny",
+  "file": "assets/designs/vaporwave-ocean.png",
+  "name": "Vaporwave Ocean",
+  "blurb": "Gigantyczna swiecaca kropla nad neonowa siatka oceanu, palmy i rozowy zachod - flagowa tapeta w formie tumblera.",
+  "categoryLabel": "Sceny",
+  "tags": [
+   "vaporwave",
+   "neon",
+   "retro"
+  ]
+ },
+ {
+  "id": "waterfall-temple",
+  "category": "sceny",
+  "file": "assets/designs/waterfall-temple.png",
+  "name": "Swiatynia Wodospadu",
+  "blurb": "Ruiny w dzungli, swiecacy blekitny wodospad, kamienne posagi i smugi swiatla we mgle - lokacja ukrytego bossa.",
+  "categoryLabel": "Sceny",
+  "tags": [
+   "fantasy",
+   "rpg",
+   "temple"
+  ]
+ },
+ {
+  "id": "bubble-field",
+  "category": "abstrakcyjne",
+  "file": "assets/designs/bubble-field.png",
+  "name": "Pole Babelkow",
+  "blurb": "Przezroczyste banki i krople dryfujace na glebokim blekicie z miekkim blaskiem - czysty H2O mood.",
+  "categoryLabel": "Abstrakcyjne",
+  "tags": [
+   "water",
+   "cozy",
+   "blue"
+  ]
+ },
+ {
+  "id": "checker-perspective",
+  "category": "abstrakcyjne",
+  "file": "assets/designs/checker-perspective.png",
+  "name": "Szachownica w Glab",
+  "blurb": "Neonowa krata w perspektywie gasnaca w swiecacym horyzoncie - retro grafika, ktora wciaga wzrok.",
+  "categoryLabel": "Abstrakcyjne",
+  "tags": [
+   "retro",
+   "neon",
+   "grid"
+  ]
+ },
+ {
+  "id": "circuit-glow",
+  "category": "abstrakcyjne",
+  "file": "assets/designs/circuit-glow.png",
+  "name": "Obwody Neon",
+  "blurb": "Bezszwowy wzor swiecacych sciezek plytki drukowanej, cyjan i magenta na czerni - tech do trzymania w dloni.",
+  "categoryLabel": "Abstrakcyjne",
+  "tags": [
+   "cyberpunk",
+   "tech",
+   "neon"
+  ]
+ },
+ {
+  "id": "crt-gradient",
+  "category": "abstrakcyjne",
+  "file": "assets/designs/crt-gradient.png",
+  "name": "Gradient CRT",
+  "blurb": "Gladkie przejscie cyjan-magenta z subtelnymi liniami skanowania - czysty retro szum w pixelach.",
+  "categoryLabel": "Abstrakcyjne",
+  "tags": [
+   "retro",
+   "crt",
+   "gradient"
+  ]
+ },
+ {
+  "id": "dither-sunset",
+  "category": "abstrakcyjne",
+  "file": "assets/designs/dither-sunset.png",
+  "name": "Dither Sunset",
+  "blurb": "Zachod ulozony z uporzadkowanego ditheringu - pasma pomaranczu, rozu i fioletu jak z 8-bitowej konsoli.",
+  "categoryLabel": "Abstrakcyjne",
+  "tags": [
+   "retro",
+   "sunset",
+   "dither"
+  ]
+ },
+ {
+  "id": "glitch-bars",
+  "category": "abstrakcyjne",
+  "file": "assets/designs/glitch-bars.png",
+  "name": "Glitch Bars",
+  "blurb": "Datamosh, przesuniete kanaly RGB i bloki cyjan-magenta - bug zmieniony w feature.",
+  "categoryLabel": "Abstrakcyjne",
+  "tags": [
+   "glitch",
+   "cyberpunk",
+   "neon"
+  ]
+ },
+ {
+  "id": "hex-mesh",
+  "category": "abstrakcyjne",
+  "file": "assets/designs/hex-mesh.png",
+  "name": "Siatka Hex",
+  "blurb": "Swiecaca heksagonalna krata, neonowy cyjan na granacie - interfejs jakby zywcem wyjety z HUD-u.",
+  "categoryLabel": "Abstrakcyjne",
+  "tags": [
+   "tech",
+   "neon",
+   "scifi"
+  ]
+ },
+ {
+  "id": "neon-grid-floor",
+  "category": "abstrakcyjne",
+  "file": "assets/designs/neon-grid-floor.png",
+  "name": "Neon Grid",
+  "blurb": "Klasyczna vaporwave'owa siatka w perspektywie ze swiecacym horyzontem pod rozgwiezdzonym niebem - default skin retro.",
+  "categoryLabel": "Abstrakcyjne",
+  "tags": [
+   "vaporwave",
+   "neon",
+   "grid"
+  ]
+ },
+ {
+  "id": "neon-waves",
+  "category": "abstrakcyjne",
+  "file": "assets/designs/neon-waves.png",
+  "name": "Neonowe Fale",
+  "blurb": "Plynace warstwy sinusoidalnych fal w cyjanie, fiolecie i magencie na czerni - ambient w formie wzoru.",
+  "categoryLabel": "Abstrakcyjne",
+  "tags": [
+   "neon",
+   "synthwave",
+   "waves"
+  ]
+ },
+ {
+  "id": "plasma-blobs",
+  "category": "abstrakcyjne",
+  "file": "assets/designs/plasma-blobs.png",
+  "name": "Plazma Lava",
+  "blurb": "Retro lampa lava: neonowe banki cyjanu, rozu i fioletu lejace sie miekko w siebie - hipnoza na 900 ml.",
+  "categoryLabel": "Abstrakcyjne",
+  "tags": [
+   "retro",
+   "neon",
+   "plasma"
+  ]
+ },
+ {
+  "id": "radial-pulse",
+  "category": "abstrakcyjne",
+  "file": "assets/designs/radial-pulse.png",
+  "name": "Radial Pulse",
+  "blurb": "Koncentryczne neonowe pierscienie pulsujace cyjanem i magenta - sygnal, ze czas sie napic.",
+  "categoryLabel": "Abstrakcyjne",
+  "tags": [
+   "neon",
+   "synthwave",
+   "pulse"
+  ]
+ },
+ {
+  "id": "starfield-nebula",
+  "category": "abstrakcyjne",
+  "file": "assets/designs/starfield-nebula.png",
+  "name": "Mgławica",
+  "blurb": "Glebia kosmosu z fioletowo-niebieska mgławica i rozsypanymi gwiazdami - twoj prywatny skybox.",
+  "categoryLabel": "Abstrakcyjne",
+  "tags": [
+   "space",
+   "cozy",
+   "nebula"
+  ]
+ },
+ {
+  "id": "arcade-corner",
+  "category": "pl",
+  "file": "assets/designs/arcade-corner.png",
+  "name": "Arcade Corner",
+  "blurb": "Jeden swiecacy automat w neonowym kacie, stolek i odbicia na podlodze - czysty retro minimal z klimatem.",
+  "categoryLabel": "Kolekcja PL",
+  "tags": [
+   "retro",
+   "arcade",
+   "neon"
+  ]
+ },
+ {
+  "id": "blokowisko-cyberpunk",
+  "category": "pl",
+  "file": "assets/designs/blokowisko-cyberpunk.png",
+  "name": "Blokowisko 2077",
+  "blurb": "Wielka plyta noca, swiecace okna, anteny satelitarne i kaluze w deszczu - polski cyberpunk, ktory znasz z balkonu.",
+  "categoryLabel": "Kolekcja PL",
+  "tags": [
+   "polski",
+   "cyberpunk",
+   "neon"
+  ]
+ },
+ {
+  "id": "defuse-bomba",
+  "category": "pl",
+  "file": "assets/designs/defuse-bomba.png",
+  "name": "Defuse or Die",
+  "blurb": "Podlozony ladunek z czerwonym odliczaniem na skrzyniach, piaszczysta mapa i worki z piaskiem - dziesiec sekund do konca rundy.",
+  "categoryLabel": "Kolekcja PL",
+  "tags": [
+   "fps",
+   "taktyczny",
+   "polski"
+  ]
+ },
+ {
+  "id": "dnd-stol",
+  "category": "pl",
+  "file": "assets/designs/dnd-stol.png",
+  "name": "Sesja przy Stole",
+  "blurb": "Widok z gory na kosci, fantasy mape, figurki i swieczki na drewnianym stole - rzut na inicjatywe i lyk wody.",
+  "categoryLabel": "Kolekcja PL",
+  "tags": [
+   "rpg",
+   "fantasy",
+   "cozy"
+  ]
+ },
+ {
+  "id": "energetyk-shaker",
+  "category": "pl",
+  "file": "assets/designs/energetyk-shaker.png",
+  "name": "Shaker Energii",
+  "blurb": "Shaker pelen swiecacego blekitnego energola, miarka rozblyskujacego proszku i iskry - paliwo na nocna sesje, bez kofeinowego kaca.",
+  "categoryLabel": "Kolekcja PL",
+  "tags": [
+   "polski",
+   "energetyk",
+   "neon"
+  ]
+ },
+ {
+  "id": "esport-arena",
+  "category": "pl",
+  "file": "assets/designs/esport-arena.png",
+  "name": "Arena Esportu",
+  "blurb": "Wielkie ekrany, reflektory i tlum z latarkami w telefonach - grand final, na ktorym chcesz byc.",
+  "categoryLabel": "Kolekcja PL",
+  "tags": [
+   "esport",
+   "polski",
+   "arena"
+  ]
+ },
+ {
+  "id": "gameroom-rgb",
+  "category": "pl",
+  "file": "assets/designs/gameroom-rgb.png",
+  "name": "Gameroom RGB",
+  "blurb": "Trzy monitory, swiecaca klawiatura, tasmy LED i figurki - setup, do ktorego dazysz przy kazdym update koszyka.",
+  "categoryLabel": "Kolekcja PL",
+  "tags": [
+   "setup",
+   "rgb",
+   "polski"
+  ]
+ },
+ {
+  "id": "haker-terminal",
+  "category": "pl",
+  "file": "assets/designs/haker-terminal.png",
+  "name": "Terminal Hakera",
+  "blurb": "Ciemny pokoj, monitory z zielonym kodem, szafy serwerowe i deszcz za oknem - I'm in. literalnie.",
+  "categoryLabel": "Kolekcja PL",
+  "tags": [
+   "cyberpunk",
+   "haker",
+   "neon"
+  ]
+ },
+ {
+  "id": "kafejka-internetowa",
+  "category": "pl",
+  "file": "assets/designs/kafejka-internetowa.png",
+  "name": "Kafejka '99",
+  "blurb": "Rzedy bulwiastych CRT swiecacych na niebiesko, splatane kable i neon GAMES - LAN-party, na ktore zawsze chciales wrocic.",
+  "categoryLabel": "Kolekcja PL",
+  "tags": [
+   "polski",
+   "retro",
+   "nostalgia"
+  ]
+ },
+ {
+  "id": "lan-party",
+  "category": "pl",
+  "file": "assets/designs/lan-party.png",
+  "name": "LAN w Piwnicy",
+  "blurb": "Znajomi przy kompach, swiecace ekrany, puszki energola i splatane kable - cozy chaos najlepszych nocy.",
+  "categoryLabel": "Kolekcja PL",
+  "tags": [
+   "polski",
+   "lan",
+   "cozy"
+  ]
+ },
+ {
+  "id": "maluch-vaporwave",
+  "category": "pl",
+  "file": "assets/designs/maluch-vaporwave.png",
+  "name": "Maluch Vaporwave",
+  "blurb": "Maly kanciasty fiat pedzacy w neonowy zachod po siatce drogi, palmy, roz i cyjan - polski klasyk w wersji synthwave.",
+  "categoryLabel": "Kolekcja PL",
+  "tags": [
+   "polski",
+   "vaporwave",
+   "retro"
+  ]
+ },
+ {
+  "id": "mech-bitwa",
+  "category": "pl",
+  "file": "assets/designs/mech-bitwa.png",
+  "name": "Bitwa Mechow",
+  "blurb": "Wielkie bojowe mechy lupia sie w neonowym cyberpunkowym miescie, eksplozje i lasery - pełny dramat na stali.",
+  "categoryLabel": "Kolekcja PL",
+  "tags": [
+   "mech",
+   "cyberpunk",
+   "scifi"
+  ]
+ },
+ {
+  "id": "neon-orzel",
+  "category": "pl",
+  "file": "assets/designs/neon-orzel.png",
+  "name": "Neonowy Orzel",
+  "blurb": "Stylizowany neonowy orzel z rozpostartymi skrzydlami, swiecacy cyjanem i bielia - esportowy crest z polskim pazurem.",
+  "categoryLabel": "Kolekcja PL",
+  "tags": [
+   "polski",
+   "esport",
+   "neon"
+  ]
+ },
+ {
+  "id": "noc-kebab",
+  "category": "pl",
+  "file": "assets/designs/noc-kebab.png",
+  "name": "Nocny Kebab",
+  "blurb": "Neonowa budka z kebabem, unoszaca sie para i mokra ulica - mood po rankedach o trzeciej nad ranem.",
+  "categoryLabel": "Kolekcja PL",
+  "tags": [
+   "polski",
+   "neon",
+   "nocny"
+  ]
+ },
+ {
+  "id": "piksel-rycerz",
+  "category": "pl",
+  "file": "assets/designs/piksel-rycerz.png",
+  "name": "Piksel Rycerz",
+  "blurb": "8-bitowy rycerz na klifie przed zamkiem w blasku zachodu - chunky retro RPG w czystej postaci.",
+  "categoryLabel": "Kolekcja PL",
+  "tags": [
+   "retro",
+   "rpg",
+   "fantasy"
+  ]
+ },
+ {
+  "id": "puchar-mistrzow",
+  "category": "pl",
+  "file": "assets/designs/puchar-mistrzow.png",
+  "name": "Puchar Mistrzow",
+  "blurb": "Zloty esportowy puchar swiecacy na piedestale, konfetti i reflektory - moment, w ktorym podnosisz trofeum.",
+  "categoryLabel": "Kolekcja PL",
+  "tags": [
+   "esport",
+   "polski",
+   "trofeum"
+  ]
+ },
+ {
+  "id": "retro-tv-konsola",
+  "category": "pl",
+  "file": "assets/designs/retro-tv-konsola.png",
+  "name": "Pegaz i CRT",
+  "blurb": "Stary telewizor na drewnianej szafce, konsola z kartridzami i wzorzysty dywan - 90s w polskim salonie.",
+  "categoryLabel": "Kolekcja PL",
+  "tags": [
+   "polski",
+   "retro",
+   "nostalgia"
+  ]
+ },
+ {
+  "id": "rush-b-tunel",
+  "category": "pl",
+  "file": "assets/designs/rush-b-tunel.png",
+  "name": "Rush B Tunel",
+  "blurb": "Betonowy korytarz w graffiti, spray na scianach i zapylone smugi swiatla - bez planu, prosto na B.",
+  "categoryLabel": "Kolekcja PL",
+  "tags": [
+   "fps",
+   "taktyczny",
+   "polski"
+  ]
+ },
+ {
+  "id": "smok-neon",
+  "category": "pl",
+  "file": "assets/designs/smok-neon.png",
+  "name": "Neonowy Smok",
+  "blurb": "Swiecacy neonowy smok oplatajacy wieze zamku, ziejacy blekitnym ogniem pod pelnia - raid boss na butelce.",
+  "categoryLabel": "Kolekcja PL",
+  "tags": [
+   "fantasy",
+   "neon",
+   "smok"
+  ]
+ },
+ {
+  "id": "zima-rynek",
+  "category": "pl",
+  "file": "assets/designs/zima-rynek.png",
+  "name": "Zimowy Rynek",
+  "blurb": "Osniezony stary rynek noca, jarmarkowe swiatla, stragany i cieply napoj - polska zima w najprzytulniejszej wersji.",
+  "categoryLabel": "Kolekcja PL",
+  "tags": [
+   "polski",
+   "winter",
+   "cozy"
+  ]
+ }
+]

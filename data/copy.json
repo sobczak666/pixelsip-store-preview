@@ -1,0 +1,111 @@
+{
+ "hero": {
+  "kicker": "PIXEL SIP // gamingowa hydratacja",
+  "headline": "Stay Hydrated, Stay Pixelated",
+  "subhead": "Tumblery ze stali nierdzewnej z nadrukiem pixel-art, które wyglądają jak loot z najlepszego dungeona. Twój setup zasługuje na butelkę, która nie psuje vibe'u.",
+  "ctaPrimary": "Wybierz wzór",
+  "ctaSecondary": "Zobacz kolekcję"
+ },
+ "valueProps": [
+  {
+   "emoji": "🛡️",
+   "title": "Nadruk, który nie respawnuje się jako placeholder",
+   "desc": "Sublimacja wtapia grafikę w powłokę, nie nakleja jej na wierzch. Bez łuszczenia, blaknięcia i smutnych odprysków po miesiącu. Pixele zostają na swoim miejscu."
+  },
+  {
+   "emoji": "❄️",
+   "title": "Podwójna ścianka = stała temperatura",
+   "desc": "Energol zimny przez cały raid, kawa ciepła przez całą sesję grindu. Stal nierdzewna z izolacją trzyma temperaturę godzinami, a obudowa nie poci się na biurku."
+  },
+  {
+   "emoji": "🎮",
+   "title": "56 wzorów, kolekcjonerski grind",
+   "desc": "Pixel art, retro, cyberpunk, vaporwave, neon. Każdy wzór to osobny drop. Zbierasz, wymieniasz, ustawiasz na półce obok figurek. Gotta hydrate 'em all."
+  },
+  {
+   "emoji": "🇵🇱",
+   "title": "Projekt natywny dla kultury gamingowej",
+   "desc": "Designujemy w Polsce, dla graczy. Żadnych stockowych \"fajnych grafik\" z marketu. Każdy wzór mógłby być okładką gry, której żałujesz, że nie zagrałeś."
+  }
+ ],
+ "howItWorks": {
+  "title": "Jak powstaje nadruk: sublimacja w 4 krokach",
+  "steps": [
+   {
+    "title": "1. Projekt ląduje na specjalnym papierze",
+    "desc": "Wybrany pixel-art drukujemy tuszem sublimacyjnym na transferowym papierze. To jeszcze nie magia, ale magia się ładuje."
+   },
+   {
+    "title": "2. Stal spotyka temperaturę i ciśnienie",
+    "desc": "Tumbler owijamy nadrukiem i wjeżdżamy w prasę. Wysoka temperatura otwiera powłokę butelki, jak portal w odpowiednim momencie."
+   },
+   {
+    "title": "3. Tusz zamienia się w gaz i wtapia w powłokę",
+    "desc": "Tu dzieje się fizyka: tusz przechodzi prosto ze stałego w gazowy i wnika w warstwę butelki. Grafika staje się częścią powierzchni, nie naklejką na niej."
+   },
+   {
+    "title": "4. Schłodzenie i kontrola jakości",
+    "desc": "Po ostygnięciu kolory są nasycone, ostre i odporne. Sprawdzamy każdą sztukę, pakujemy i wysyłamy do Twojego setupu."
+   }
+  ]
+ },
+ "care": {
+  "title": "Pielęgnacja, czyli jak nie zbrickować butelki",
+  "points": [
+   "Myj ręcznie, ciepłą wodą z odrobiną płynu i miękką gąbką. 30 sekund i czysto.",
+   "Zmywarka to permadeath dla nadruku. Wysoka temperatura i detergenty potrafią zmatowić grafikę i uszkodzić izolację. Nie ryzykuj save'a.",
+   "Mikrofalówka odpada na full. Stal w mikrofali to jump scare, jakiego nie chcesz w kuchni.",
+   "Nie szoruj druciakami ani agresywną chemią. Ścierne gąbki rysują powłokę i skracają żywotność wzoru.",
+   "Pokrywkę i słomkę myj osobno, a butelkę susz odwróconą do góry dnem. Zero wody uwięzionej w środku, zero zapachów."
+  ]
+ },
+ "about": {
+  "title": "Skąd się wzięliśmy",
+  "body": "Pixel Sip zaczął się od prostej frustracji: setup wypieszczony co do kabelka, RGB zsynchronizowane, a obok stoi generyczna butelka z napisem \"HYDRATE\" jak z automatu na stacji benzynowej. Uznaliśmy, że to bug, nie feature. Robimy tumblery, które wyglądają jak przedmiot z gry, a nie jak gadżet z firmowego eventu. Pixel art, retro, neon, cyberpunk: estetyka, na której się wychowaliśmy, przeniesiona na stal nierdzewną premium. Nie sprzedajemy \"butelek na wodę\". Sprzedajemy element setupu, który możesz pokazać na kamerce i nikt nie zapyta \"co to za syf\". Pijesz, grasz, kolekcjonujesz. Stay Hydrated, Stay Pixelated."
+ },
+ "faq": [
+  {
+   "q": "Czy nadruk się zetrze albo wyblaknie po kilku miesiącach?",
+   "a": "Nie, bo to sublimacja, nie naklejka. Grafika jest wtopiona w powłokę butelki, więc nie łuszczy się i nie odpryskuje. Przy myciu ręcznym (zgodnie z pielęgnacją) wzór zostaje ostry i nasycony na lata. Zmywarka to jedyny realny boss, który może mu zaszkodzić."
+  },
+  {
+   "q": "Mogę wrzucić tumbler do zmywarki?",
+   "a": "Szczerze: lepiej nie. Wysoka temperatura i detergenty w zmywarce potrafią zmatowić nadruk i osłabić izolację podwójnej ścianki. Mycie ręczne zajmuje 30 sekund i to jedyny sposób, żeby butelka wyglądała jak nowa po setkach sesji."
+  },
+  {
+   "q": "Jakie są pojemności i którą wybrać?",
+   "a": "Mamy 600 ml i 900 ml. 600 ml to wersja kompaktowa na biurko i do plecaka. 900 ml to opcja dla tych, którzy nie chcą wstawać w trakcie rankedów i wolą jeden duży uzupełniony zbiornik many. Oba modele to ta sama stal nierdzewna z podwójną ścianką."
+  },
+  {
+   "q": "Czy butelka faktycznie trzyma temperaturę?",
+   "a": "Tak. Podwójna ścianka ze stali nierdzewnej izoluje napój, więc zimne zostaje zimne, a ciepłe ciepłe przez wiele godzin. Bonus: obudowa nie poci się na biurku, więc żadnych mokrych kółek pod myszką ani na klawiaturze."
+  },
+  {
+   "q": "Ile trwa realizacja i jak szybko dojdzie?",
+   "a": "Każdy tumbler zdobi się na zamówienie, więc realizacja zajmuje zwykle 2-4 dni robocze, a potem kurier dostarcza paczkę w 1-2 dni robocze. Status śledzisz na bieżąco. Drop nowych wzorów potrafi wydłużyć kolejkę, ale dajemy znać z wyprzedzeniem."
+  },
+  {
+   "q": "Czy mogę zwrócić butelkę, jeśli wzór mi nie podejdzie?",
+   "a": "Jasne. Masz 14 dni na zwrot nieużywanego tumblera w oryginalnym stanie, zgodnie z prawem konsumenckim. Wadliwy nadruk albo uszkodzenie w transporcie? Piszesz, my ogarniamy wymianę. Zero questa z dziesięcioma NPC-ami do przejścia."
+  },
+  {
+   "q": "Co ze słomką i pokrywką?",
+   "a": "W zestawie dostajesz szczelną pokrywkę i wielorazową słomkę. Pokrywka ogranicza rozlewanie przy nieuważnym ruchu (zdarza się w klatchu), a słomkę i wieczko myjesz osobno. Na wymianę słomek też damy radę."
+  },
+  {
+   "q": "Da się zamówić własny wzór albo grafikę gildii?",
+   "a": "Pracujemy nad custom dropami i zamówieniami grupowymi (gildie, teamy, prezenty firmowe bez korpo-nudy). Jeśli masz pomysł na własny pixel-art albo logo teamu, napisz do nas, a sprawdzimy, czy da się to wbić na stal."
+  }
+ ],
+ "shippingBlurb": "Wysyłamy kurierem po 2-4 dniach roboczych personalizacji, z pełnym śledzeniem paczki od naszego magazynu do Twojego setupu.",
+ "newsletter": {
+  "title": "Nie przegap dropu",
+  "desc": "Nowe wzory lecą limitowanymi dropami i potrafią zniknąć szybciej niż loot legendarny. Zapisz się, a dostaniesz early access do kolekcji, zniżki dla zapisanych i pierwszeństwo, zanim reszta party się zorientuje.",
+  "cta": "Zapisz się na dropy"
+ },
+ "footerTagline": "Stay Hydrated, Stay Pixelated. Hydratacja dla Twojego setupu.",
+ "seo": {
+  "title": "Pixel Sip - tumblery pixel-art dla graczy",
+  "description": "Premium tumblery 600 i 900 ml ze stali nierdzewnej z nadrukiem pixel-art. 56 wzorów: retro, cyberpunk, neon. Stay Hydrated, Stay Pixelated."
+ }
+}

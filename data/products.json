@@ -1,0 +1,154 @@
+{
+ "currency": "PLN",
+ "freeShippingThreshold": 199,
+ "products": [
+  {
+   "id": "tumbler-900",
+   "name": "PIXEL SIP Tumbler 900 ml — Stay Hydrated, Stay Pixelated",
+   "sizeLabel": "900 ml",
+   "capacityMl": 900,
+   "retailPrice": 129,
+   "compareAt": 159,
+   "shortDesc": "Maksymalny zapas many na cały raid — 900 ml stali, podwójna ścianka i pixel-art, który należy do Twojego setupu, a nie do szafki z gadżetami.",
+   "specs": [
+    {
+     "label": "Pojemność",
+     "value": "900 ml"
+    },
+    {
+     "label": "Materiał",
+     "value": "Stal nierdzewna, podwójna ścianka (zewn. 304 / wewn. 201)"
+    },
+    {
+     "label": "Wymiary",
+     "value": "Ø 7,5 × 25,4 cm"
+    },
+    {
+     "label": "Kolor",
+     "value": "Biały matowy"
+    },
+    {
+     "label": "Pokrywka i słomka",
+     "value": "Przezroczysta pokrywka + metalowa słomka wielokrotnego użytku"
+    },
+    {
+     "label": "Nadruk",
+     "value": "Sublimacyjny pixel-art, full-wrap, na całej powierzchni"
+    },
+    {
+     "label": "Izolacja",
+     "value": "Termiczna (double-wall) — zimne zostaje zimne, ciepłe ciepłe"
+    },
+    {
+     "label": "SKU",
+     "value": "BW34PS-900WT"
+    }
+   ],
+   "image": "assets/products/tumbler-900-12514_1.jpg",
+   "gallery": [
+    "assets/products/tumbler-900-12514_1.jpg"
+   ],
+   "mockup": {
+    "photo": "assets/products/tumbler-900-12514_1-cut.png",
+    "left": 5.26,
+    "top": 25.37,
+    "width": 70.39,
+    "height": 70.15
+   }
+  },
+  {
+   "id": "tumbler-600",
+   "name": "PIXEL SIP Tumbler 600 ml — Stay Hydrated, Stay Pixelated",
+   "sizeLabel": "600 ml",
+   "capacityMl": 600,
+   "retailPrice": 109,
+   "compareAt": 139,
+   "shortDesc": "Kompaktowy daily driver na biurko gracza — 600 ml stali, podwójna ścianka i nadruk pixel-art, który pasuje do każdego loadoutu.",
+   "specs": [
+    {
+     "label": "Pojemność",
+     "value": "600 ml"
+    },
+    {
+     "label": "Materiał",
+     "value": "Stal nierdzewna, podwójna ścianka (zewn. 304 / wewn. 201)"
+    },
+    {
+     "label": "Wymiary",
+     "value": "Ø 7,5 × 21,3 cm"
+    },
+    {
+     "label": "Kolor",
+     "value": "Biały matowy"
+    },
+    {
+     "label": "Pokrywka i słomka",
+     "value": "Pokrywka + metalowa słomka wielokrotnego użytku"
+    },
+    {
+     "label": "Nadruk",
+     "value": "Sublimacyjny pixel-art, full-wrap, na całej powierzchni"
+    },
+    {
+     "label": "Izolacja",
+     "value": "Termiczna (double-wall) — utrzymuje temperaturę napoju"
+    },
+    {
+     "label": "SKU",
+     "value": "BW34PS-600WT"
+    }
+   ],
+   "image": "assets/products/tumbler-600-12513_1.jpg",
+   "gallery": [
+    "assets/products/tumbler-600-12513_1.jpg",
+    "assets/products/tumbler-600-12513_2.jpg",
+    "assets/products/tumbler-600-12513_3.jpg"
+   ],
+   "mockup": {
+    "photo": "assets/products/tumbler-600-12513_1-cut.png",
+    "left": 3.47,
+    "top": 27.36,
+    "width": 78.47,
+    "height": 67.66
+   }
+  }
+ ],
+ "bundles": [
+  {
+   "title": "Duo Loadout (600 ml + 900 ml)",
+   "desc": "Pełen ekwipunek nawodnienia: 900 ml na sesje maraton + 600 ml na wypady poza bazę. Dwie sztuki taniej niż osobno — i jedna wysyłka.",
+   "price": 209
+  },
+  {
+   "title": "Starter Pack — 900 ml + naklejki + kod na kolejny drop",
+   "desc": "Wejście do gry: tumbler 900 ml, arkusz pixelowych naklejek na setup i kod -15% na następny numerowany drop. Gotowy, trafiony prezent dla gracza prosto z pudełka.",
+   "price": 139
+  }
+ ],
+ "delivery": [
+  {
+   "method": "InPost Paczkomat 24/7",
+   "desc": "Najczęstszy wybór — odbiór z paczkomatu o dowolnej porze. Darmowo od 199 zł.",
+   "price": 12.99,
+   "eta": "1–2 dni robocze"
+  },
+  {
+   "method": "Kurier InPost / DPD (pod drzwi)",
+   "desc": "Dostawa pod wskazany adres. Darmowo od 199 zł.",
+   "price": 16.99,
+   "eta": "1–2 dni robocze"
+  },
+  {
+   "method": "Kurier — za pobraniem",
+   "desc": "Płatność gotówką lub kartą przy odbiorze przesyłki.",
+   "price": 21.99,
+   "eta": "1–2 dni robocze"
+  },
+  {
+   "method": "Odbiór osobisty",
+   "desc": "Odbiór po wcześniejszym umówieniu — zero kosztów wysyłki.",
+   "price": 0,
+   "eta": "Gotowe do odbioru w 1–2 dni"
+  }
+ ]
+}
