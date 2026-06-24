@@ -99,7 +99,7 @@ function init() {
 
   // API dla store.js
   window.Tumbler = { setTextureCanvas, setSize };
-  window.__t3d = { controls, camera, scene };  // QA
+  window.__t3d = { controls, camera, scene, renderer, render: () => renderer.render(scene, camera) };  // QA
   if (window.__tumblerWant) setSize(window.__tumblerWant.cap);
   if (window.__tumblerCanvas) setTextureCanvas(window.__tumblerCanvas);
 

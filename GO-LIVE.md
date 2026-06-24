@@ -26,15 +26,16 @@ Sklep nie predefiniuje wariantów — klient konfiguruje (wzór + rozmiar + pozy
 
 1. W mailu zamówienia każda pozycja ma linię `[config: ...]`, np.:
    - `[config: base=scene design=vaporwave-ocean size=tumbler-900 strip=both gora_tekst=#FFFFFF gora_tlo=#FF2E97 dol_tekst=glitch dol_tlo=#000000]`
-   - `[config: base=geo wzor=romby c1=#0B0A16 c2=#FF2E97 skala=44 kier=skos size=tumbler-900 strip=both gora_tekst=glitch gora_tlo=#000000 dol_tekst=glitch dol_tlo=#000000]`
-   - `[config: base=tile emblemat=water-drop tlo=#0B0A16 skala=90 uklad=brick size=tumbler-900 strip=both ...]`
+   - `[config: base=geo wzor=romby c1=#0B0A16 c2=#FF2E97 n=10 size=tumbler-900 strip=both gora_tekst=glitch gora_tlo=#000000 dol_tekst=glitch dol_tlo=#000000]`
+   - `[config: base=tile emblemat=water-drop tlo=#0B0A16 n=6 size=tumbler-900 strip=both ...]`
 2. **Kopiujesz całą zawartość nawiasu** i wklejasz jako jeden argument:
    ```bash
-   python pixel-lab/generate_order.py "base=geo wzor=romby c1=#0B0A16 c2=#FF2E97 skala=44 kier=skos size=tumbler-900 strip=both gora_tekst=glitch gora_tlo=#000000 dol_tekst=glitch dol_tlo=#000000"
+   python pixel-lab/generate_order.py "base=geo wzor=romby c1=#0B0A16 c2=#FF2E97 n=10 size=tumbler-900 strip=both gora_tekst=glitch gora_tlo=#000000 dol_tekst=glitch dol_tlo=#000000"
    ```
 3. Dostajesz gotowy **PNG + PDF 1:1** (z 4 mm spadem, 300 DPI) w `pixel-lab/orders/` → wysyłasz do drukarni.
 
-> Trzy tryby bazy: `scene` (56 scen), `geo` (wzory geometryczne: paski/szachownica/romby/kropki/krata/zygzak), `tile` (emblemat kafelkowany — 100 emblematów). Podgląd 3D w sklepie i plik z generatora używają tej samej logiki — to, co klient widzi, to co dostaje na druku.
+> Trzy tryby bazy: `scene` (sceny pixel-art), `geo` (wzory geometryczne: paski-pion/paski-poziom/szachownica/romby/kropki/krata/zygzak), `tile` (emblemat kafelkowany — 100 emblematów).
+> `n` = liczba powtórzeń wzoru na obwodzie (z przycisków Drobny/Średni/Duży/Wielki w sklepie) — komórka = szerokość/`n`, więc wzór **zawsze domyka się bezszwowo na szwie** z tyłu kubka. Podgląd 3D w sklepie i plik z generatora używają tej samej logiki — to, co klient widzi, to co dostaje na druku.
 
 ## 🟡 WAŻNE (zrób przed lub tuż po starcie)
 

@@ -20,17 +20,21 @@
     size: null, designId: null, strip: 'both',
     stripColorTop: 'glitch', bandColorTop: '#000000', stripColorBot: 'glitch', bandColorBot: '#000000',
     base: 'scene',
-    geo: { pattern: 'paski', c1: '#0B0A16', c2: '#22E0E6', scale: 60, dir: 'skos' },
-    tile: { emblem: 'water-drop', bg: '#0B0A16', scale: 100, layout: 'brick' },
+    geo: { pattern: 'paski-pion', c1: '#0B0A16', c2: '#22E0E6', n: 10 },
+    tile: { emblem: 'water-drop', bg: '#0B0A16', n: 6 },
+    stripLinked: true,
     emblems: [], embCat: 'all',
     cat: 'all', q: '',
     freeShip: 199, delivery: [], bundles: [], lastFocus: null,
   };
+  // wzory tilują się na szwie (cell = szerokość / n, bez obrotów)
   const GEO_PATTERNS = [
-    { id: 'paski', label: 'Paski' }, { id: 'szachownica', label: 'Szachownica' },
-    { id: 'romby', label: 'Romby' }, { id: 'kropki', label: 'Kropki' },
-    { id: 'krata', label: 'Krata' }, { id: 'zygzak', label: 'Zygzak' },
+    { id: 'paski-pion', label: 'Paski ▏▏' }, { id: 'paski-poziom', label: 'Paski ▭' },
+    { id: 'szachownica', label: 'Szachownica' }, { id: 'romby', label: 'Romby' },
+    { id: 'kropki', label: 'Kropki' }, { id: 'krata', label: 'Krata' }, { id: 'zygzak', label: 'Zygzak' },
   ];
+  const GEO_SIZES = [{ label: 'Drobny', n: 16 }, { label: 'Średni', n: 10 }, { label: 'Duży', n: 6 }, { label: 'Wielki', n: 4 }];
+  const TILE_SIZES = [{ label: 'Drobny', n: 10 }, { label: 'Średni', n: 7 }, { label: 'Duży', n: 5 }, { label: 'Wielki', n: 3 }];
   const STRIP_LABEL = { both: 'góra i dół', top: 'tylko góra', bot: 'tylko dół', none: 'bez paska' };
   const PALETTE = [
     { id: '#FFFFFF', label: 'Biały', css: '#FFFFFF' },
@@ -94,7 +98,7 @@
       state.designId = state.designs[0]?.id || null;
     } catch (e) { console.error('Błąd ładowania danych', e); const g = $('#design-gallery'); if (g) g.innerHTML = '<p class="muted">Nie udało się załadować wzorów. Odśwież stronę.</p>'; return; }
 
-    renderGallery(); renderSizes(); renderPalettes(); applyStripVisibility();
+    renderGallery(); renderSizes(); renderPalettes(); applyStripUI();
     renderGeoControls(); renderEmblems(); applyBaseVisibility();
     renderDelivery(); updatePreview(); bindUI(); renderCart(); cookieBanner();
   }
@@ -135,21 +139,35 @@
     const w = $('#' + id); if (!w) return;
     w.innerHTML = colors.map(c => `<button class="swatch${c.id === current ? ' is-active' : ''}" data-pal="${pal}" data-val="${esc(c.id)}" title="${esc(c.label)}" aria-label="${lbl}: ${esc(c.label)}" style="background:${c.css}"></button>`).join('');
   }
+  function renderSizeBtns(id, sizes, current, kind) {
+    const w = $('#' + id); if (!w) return;
+    w.innerHTML = sizes.map(s => `<button class="strip-opt${s.n === current ? ' is-active' : ''}" data-size-${kind}="${s.n}">${esc(s.label)}</button>`).join('');
+  }
   function renderPalettes() {
+    const onBot = state.strip === 'bot';
+    renderPalette('strip-colors-main', STRIP_COLORS, onBot ? state.stripColorBot : state.stripColorTop, 'mt', 'Kolor napisu');
+    renderPalette('band-colors-main', BAND_COLORS, onBot ? state.bandColorBot : state.bandColorTop, 'mb', 'Kolor tła');
     renderPalette('strip-colors-top', STRIP_COLORS, state.stripColorTop, 'tt', 'Napis górny');
     renderPalette('band-colors-top', BAND_COLORS, state.bandColorTop, 'tb', 'Tło górne');
     renderPalette('strip-colors-bot', STRIP_COLORS, state.stripColorBot, 'bt', 'Napis dolny');
     renderPalette('band-colors-bot', BAND_COLORS, state.bandColorBot, 'bb', 'Tło dolne');
   }
-  function applyStripVisibility() {
-    $('#strip-top-group')?.classList.toggle('off', !(state.strip === 'both' || state.strip === 'top'));
-    $('#strip-bot-group')?.classList.toggle('off', !(state.strip === 'both' || state.strip === 'bot'));
+  function applyStripUI() {
+    const none = state.strip === 'none', both = state.strip === 'both';
+    const split = both && !state.stripLinked;           // dwie osobne pary kolorów (góra/dół)
+    $('#strip-link-row')?.classList.toggle('off', none || !both);
+    $('#strip-main-group')?.classList.toggle('off', none || split);
+    $('#strip-top-group')?.classList.toggle('off', none || !split);
+    $('#strip-bot-group')?.classList.toggle('off', none || !split);
+    const lt = $('[data-striplink]');
+    if (lt) { lt.classList.toggle('is-active', state.stripLinked); lt.setAttribute('aria-pressed', state.stripLinked); }
   }
   function renderGeoControls() {
     const pw = $('#geo-patterns');
     if (pw) pw.innerHTML = GEO_PATTERNS.map(p => `<button class="strip-opt${p.id === state.geo.pattern ? ' is-active' : ''}" data-geopat="${p.id}">${esc(p.label)}</button>`).join('');
     renderPalette('geo-c1', PALETTE, state.geo.c1, 'g1', 'Kolor tła');
     renderPalette('geo-c2', PALETTE, state.geo.c2, 'g2', 'Kolor wzoru');
+    renderSizeBtns('geo-sizes', GEO_SIZES, state.geo.n, 'geo');
   }
   function renderEmblems() {
     const cats = ['all', ...new Set(state.emblems.map(e => e.category))];
@@ -162,6 +180,7 @@
       tray.innerHTML = items.map(e => `<button class="emb${e.id === state.tile.emblem ? ' is-active' : ''}" data-emblem="${esc(e.id)}" title="${esc(e.id)}" aria-label="Emblemat ${esc(e.id)}"><img src="${esc(e.file)}" alt="" loading="lazy" width="64" height="64"></button>`).join('');
     }
     renderPalette('tile-bg', PALETTE, state.tile.bg, 'tg', 'Kolor tła');
+    renderSizeBtns('tile-sizes', TILE_SIZES, state.tile.n, 'tile');
   }
   function applyBaseVisibility() {
     ['scene', 'geo', 'tile'].forEach(b => $('#panel-' + b)?.classList.toggle('off', state.base !== b));
@@ -220,43 +239,42 @@
     drawCover(img, x, y, w, h);
   }
   function drawGeo(x, y, w, h) {
-    const g = state.geo, sc = Math.max(8, g.scale | 0), P = g.pattern, D = Math.max(w, h);
+    const g = state.geo, n = Math.max(2, g.n | 0), cell = w / n, P = g.pattern, rows = Math.ceil(h / cell) + 1;
     tctx.save(); tctx.beginPath(); tctx.rect(x, y, w, h); tctx.clip();
     tctx.fillStyle = g.c1; tctx.fillRect(x, y, w, h);
     tctx.fillStyle = g.c2; tctx.strokeStyle = g.c2;
-    if (P === 'paski') {
-      const ang = g.dir === 'pion' ? 0 : g.dir === 'poziom' ? 90 : 45;
-      tctx.save(); tctx.translate(x + w / 2, y + h / 2); tctx.rotate(ang * Math.PI / 180);
-      const R = D * 1.5; for (let i = -R; i < R; i += sc * 2) tctx.fillRect(i, -R, sc, 2 * R); tctx.restore();
-    } else if (P === 'szachownica' || P === 'romby') {
-      tctx.save();
-      if (P === 'romby') { tctx.translate(x + w / 2, y + h / 2); tctx.rotate(Math.PI / 4); tctx.translate(-(x + w / 2), -(y + h / 2)); }
-      for (let r = -Math.ceil(D / sc) - 1; (y - D + r * sc) < y + h + D; r++)
-        for (let c = -Math.ceil(D / sc) - 1; (x - D + c * sc) < x + w + D; c++)
-          if ((r + c) & 1) tctx.fillRect(x - D + c * sc, y - D + r * sc, sc, sc);
-      tctx.restore();
+    if (P === 'paski-pion') {
+      for (let i = 0; i < n; i++) tctx.fillRect(x + i * cell, y, cell / 2, h);
+    } else if (P === 'paski-poziom') {
+      for (let j = 0; j < rows; j++) tctx.fillRect(x, y + j * cell, w, cell / 2);
+    } else if (P === 'szachownica') {
+      for (let j = 0; j < rows; j++) for (let i = 0; i < n; i++) if ((i + j) & 1) tctx.fillRect(x + i * cell, y + j * cell, cell + 0.6, cell + 0.6);
+    } else if (P === 'romby') {
+      // pojedyncza krata rombów (cyan romb / romb tła naprzemiennie — harlequin); domyka się na szwie dla każdego n
+      const hw = cell / 2, dia = (cx, cy) => { tctx.beginPath(); tctx.moveTo(cx, cy - hw); tctx.lineTo(cx + hw, cy); tctx.lineTo(cx, cy + hw); tctx.lineTo(cx - hw, cy); tctx.closePath(); tctx.fill(); };
+      for (let j = -1; j <= rows; j++) for (let i = -1; i <= n; i++) dia(x + i * cell, y + j * cell);
     } else if (P === 'kropki') {
-      const rr = sc * 0.3;
-      for (let cy = y + sc / 2; cy < y + h + sc; cy += sc) for (let cx = x + sc / 2; cx < x + w + sc; cx += sc) { tctx.beginPath(); tctx.arc(cx, cy, rr, 0, 7); tctx.fill(); }
+      const r = cell * 0.3;
+      for (let j = 0; j < rows; j++) for (let i = 0; i < n; i++) { tctx.beginPath(); tctx.arc(x + (i + 0.5) * cell, y + (j + 0.5) * cell, r, 0, 7); tctx.fill(); }
     } else if (P === 'krata') {
-      tctx.lineWidth = Math.max(2, sc * 0.12);
-      for (let cx = x; cx < x + w + sc; cx += sc) { tctx.beginPath(); tctx.moveTo(cx, y); tctx.lineTo(cx, y + h); tctx.stroke(); }
-      for (let cy = y; cy < y + h + sc; cy += sc) { tctx.beginPath(); tctx.moveTo(x, cy); tctx.lineTo(x + w, cy); tctx.stroke(); }
+      tctx.lineWidth = Math.max(2, cell * 0.12);
+      for (let i = 0; i <= n; i++) { tctx.beginPath(); tctx.moveTo(x + i * cell, y); tctx.lineTo(x + i * cell, y + h); tctx.stroke(); }
+      for (let j = 0; j <= rows; j++) { tctx.beginPath(); tctx.moveTo(x, y + j * cell); tctx.lineTo(x + w, y + j * cell); tctx.stroke(); }
     } else if (P === 'zygzak') {
-      tctx.lineWidth = Math.max(3, sc * 0.34); tctx.lineJoin = 'miter';
-      for (let yy = y - sc; yy < y + h + sc; yy += sc * 2) { tctx.beginPath(); let up = true; for (let xx = x - sc; xx < x + w + sc; xx += sc) { tctx.lineTo(xx, yy + (up ? 0 : sc)); up = !up; } tctx.stroke(); }
+      tctx.lineWidth = Math.max(3, cell * 0.28); tctx.lineJoin = 'miter';
+      for (let j = -1; j < rows + 1; j += 2) { tctx.beginPath(); for (let i = 0; i <= n; i++) tctx.lineTo(x + i * cell, y + j * cell + ((i & 1) ? cell : 0)); tctx.stroke(); }
     }
     tctx.restore();
   }
   function drawTile(x, y, w, h, img) {
-    const t = state.tile, sc = Math.max(24, t.scale | 0);
+    const t = state.tile, n = Math.max(2, t.n | 0), cell = w / n;
     tctx.save(); tctx.beginPath(); tctx.rect(x, y, w, h); tctx.clip();
     tctx.fillStyle = t.bg; tctx.fillRect(x, y, w, h);
     tctx.imageSmoothingEnabled = false;
-    const ih = sc * (img.height / img.width); let row = 0;
-    for (let cy = y; cy < y + h + sc; cy += sc) {
-      const off = (t.layout === 'brick' && (row & 1)) ? sc / 2 : 0;
-      for (let cx = x - sc; cx < x + w + sc; cx += sc) tctx.drawImage(img, cx + off, cy, sc, ih);
+    const ih = cell * (img.height / img.width); let row = 0;
+    for (let cy = y; cy < y + h + cell; cy += cell) {
+      const off = (row & 1) ? cell / 2 : 0;
+      for (let i = -1; i <= n; i++) tctx.drawImage(img, x + i * cell + off, cy, cell, ih);
       row++;
     }
     tctx.restore();
@@ -267,7 +285,11 @@
     const d = state.byId[state.designId], p = state.prodById[state.size];
     if (!d || !p) return;
     const set = (id, t) => { const el = $(id); if (el) el.textContent = t; };
-    set('#preview-name', d.name); set('#preview-blurb', d.blurb || '');
+    const isScene = state.base === 'scene';
+    const blurb = isScene ? (d.blurb || '')
+      : state.base === 'geo' ? 'Wzór geometryczny • nadruk domyka się bezszwowo dookoła'
+      : 'Emblemat kafelkowany • nadruk domyka się bezszwowo dookoła';
+    set('#preview-name', isScene ? d.name : baseName()); set('#preview-blurb', blurb);
     set('#preview-size', p.sizeLabel); set('#preview-price', PLN(p.retailPrice));
     const cmp = $('#preview-compare');
     if (cmp) { if (p.compareAt && p.compareAt > p.retailPrice) { cmp.textContent = PLN(p.compareAt); cmp.hidden = false; } else cmp.hidden = true; }
@@ -285,8 +307,8 @@
   }
   function baseConfig() {
     const g = state.geo, t = state.tile;
-    if (state.base === 'geo') return { base: 'geo', wzor: g.pattern, c1: g.c1, c2: g.c2, skala: g.scale, kier: g.dir };
-    if (state.base === 'tile') return { base: 'tile', emblemat: t.emblem, tlo: t.bg, skala: t.scale, uklad: t.layout };
+    if (state.base === 'geo') return { base: 'geo', wzor: g.pattern, c1: g.c1, c2: g.c2, n: g.n };
+    if (state.base === 'tile') return { base: 'tile', emblemat: t.emblem, tlo: t.bg, n: t.n };
     return { base: 'scene', design: state.designId };
   }
   function baseName() {
@@ -420,27 +442,36 @@
       const chip = e.target.closest('[data-cat]');
       if (chip) { state.cat = chip.dataset.cat; $$('[data-cat]').forEach(c => c.classList.toggle('is-active', c === chip)); renderGallery(); return; }
       const strip = e.target.closest('[data-strip]');
-      if (strip) { state.strip = strip.dataset.strip; $$('[data-strip]').forEach(s => { const a = s === strip; s.classList.toggle('is-active', a); s.setAttribute('aria-pressed', a); }); applyStripVisibility(); updatePreview(); return; }
+      if (strip) { state.strip = strip.dataset.strip; $$('[data-strip]').forEach(s => { const a = s === strip; s.classList.toggle('is-active', a); s.setAttribute('aria-pressed', a); }); renderPalettes(); applyStripUI(); updatePreview(); return; }
+      const lk = e.target.closest('[data-striplink]');
+      if (lk) { state.stripLinked = !state.stripLinked; applyStripUI(); updatePreview(); return; }
       const sw = e.target.closest('[data-pal]');
       if (sw) {
         const pal = sw.dataset.pal, val = sw.dataset.val;
-        if (pal === 'tt') state.stripColorTop = val; else if (pal === 'tb') state.bandColorTop = val; else if (pal === 'bt') state.stripColorBot = val; else if (pal === 'bb') state.bandColorBot = val;
-        else if (pal === 'g1') state.geo.c1 = val; else if (pal === 'g2') state.geo.c2 = val; else if (pal === 'tg') state.tile.bg = val;
-        $$(`[data-pal="${pal}"]`).forEach(s => s.classList.toggle('is-active', s === sw));
+        if (pal === 'mt' || pal === 'mb') {           // wspólna para kolorów — ustaw aktywne strony
+          const t = state.strip !== 'bot', b = state.strip !== 'top';
+          if (pal === 'mt') { if (t) state.stripColorTop = val; if (b) state.stripColorBot = val; }
+          else { if (t) state.bandColorTop = val; if (b) state.bandColorBot = val; }
+          renderPalettes();
+        } else {
+          if (pal === 'tt') state.stripColorTop = val; else if (pal === 'tb') state.bandColorTop = val; else if (pal === 'bt') state.stripColorBot = val; else if (pal === 'bb') state.bandColorBot = val;
+          else if (pal === 'g1') state.geo.c1 = val; else if (pal === 'g2') state.geo.c2 = val; else if (pal === 'tg') state.tile.bg = val;
+          $$(`[data-pal="${pal}"]`).forEach(s => s.classList.toggle('is-active', s === sw));
+        }
         updatePreview(); return;
       }
       const bt = e.target.closest('[data-base]');
       if (bt) { state.base = bt.dataset.base; applyBaseVisibility(); updatePreview(); return; }
       const gp = e.target.closest('[data-geopat]');
       if (gp) { state.geo.pattern = gp.dataset.geopat; $$('[data-geopat]').forEach(s => s.classList.toggle('is-active', s === gp)); updatePreview(); return; }
-      const gd = e.target.closest('[data-geodir]');
-      if (gd) { state.geo.dir = gd.dataset.geodir; $$('[data-geodir]').forEach(s => s.classList.toggle('is-active', s === gd)); updatePreview(); return; }
+      const gs = e.target.closest('[data-size-geo]');
+      if (gs) { state.geo.n = +gs.dataset.sizeGeo; $$('[data-size-geo]').forEach(s => s.classList.toggle('is-active', s === gs)); updatePreview(); return; }
       const em = e.target.closest('[data-emblem]');
       if (em) { state.tile.emblem = em.dataset.emblem; $$('[data-emblem]').forEach(s => s.classList.toggle('is-active', s === em)); updatePreview(); return; }
       const ec = e.target.closest('[data-embcat]');
       if (ec) { state.embCat = ec.dataset.embcat; renderEmblems(); return; }
-      const tl = e.target.closest('[data-tilelayout]');
-      if (tl) { state.tile.layout = tl.dataset.tilelayout; $$('[data-tilelayout]').forEach(s => s.classList.toggle('is-active', s === tl)); updatePreview(); return; }
+      const ts = e.target.closest('[data-size-tile]');
+      if (ts) { state.tile.n = +ts.dataset.sizeTile; $$('[data-size-tile]').forEach(s => s.classList.toggle('is-active', s === ts)); updatePreview(); return; }
       if (e.target.closest('#add-to-cart, #sticky-add')) { addToCart(); return; }
       if (e.target.closest('#cart-toggle, #sticky-cart')) { openCart(); return; }
       if (e.target.closest('#cart-close')) { closeCart(); return; }
@@ -454,8 +485,6 @@
       if (e.target.closest('#nav a')) { $('#nav')?.classList.remove('open'); }
     });
     $('#design-search')?.addEventListener('input', (e) => { state.q = e.target.value.toLowerCase().trim(); renderGallery(); });
-    $('#geo-scale')?.addEventListener('input', (e) => { state.geo.scale = +e.target.value; updatePreview(); });
-    $('#tile-scale')?.addEventListener('input', (e) => { state.tile.scale = +e.target.value; updatePreview(); });
     $('#checkout-form')?.addEventListener('submit', submitOrder);
     $('#co-delivery')?.addEventListener('change', updateGrand);
     document.addEventListener('keydown', (e) => {
