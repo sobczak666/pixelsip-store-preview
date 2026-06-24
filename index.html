@@ -80,8 +80,16 @@
           <button class="strip-opt" data-strip="bot" aria-pressed="false">Tylko dół</button>
           <button class="strip-opt" data-strip="none" aria-pressed="false">Bez paska</button>
         </div>
-        <div class="color-row"><span class="color-lbl">Kolor napisu</span><div class="strip-colors" id="strip-colors"></div></div>
-        <div class="color-row"><span class="color-lbl">Kolor tła</span><div class="strip-colors" id="band-colors"></div></div>
+        <div class="strip-group" id="strip-top-group">
+          <div class="strip-group__h">Pasek górny</div>
+          <div class="color-row"><span class="color-lbl">Napis</span><div class="strip-colors" id="strip-colors-top"></div></div>
+          <div class="color-row"><span class="color-lbl">Tło</span><div class="strip-colors" id="band-colors-top"></div></div>
+        </div>
+        <div class="strip-group" id="strip-bot-group">
+          <div class="strip-group__h">Pasek dolny</div>
+          <div class="color-row"><span class="color-lbl">Napis</span><div class="strip-colors" id="strip-colors-bot"></div></div>
+          <div class="color-row"><span class="color-lbl">Tło</span><div class="strip-colors" id="band-colors-bot"></div></div>
+        </div>
       </div>
       <p class="perso-note">ℹ️ <b>Produkt personalizowany.</b> Wybierając wzór zamawiasz rzecz wykonywaną na Twoje zamówienie. Zgodnie z art.&nbsp;38 ustawy o prawach konsumenta produkty personalizowane <b>nie podlegają 14-dniowemu prawu odstąpienia</b> — wymieniamy je wyłącznie w razie wady. <a href="pages/odstapienie-od-umowy.html">Szczegóły</a></p>
       <div class="add-row"><button id="add-to-cart" class="btn btn--primary btn--lg btn--block">Dodaj do koszyka 🛒</button></div>
