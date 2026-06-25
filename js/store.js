@@ -123,6 +123,20 @@
           <span class="design-card__cat">${esc(d.categoryLabel || '')}</span>
         </span>
       </button>`).join('') || `<p class="muted">Brak wzorów dla tego filtra.</p>`;
+    grid.scrollLeft = 0; updateGalleryNav();
+  }
+  function updateGalleryNav() {                                   // chowaj strzałki na krańcach
+    const g = $('#design-gallery'); if (!g) return;
+    const max = g.scrollWidth - g.clientWidth;
+    const prev = $('.gallery-nav--prev'), next = $('.gallery-nav--next');
+    if (prev) prev.hidden = g.scrollLeft <= 2;
+    if (next) next.hidden = g.scrollLeft >= max - 2;
+  }
+  function scrollGallery(dir) {
+    const g = $('#design-gallery'); if (!g) return;
+    g.style.scrollSnapType = 'none';                              // snap blokuje smooth scrollBy — wyłącz na czas animacji
+    g.scrollBy({ left: dir * Math.max(220, g.clientWidth * 0.85), behavior: 'smooth' });
+    clearTimeout(scrollGallery._t); scrollGallery._t = setTimeout(() => { g.style.scrollSnapType = ''; updateGalleryNav(); }, 500);
   }
 
   function renderSizes() {
@@ -552,6 +566,8 @@
   // ——————————————————— UI BINDING ———————————————————
   function bindUI() {
     document.addEventListener('click', (e) => {
+      const gnav = e.target.closest('[data-gallery-nav]');
+      if (gnav) { scrollGallery(+gnav.dataset.galleryNav); return; }
       const card = e.target.closest('[data-design]');
       if (card) { state.designId = card.dataset.design; renderGallery(); updatePreview(); $('#configurator')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); return; }
       const sz = e.target.closest('[data-size]');
@@ -571,7 +587,7 @@
       const ps = e.target.closest('[data-size-strip]');
       if (ps) { state.stripSize = +ps.dataset.sizeStrip; $$('[data-size-strip]').forEach(s => s.classList.toggle('is-active', s === ps)); updatePreview(); return; }
       const bt = e.target.closest('[data-base]');
-      if (bt) { state.base = bt.dataset.base; applyBaseVisibility(); updatePreview(); return; }
+      if (bt) { state.base = bt.dataset.base; applyBaseVisibility(); if (state.base === 'scene') updateGalleryNav(); updatePreview(); return; }
       const gp = e.target.closest('[data-geopat]');
       if (gp) { state.geo.pattern = gp.dataset.geopat; $$('[data-geopat]').forEach(s => s.classList.toggle('is-active', s === gp)); updatePreview(); return; }
       const gs = e.target.closest('[data-size-geo]');
@@ -602,6 +618,8 @@
       if (Math.abs(e.deltaX) >= Math.abs(e.deltaY)) return;       // gest już poziomy (touchpad) — zostaw
       el.scrollLeft += e.deltaY; e.preventDefault();
     }, { passive: false });
+    $('#design-gallery')?.addEventListener('scroll', updateGalleryNav, { passive: true });
+    window.addEventListener('resize', updateGalleryNav, { passive: true });
     $('#strip-text')?.addEventListener('input', (e) => {
       const clean = sanitizeText(e.target.value);
       if (clean !== e.target.value) e.target.value = clean;

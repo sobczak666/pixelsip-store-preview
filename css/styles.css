@@ -165,8 +165,17 @@ button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
 .chip.is-active{background:var(--txt);color:#0a0a12;border-color:var(--txt)}
 #design-search{margin-left:auto;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:.5em 1em;color:var(--txt);min-width:160px}
 #design-search:focus{outline:none;border-color:var(--cyan)}
+.gallery-wrap{position:relative}
 .gallery{display:flex;gap:12px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;padding:4px 2px 12px;scrollbar-width:thin}
 .gallery>.design-card{flex:0 0 30%;scroll-snap-align:start}
+.gallery-nav{position:absolute;top:40%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;display:grid;place-items:center;
+  background:rgba(11,10,22,.85);backdrop-filter:blur(6px);border:1.5px solid var(--line);color:var(--txt);z-index:3;cursor:pointer;transition:.15s;box-shadow:var(--shadow)}
+.gallery-nav:hover{border-color:var(--cyan);color:var(--cyan);box-shadow:var(--glow)}
+.gallery-nav:active{transform:translateY(-50%) scale(.92)}
+.gallery-nav[hidden]{display:none}
+.gallery-nav--prev{left:-6px}
+.gallery-nav--next{right:-6px}
+@media(max-width:640px){.gallery-nav{width:34px;height:34px}}
 .design-card{border:1.5px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card);transition:.15s;text-align:left}
 .design-card:hover{transform:translateY(-2px);border-color:var(--purple)}
 .design-card.is-active{border-color:var(--cyan);box-shadow:var(--glow)}
