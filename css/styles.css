@@ -80,6 +80,18 @@ button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
 .value .emoji{font-size:1.8rem;display:block;margin-bottom:10px}
 .value h3{font-size:1.05rem;margin-bottom:6px}
 .value p{color:var(--muted);font-size:.92rem}
+.hero__summer{display:inline-flex;align-items:center;gap:11px;margin:0 0 1.5em;padding:11px 17px;border-radius:999px;background:linear-gradient(90deg,rgba(255,210,63,.13),rgba(255,46,151,.13));border:1px solid rgba(255,138,61,.5);font-size:.96rem;color:var(--txt);max-width:50ch;line-height:1.4}
+.hero__summer-em{font-size:1.25rem;flex-shrink:0}
+.hero__summer b{color:var(--yellow);font-weight:700}
+.kicker--hot{color:var(--yellow)}
+.summer{background:var(--bg2)}
+.summer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.summer-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px;position:relative;overflow:hidden}
+.summer-card::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,var(--yellow),var(--pink))}
+.summer-em{font-size:1.8rem;display:block;margin-bottom:10px}
+.summer-card h3{font-size:1.05rem;margin-bottom:6px}
+.summer-card p{color:var(--muted);font-size:.92rem}
+@media(max-width:760px){.summer-grid{grid-template-columns:1fr}}
 
 /* ===== Configurator ===== */
 .config{display:grid;grid-template-columns:.85fr 1.15fr;gap:40px;align-items:start}
