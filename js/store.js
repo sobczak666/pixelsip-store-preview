@@ -19,7 +19,8 @@
     products: [], designs: [], byId: {}, prodById: {},
     size: null, designId: null, strip: 'both',
     stripColorTop: 'glitch', bandColorTop: '#000000', stripColorBot: 'glitch', bandColorBot: '#000000',
-    stripText: '',                       // '' = domyślny wordmark PIXEL SIP; inaczej własny napis w foncie Jersey 25
+    stripText: '',                       // '' = domyślny „PIXEL SIP"; inaczej własny napis (font Pixel Operator Bold)
+    stripSize: 1,                        // mnożnik wysokości paska/fontu (Mały/Średni/Duży/Wielki)
     base: 'scene',
     geo: { pattern: 'paski-pion', c1: '#0B0A16', c2: '#22E0E6', n: 10 },
     tile: { emblem: 'water-drop', bg: '#0B0A16', n: 6 },
@@ -35,6 +36,7 @@
   ];
   const GEO_SIZES = [{ label: 'Drobny', n: 16 }, { label: 'Średni', n: 10 }, { label: 'Duży', n: 6 }, { label: 'Wielki', n: 4 }];
   const TILE_SIZES = [{ label: 'Drobny', n: 10 }, { label: 'Średni', n: 7 }, { label: 'Duży', n: 5 }, { label: 'Wielki', n: 3 }];
+  const STRIP_SIZES = [{ label: 'Mały', n: 0.8 }, { label: 'Średni', n: 1 }, { label: 'Duży', n: 1.25 }, { label: 'Wielki', n: 1.5 }];
   const STRIP_LABEL = { both: 'góra i dół', top: 'tylko góra', bot: 'tylko dół', none: 'bez paska' };
   const PALETTE = [
     { id: '#FFFFFF', label: 'Biały', css: '#FFFFFF' },
@@ -153,6 +155,7 @@
   }
   function applyStripVisibility() {
     const ti = $('#strip-text'); if (ti && ti.value !== state.stripText) ti.value = state.stripText;
+    renderSizeBtns('strip-sizes', STRIP_SIZES, state.stripSize, 'strip');
     $$('[data-strip]').forEach(s => { const a = s.dataset.strip === state.strip; s.classList.toggle('is-active', a); s.setAttribute('aria-pressed', a); });
     $('#strip-top-group')?.classList.toggle('off', !(state.strip === 'both' || state.strip === 'top'));
     $('#strip-bot-group')?.classList.toggle('off', !(state.strip === 'both' || state.strip === 'bot'));
@@ -187,15 +190,9 @@
   const tctx = TEX.getContext('2d');
   const imgCache = {};
   const loadImg = (src) => imgCache[src] || (imgCache[src] = new Promise((res) => { const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = src; }));
-  let wordmark = null, glitch = null, texSeq = 0, jerseyReady = null;
+  let texSeq = 0, jerseyReady = null;
   const stripCache = {};
-  function tintStrip(hex) {
-    const c = document.createElement('canvas'); c.width = wordmark.width; c.height = wordmark.height;
-    const x = c.getContext('2d'); x.drawImage(wordmark, 0, 0);
-    x.globalCompositeOperation = 'source-in'; x.fillStyle = hex; x.fillRect(0, 0, c.width, c.height);
-    return c;
-  }
-  // własny napis: ten sam font co wordmark — Jersey 25 (font marki)
+  // pasek „PIXEL SIP" (i własne napisy) renderowany fontem marki — Pixel Operator Bold (CC0), nie obrazkiem
   function ensureFont() {
     if (jerseyReady) return jerseyReady;
     if (window.FontFace) {
@@ -230,21 +227,18 @@
     } else { x.fillStyle = color; x.fillText(text, bx, by); }
     stripCache[key] = c; return c;
   }
-  function stripFor(textColor) {                            // domyślny wordmark/glitch albo własny napis
-    if (state.stripText) return renderCustomStrip(state.stripText, textColor);
-    return textColor === 'glitch' ? glitch : tintStrip(textColor);
+  function stripFor(textColor) {                            // zawsze font: domyślnie „PIXEL SIP", albo własny napis
+    return renderCustomStrip(state.stripText || 'PIXEL SIP', textColor);
   }
   async function buildTexture() {
     const seq = ++texSeq;
-    if (!wordmark) wordmark = await loadImg('assets/brand/wordmark.png');
-    if (!glitch) glitch = await loadImg('assets/brand/strip-glitch-t.png');
     await ensureFont();
     let baseImg = null;
     if (state.base === 'scene') { const d = state.byId[state.designId]; if (!d) return; baseImg = await loadImg(d.file); }
     else if (state.base === 'tile') { if (!state.tile.emblem) return; baseImg = await loadImg('assets/emblems/' + state.tile.emblem + '.png'); }
-    if (seq !== texSeq || !wordmark) return;
+    if (seq !== texSeq) return;
     if ((state.base === 'scene' || state.base === 'tile') && !baseImg) return;
-    const TW = TEX.width, TH = TEX.height, BAND = Math.round(TH * 0.135);
+    const TW = TEX.width, TH = TEX.height, BAND = Math.round(TH * 0.135 * state.stripSize);
     const top = state.strip === 'both' || state.strip === 'top';
     const bot = state.strip === 'both' || state.strip === 'bot';
     tctx.imageSmoothingEnabled = false;
@@ -386,6 +380,7 @@
     if (cfg.dt === 'glitch' || isHex(cfg.dt)) state.stripColorBot = cfg.dt;
     if (isHex(cfg.db)) state.bandColorBot = cfg.db;
     if (cfg.txt !== undefined) state.stripText = cfg.txt ? sanitizeText(b64urlDec(cfg.txt)) : '';
+    const ps = parseFloat(cfg.ps); if (STRIP_SIZES.some(s => s.n === ps)) state.stripSize = ps;
   }
   function applyConfig(cfg) {                          // mutacja + pełny re-render kreatora (dla linków/presetów w locie)
     setStateFromConfig(cfg);
@@ -404,6 +399,7 @@
     add('dt', state.stripColorBot === 'glitch' ? 'glitch' : noHash(state.stripColorBot));
     add('db', noHash(state.bandColorBot));
     add('txt', state.stripText ? b64urlEnc(state.stripText) : '');
+    if (state.stripSize !== 1) add('ps', state.stripSize);
     return p.join('~');
   }
   function parseBuild(str) {                            // token -> cfg (z przywróconym '#')
@@ -412,7 +408,7 @@
       base: d.base, design: d.design, wzor: d.wzor, c1: addHashCol(d.c1), c2: addHashCol(d.c2),
       emb: d.emb, bg: addHashCol(d.bg), gn: d.gn, tn: d.tn, size: d.size, strip: d.strip,
       gt: d.gt === 'glitch' ? 'glitch' : addHashCol(d.gt), gb: addHashCol(d.gb),
-      dt: d.dt === 'glitch' ? 'glitch' : addHashCol(d.dt), db: addHashCol(d.db), txt: d.txt,
+      dt: d.dt === 'glitch' ? 'glitch' : addHashCol(d.dt), db: addHashCol(d.db), txt: d.txt, ps: d.ps,
     };
   }
   function saveBuild() { try { localStorage.setItem(BUILD_KEY, serializeBuild()); } catch {} }
@@ -444,9 +440,10 @@
       gora_tekst: hasT ? state.stripColorTop : '-', gora_tlo: hasT ? state.bandColorTop : '-',
       dol_tekst: hasB ? state.stripColorBot : '-', dol_tlo: hasB ? state.bandColorBot : '-',
       napis: state.stripText ? b64urlEnc(state.stripText) : '',
+      psize: state.stripSize,
     };
     const bc = baseConfig();
-    const key = `${p.id}__${JSON.stringify(bc)}__${state.strip}__${cfg.gora_tekst}_${cfg.gora_tlo}_${cfg.dol_tekst}_${cfg.dol_tlo}__${cfg.napis}`;
+    const key = `${p.id}__${JSON.stringify(bc)}__${state.strip}__${cfg.gora_tekst}_${cfg.gora_tlo}_${cfg.dol_tekst}_${cfg.dol_tlo}__${cfg.napis}_${cfg.psize}`;
     const ex = cart.find(i => i.key === key);
     if (ex) ex.qty += 1;
     else cart.push({ key, size: p.id, sizeLabel: p.sizeLabel, designName: baseName(), baseCfg: bc, strip: state.strip, cfg, stripDesc: stripDesc(), file: thumbURL(), price: p.retailPrice, qty: 1 });
@@ -521,7 +518,7 @@
     const order = {
       klient: { imie: f.name.value, email: f.email.value, telefon: f.phone.value, adres, uwagi: f.notes.value },
       dostawa: d.method, dostawa_koszt: d.price,
-      pozycje: cart.map(i => `${i.qty}× ${i.designName} (${i.sizeLabel}, ${i.stripDesc || ''}) = ${(i.price * i.qty).toFixed(2)} zł\n   [config: ${Object.entries(i.baseCfg).map(([k, v]) => `${k}=${v}`).join(' ')} size=${i.size} strip=${i.strip} gora_tekst=${i.cfg.gora_tekst} gora_tlo=${i.cfg.gora_tlo} dol_tekst=${i.cfg.dol_tekst} dol_tlo=${i.cfg.dol_tlo}${i.cfg.napis ? ' napis=' + i.cfg.napis : ''}]`),
+      pozycje: cart.map(i => `${i.qty}× ${i.designName} (${i.sizeLabel}, ${i.stripDesc || ''}) = ${(i.price * i.qty).toFixed(2)} zł\n   [config: ${Object.entries(i.baseCfg).map(([k, v]) => `${k}=${v}`).join(' ')} size=${i.size} strip=${i.strip} gora_tekst=${i.cfg.gora_tekst} gora_tlo=${i.cfg.gora_tlo} dol_tekst=${i.cfg.dol_tekst} dol_tlo=${i.cfg.dol_tlo}${i.cfg.napis ? ' napis=' + i.cfg.napis : ''}${i.cfg.psize && i.cfg.psize !== 1 ? ' psize=' + i.cfg.psize : ''}]`),
       suma_produkty: cartTotal().toFixed(2), suma_calosc: (cartTotal() + (d.price || 0)).toFixed(2),
     };
     const btn = $('#co-submit'); btn.disabled = true; btn.textContent = 'Wysyłanie…';
@@ -571,6 +568,8 @@
         $$(`[data-pal="${pal}"]`).forEach(s => s.classList.toggle('is-active', s === sw));
         updatePreview(); return;
       }
+      const ps = e.target.closest('[data-size-strip]');
+      if (ps) { state.stripSize = +ps.dataset.sizeStrip; $$('[data-size-strip]').forEach(s => s.classList.toggle('is-active', s === ps)); updatePreview(); return; }
       const bt = e.target.closest('[data-base]');
       if (bt) { state.base = bt.dataset.base; applyBaseVisibility(); updatePreview(); return; }
       const gp = e.target.closest('[data-geopat]');
