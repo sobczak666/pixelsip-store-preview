@@ -378,7 +378,7 @@
   const okN = (set, n) => set.some(s => s.n === n);
   function setStateFromConfig(cfg) {                 // tylko mutacja state + walidacja (bez renderów)
     if (!cfg) return;
-    if (['scene', 'geo', 'tile'].includes(cfg.base)) state.base = cfg.base;
+    if (['scene', 'tile'].includes(cfg.base)) state.base = cfg.base;   // 'geo' wycofane — stare configi -> domyślnie scena
     if (cfg.design && state.byId[cfg.design]) state.designId = cfg.design;
     if (GEO_PATTERNS.some(p => p.id === cfg.wzor)) state.geo.pattern = cfg.wzor;
     if (isHex(cfg.c1)) state.geo.c1 = cfg.c1;
