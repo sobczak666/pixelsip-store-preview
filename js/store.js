@@ -199,7 +199,7 @@
   function ensureFont() {
     if (jerseyReady) return jerseyReady;
     if (window.FontFace) {
-      const ff = new FontFace('PixelSipJersey', "url('assets/fonts/Jersey20-Regular.ttf')");
+      const ff = new FontFace('PixelSipFont', "url('assets/fonts/PixelOperator-Bold.ttf')");
       jerseyReady = ff.load().then((f) => { document.fonts.add(f); return true; }).catch(() => false);
     } else jerseyReady = Promise.resolve(false);
     return jerseyReady;
@@ -212,7 +212,7 @@
     if (stripCache[key]) return stripCache[key];
     const PX = 120;
     const mc = document.createElement('canvas').getContext('2d');
-    mc.font = `${PX}px PixelSipJersey, monospace`;
+    mc.font = `${PX}px PixelSipFont, monospace`;
     const m = mc.measureText(text || ' ');
     const asc = Math.ceil(m.actualBoundingBoxAscent || PX * 0.72), desc = Math.ceil(m.actualBoundingBoxDescent || PX * 0.1);
     const tw = Math.max(1, Math.ceil(m.width));
@@ -221,7 +221,7 @@
     const c = document.createElement('canvas');
     c.width = tw + padX * 2; c.height = asc + desc + padY * 2;
     const x = c.getContext('2d');
-    x.font = `${PX}px PixelSipJersey, monospace`; x.textBaseline = 'alphabetic'; x.textAlign = 'left';
+    x.font = `${PX}px PixelSipFont, monospace`; x.textBaseline = 'alphabetic'; x.textAlign = 'left';
     const bx = padX, by = padY + asc;
     if (color === 'glitch') {
       x.fillStyle = '#FF2E97'; x.fillText(text, bx - d, by - d);
