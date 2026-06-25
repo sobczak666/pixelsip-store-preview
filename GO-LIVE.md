@@ -36,6 +36,7 @@ Sklep nie predefiniuje wariantów — klient konfiguruje (wzór + rozmiar + pozy
 
 > Trzy tryby bazy: `scene` (sceny pixel-art), `geo` (wzory geometryczne: paski-pion/paski-poziom/szachownica/romby/kropki/krata/zygzak), `tile` (emblemat kafelkowany — 100 emblematów).
 > `n` = liczba powtórzeń wzoru na obwodzie (z przycisków Drobny/Średni/Duży/Wielki w sklepie) — komórka = szerokość/`n`, więc wzór **zawsze domyka się bezszwowo na szwie** z tyłu kubka. Podgląd 3D w sklepie i plik z generatora używają tej samej logiki — to, co klient widzi, to co dostaje na druku.
+> `napis=<kod>` (opcjonalne) — własny napis klienta na pasku zamiast „PIXEL SIP", w foncie marki **Jersey 25**. Wartość jest zakodowana base64url (bez spacji, by nie rozbić configu) — generator sam ją dekoduje i renderuje. Brak `napis=` → domyślny wordmark PIXEL SIP. Krótki napis = dwie kopie jak wordmark; dłuższy = jedna wyśrodkowana.
 
 ## 🟡 WAŻNE (zrób przed lub tuż po starcie)
 

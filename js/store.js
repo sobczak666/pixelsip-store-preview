@@ -19,6 +19,7 @@
     products: [], designs: [], byId: {}, prodById: {},
     size: null, designId: null, strip: 'both',
     stripColorTop: 'glitch', bandColorTop: '#000000', stripColorBot: 'glitch', bandColorBot: '#000000',
+    stripText: '',                       // '' = domyślny wordmark PIXEL SIP; inaczej własny napis w foncie Jersey 25
     base: 'scene',
     geo: { pattern: 'paski-pion', c1: '#0B0A16', c2: '#22E0E6', n: 10 },
     tile: { emblem: 'water-drop', bg: '#0B0A16', n: 6 },
@@ -151,6 +152,7 @@
     renderPalette('band-colors-bot', BAND_COLORS, state.bandColorBot, 'bb', 'Tło dolne');
   }
   function applyStripVisibility() {
+    const ti = $('#strip-text'); if (ti && ti.value !== state.stripText) ti.value = state.stripText;
     $$('[data-strip]').forEach(s => { const a = s.dataset.strip === state.strip; s.classList.toggle('is-active', a); s.setAttribute('aria-pressed', a); });
     $('#strip-top-group')?.classList.toggle('off', !(state.strip === 'both' || state.strip === 'top'));
     $('#strip-bot-group')?.classList.toggle('off', !(state.strip === 'both' || state.strip === 'bot'));
@@ -185,17 +187,58 @@
   const tctx = TEX.getContext('2d');
   const imgCache = {};
   const loadImg = (src) => imgCache[src] || (imgCache[src] = new Promise((res) => { const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = src; }));
-  let wordmark = null, glitch = null, texSeq = 0;
+  let wordmark = null, glitch = null, texSeq = 0, jerseyReady = null;
+  const stripCache = {};
   function tintStrip(hex) {
     const c = document.createElement('canvas'); c.width = wordmark.width; c.height = wordmark.height;
     const x = c.getContext('2d'); x.drawImage(wordmark, 0, 0);
     x.globalCompositeOperation = 'source-in'; x.fillStyle = hex; x.fillRect(0, 0, c.width, c.height);
     return c;
   }
+  // własny napis: ten sam font co wordmark — Jersey 25 (font marki)
+  function ensureFont() {
+    if (jerseyReady) return jerseyReady;
+    if (window.FontFace) {
+      const ff = new FontFace('PixelSipJersey', "url('assets/fonts/Jersey25-Regular.ttf')");
+      jerseyReady = ff.load().then((f) => { document.fonts.add(f); return true; }).catch(() => false);
+    } else jerseyReady = Promise.resolve(false);
+    return jerseyReady;
+  }
+  function sanitizeText(s) { return String(s).replace(/[^\p{L}\p{N} !?#&.,'\-]/gu, '').replace(/\s+/g, ' ').slice(0, 14); }
+  const b64urlEnc = (s) => { try { return btoa(unescape(encodeURIComponent(s))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); } catch { return ''; } };
+  const b64urlDec = (s) => { try { return decodeURIComponent(escape(atob(String(s).replace(/-/g, '+').replace(/_/g, '/')))); } catch { return ''; } };
+  function renderCustomStrip(text, color) {                // -> canvas z napisem (kolor lub glitch cyan/magenta)
+    const key = color + '|' + text;
+    if (stripCache[key]) return stripCache[key];
+    const PX = 120;
+    const mc = document.createElement('canvas').getContext('2d');
+    mc.font = `${PX}px PixelSipJersey, monospace`;
+    const m = mc.measureText(text || ' ');
+    const asc = Math.ceil(m.actualBoundingBoxAscent || PX * 0.72), desc = Math.ceil(m.actualBoundingBoxDescent || PX * 0.1);
+    const tw = Math.max(1, Math.ceil(m.width));
+    const d = color === 'glitch' ? Math.max(2, Math.round(PX * 0.045)) : 0;
+    const padX = d + 2, padY = d + Math.round((asc + desc) * 0.07) + 2;   // ~7% luzu pionowo, by rozmiar pasował do wordmarku
+    const c = document.createElement('canvas');
+    c.width = tw + padX * 2; c.height = asc + desc + padY * 2;
+    const x = c.getContext('2d');
+    x.font = `${PX}px PixelSipJersey, monospace`; x.textBaseline = 'alphabetic'; x.textAlign = 'left';
+    const bx = padX, by = padY + asc;
+    if (color === 'glitch') {
+      x.fillStyle = '#FF2E97'; x.fillText(text, bx - d, by - d);
+      x.fillStyle = '#22E0E6'; x.fillText(text, bx + d, by + d);
+      x.fillStyle = '#F5F5FC'; x.fillText(text, bx, by);
+    } else { x.fillStyle = color; x.fillText(text, bx, by); }
+    stripCache[key] = c; return c;
+  }
+  function stripFor(textColor) {                            // domyślny wordmark/glitch albo własny napis
+    if (state.stripText) return renderCustomStrip(state.stripText, textColor);
+    return textColor === 'glitch' ? glitch : tintStrip(textColor);
+  }
   async function buildTexture() {
     const seq = ++texSeq;
     if (!wordmark) wordmark = await loadImg('assets/brand/wordmark.png');
     if (!glitch) glitch = await loadImg('assets/brand/strip-glitch-t.png');
+    await ensureFont();
     let baseImg = null;
     if (state.base === 'scene') { const d = state.byId[state.designId]; if (!d) return; baseImg = await loadImg(d.file); }
     else if (state.base === 'tile') { if (!state.tile.emblem) return; baseImg = await loadImg('assets/emblems/' + state.tile.emblem + '.png'); }
@@ -211,10 +254,16 @@
     const sh = Math.round(BAND * 0.58), mg = Math.round(TW * 0.05);
     const band = (by, textColor, bandColorHex) => {
       tctx.fillStyle = bandColorHex; tctx.fillRect(0, by, TW, BAND);
-      const strip = textColor === 'glitch' ? glitch : tintStrip(textColor);
+      const strip = stripFor(textColor);
       const bw = Math.round(strip.width * sh / strip.height), yy = by + (BAND - sh) / 2;
       tctx.imageSmoothingEnabled = false;
-      tctx.drawImage(strip, mg, yy, bw, sh); tctx.drawImage(strip, TW - mg - bw, yy, bw, sh);
+      if (2 * bw + 2 * mg + 24 <= TW) {                 // mieści się dwa razy (jak PIXEL SIP) -> dwie kopie
+        tctx.drawImage(strip, mg, yy, bw, sh); tctx.drawImage(strip, TW - mg - bw, yy, bw, sh);
+      } else {                                          // dłuższy napis -> jedna kopia wyśrodkowana (zachowaj proporcje)
+        let cw = bw, ch = sh; const maxw = TW - 2 * mg;
+        if (cw > maxw) { cw = maxw; ch = Math.round(strip.height * cw / strip.width); }
+        tctx.drawImage(strip, (TW - cw) / 2, by + (BAND - ch) / 2, cw, ch);
+      }
     };
     if (top) band(0, state.stripColorTop, state.bandColorTop);
     if (bot) band(TH - BAND, state.stripColorBot, state.bandColorBot);
@@ -336,6 +385,7 @@
     if (isHex(cfg.gb)) state.bandColorTop = cfg.gb;
     if (cfg.dt === 'glitch' || isHex(cfg.dt)) state.stripColorBot = cfg.dt;
     if (isHex(cfg.db)) state.bandColorBot = cfg.db;
+    if (cfg.txt !== undefined) state.stripText = cfg.txt ? sanitizeText(b64urlDec(cfg.txt)) : '';
   }
   function applyConfig(cfg) {                          // mutacja + pełny re-render kreatora (dla linków/presetów w locie)
     setStateFromConfig(cfg);
@@ -353,6 +403,7 @@
     add('gb', noHash(state.bandColorTop));
     add('dt', state.stripColorBot === 'glitch' ? 'glitch' : noHash(state.stripColorBot));
     add('db', noHash(state.bandColorBot));
+    add('txt', state.stripText ? b64urlEnc(state.stripText) : '');
     return p.join('~');
   }
   function parseBuild(str) {                            // token -> cfg (z przywróconym '#')
@@ -361,7 +412,7 @@
       base: d.base, design: d.design, wzor: d.wzor, c1: addHashCol(d.c1), c2: addHashCol(d.c2),
       emb: d.emb, bg: addHashCol(d.bg), gn: d.gn, tn: d.tn, size: d.size, strip: d.strip,
       gt: d.gt === 'glitch' ? 'glitch' : addHashCol(d.gt), gb: addHashCol(d.gb),
-      dt: d.dt === 'glitch' ? 'glitch' : addHashCol(d.dt), db: addHashCol(d.db),
+      dt: d.dt === 'glitch' ? 'glitch' : addHashCol(d.dt), db: addHashCol(d.db), txt: d.txt,
     };
   }
   function saveBuild() { try { localStorage.setItem(BUILD_KEY, serializeBuild()); } catch {} }
@@ -392,9 +443,10 @@
     const cfg = {
       gora_tekst: hasT ? state.stripColorTop : '-', gora_tlo: hasT ? state.bandColorTop : '-',
       dol_tekst: hasB ? state.stripColorBot : '-', dol_tlo: hasB ? state.bandColorBot : '-',
+      napis: state.stripText ? b64urlEnc(state.stripText) : '',
     };
     const bc = baseConfig();
-    const key = `${p.id}__${JSON.stringify(bc)}__${state.strip}__${cfg.gora_tekst}_${cfg.gora_tlo}_${cfg.dol_tekst}_${cfg.dol_tlo}`;
+    const key = `${p.id}__${JSON.stringify(bc)}__${state.strip}__${cfg.gora_tekst}_${cfg.gora_tlo}_${cfg.dol_tekst}_${cfg.dol_tlo}__${cfg.napis}`;
     const ex = cart.find(i => i.key === key);
     if (ex) ex.qty += 1;
     else cart.push({ key, size: p.id, sizeLabel: p.sizeLabel, designName: baseName(), baseCfg: bc, strip: state.strip, cfg, stripDesc: stripDesc(), file: thumbURL(), price: p.retailPrice, qty: 1 });
@@ -469,7 +521,7 @@
     const order = {
       klient: { imie: f.name.value, email: f.email.value, telefon: f.phone.value, adres, uwagi: f.notes.value },
       dostawa: d.method, dostawa_koszt: d.price,
-      pozycje: cart.map(i => `${i.qty}× ${i.designName} (${i.sizeLabel}, ${i.stripDesc || ''}) = ${(i.price * i.qty).toFixed(2)} zł\n   [config: ${Object.entries(i.baseCfg).map(([k, v]) => `${k}=${v}`).join(' ')} size=${i.size} strip=${i.strip} gora_tekst=${i.cfg.gora_tekst} gora_tlo=${i.cfg.gora_tlo} dol_tekst=${i.cfg.dol_tekst} dol_tlo=${i.cfg.dol_tlo}]`),
+      pozycje: cart.map(i => `${i.qty}× ${i.designName} (${i.sizeLabel}, ${i.stripDesc || ''}) = ${(i.price * i.qty).toFixed(2)} zł\n   [config: ${Object.entries(i.baseCfg).map(([k, v]) => `${k}=${v}`).join(' ')} size=${i.size} strip=${i.strip} gora_tekst=${i.cfg.gora_tekst} gora_tlo=${i.cfg.gora_tlo} dol_tekst=${i.cfg.dol_tekst} dol_tlo=${i.cfg.dol_tlo}${i.cfg.napis ? ' napis=' + i.cfg.napis : ''}]`),
       suma_produkty: cartTotal().toFixed(2), suma_calosc: (cartTotal() + (d.price || 0)).toFixed(2),
     };
     const btn = $('#co-submit'); btn.disabled = true; btn.textContent = 'Wysyłanie…';
@@ -545,6 +597,11 @@
       if (e.target.closest('#nav a')) { $('#nav')?.classList.remove('open'); }
     });
     $('#design-search')?.addEventListener('input', (e) => { state.q = e.target.value.toLowerCase().trim(); renderGallery(); });
+    $('#strip-text')?.addEventListener('input', (e) => {
+      const clean = sanitizeText(e.target.value);
+      if (clean !== e.target.value) e.target.value = clean;
+      state.stripText = clean; updatePreview();
+    });
     $('#checkout-form')?.addEventListener('submit', submitOrder);
     $('#co-delivery')?.addEventListener('change', updateGrand);
     document.addEventListener('keydown', (e) => {
