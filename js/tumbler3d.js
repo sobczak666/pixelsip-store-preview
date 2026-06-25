@@ -30,7 +30,7 @@ function init() {
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enablePan = false; controls.enableZoom = false;
   controls.autoRotate = true; controls.autoRotateSpeed = -1.6;
-  controls.minPolarAngle = Math.PI * 0.30; controls.maxPolarAngle = Math.PI * 0.70;
+  controls.minPolarAngle = Math.PI * 0.44; controls.maxPolarAngle = Math.PI * 0.62;
   controls.enableDamping = true; controls.dampingFactor = 0.08;
 
   const maxAniso = renderer.capabilities.getMaxAnisotropy();
@@ -45,8 +45,9 @@ function init() {
   let tumbler = null, bodyMesh = null, lastH = 8, currentCap = 900, currentTex = null;
   const FR = 0.16;                                   // promień zaokrąglenia dna
   function fitCamera() {
-    const dist = (lastH / 2 * 1.12) / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
-    camera.position.set(0, lastH * 0.04, dist);
+    // dopasuj pełną wysokość (ze słomką) z zapasem, by nie ucinało góry przy pochyleniu
+    const dist = (lastH / 2 * 1.25) / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+    camera.position.set(0, lastH * 0.03, dist);
     controls.target.set(0, 0, 0); controls.update();
   }
   function buildTumbler(bodyH) {
