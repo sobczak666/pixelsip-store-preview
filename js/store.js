@@ -103,7 +103,7 @@
     restoreBuild();                       // link #k=... albo autozapis -> ustawia state przed renderem
     renderGallery(); renderSizes(); renderPalettes(); applyStripVisibility();
     renderGeoControls(); renderEmblems(); applyBaseVisibility();
-    renderDelivery(); updatePreview(); bindUI(); renderCart(); cookieBanner();
+    renderDelivery(); updatePreview(); bindUI(); renderCart(); cookieBanner(); initHeroCarousel();
     if (window.__fromShareLink) toast('Wczytano udostępniony projekt ✨');
   }
 
@@ -561,6 +561,21 @@
     if (localStorage.getItem('pixelsip_cookie')) return;
     b.hidden = false;
     b.querySelector('[data-cookie]')?.addEventListener('click', () => { try { localStorage.setItem('pixelsip_cookie', '1'); } catch {} b.hidden = true; });
+  }
+  function initHeroCarousel() {
+    const slides = $$('.hero__slide'), dots = $$('.hero__dot'), wrap = $('.hero__carousel');
+    if (slides.length < 2) return;
+    let i = 0, timer = null;
+    const go = (n) => { i = (n + slides.length) % slides.length;
+      slides.forEach((s, k) => s.classList.toggle('is-active', k === i));
+      dots.forEach((d, k) => d.classList.toggle('is-active', k === i)); };
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const start = () => { if (reduce) return; clearInterval(timer); timer = setInterval(() => go(i + 1), 4200); };
+    const stop = () => clearInterval(timer);
+    dots.forEach((d, k) => d.addEventListener('click', () => { go(k); start(); }));
+    wrap?.addEventListener('mouseenter', stop);
+    wrap?.addEventListener('mouseleave', start);
+    start();
   }
 
   // ——————————————————— UI BINDING ———————————————————
