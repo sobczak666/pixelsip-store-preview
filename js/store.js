@@ -199,7 +199,7 @@
   function ensureFont() {
     if (jerseyReady) return jerseyReady;
     if (window.FontFace) {
-      const ff = new FontFace('PixelSipJersey', "url('assets/fonts/Jersey25-Regular.ttf')");
+      const ff = new FontFace('PixelSipJersey', "url('assets/fonts/Jersey20-Regular.ttf')");
       jerseyReady = ff.load().then((f) => { document.fonts.add(f); return true; }).catch(() => false);
     } else jerseyReady = Promise.resolve(false);
     return jerseyReady;
