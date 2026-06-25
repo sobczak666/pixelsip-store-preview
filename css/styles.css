@@ -95,6 +95,7 @@ button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
 
 /* ===== Configurator ===== */
 .config{display:grid;grid-template-columns:.85fr 1.15fr;gap:40px;align-items:start}
+.config>*{min-width:0}
 .preview{position:sticky;top:90px}
 .preview__stage{background:radial-gradient(120% 120% at 50% 0%,rgba(155,93,229,.22),transparent 60%),var(--bg2);
   border:1px solid var(--line);border-radius:24px;padding:34px;display:grid;place-items:center;min-height:420px;position:relative;overflow:hidden}
