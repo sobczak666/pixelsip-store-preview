@@ -297,7 +297,16 @@ footer{border-top:1px solid var(--line);background:var(--bg2);padding:56px 0 30p
 @media(max-width:980px){
   .hero__inner{grid-template-columns:1fr}.hero__art{display:none}
   .values{grid-template-columns:1fr 1fr}.steps{grid-template-columns:1fr 1fr}
-  .config{grid-template-columns:1fr}.preview{position:static;order:-1;top:auto}
+  .config{grid-template-columns:minmax(0,1fr)}.config>*{min-width:0}
+  .preview{position:sticky;top:66px;order:-1;z-index:5;background:var(--bg);padding-bottom:8px;box-shadow:0 14px 16px -12px var(--bg)}
+  .preview__stage{min-height:0;padding:14px;border-radius:16px}
+  #tumbler3d{height:258px}
+  .preview__info{margin-top:6px}.preview__info h3{font-size:1rem;margin-bottom:0}
+  #preview-blurb{display:none}.preview__price{font-size:1.2rem}
+  .swatch{width:36px;height:36px}
+  .color-row{flex-direction:column;align-items:stretch;gap:7px}.color-row .color-lbl{min-width:0}
+  .add-row{flex-direction:column;align-items:stretch;margin-top:18px}
+  .base-tab{font-size:.84rem;padding:11px 4px}
   .specs{grid-template-columns:1fr}.about{grid-template-columns:1fr}.about__art{display:none}
   .foot{grid-template-columns:1fr 1fr}
 }
@@ -311,6 +320,8 @@ footer{border-top:1px solid var(--line);background:var(--bg2);padding:56px 0 30p
   .gallery{grid-template-columns:repeat(3,1fr);max-height:none;overflow-y:visible}
   .checkout .grid2{grid-template-columns:1fr}.checkout input,.checkout select,.checkout textarea{min-height:44px}
   .foot{grid-template-columns:1fr}
+  #tumbler3d{height:222px}.preview{top:58px}
+  .strip-opt{min-width:0;flex:1 1 30%}
   #sticky-bar{display:flex}
   #toast{bottom:calc(76px + 18px)}
   body{padding-bottom:78px}
