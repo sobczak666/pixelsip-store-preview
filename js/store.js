@@ -596,6 +596,12 @@
       if (e.target.closest('#nav a')) { $('#nav')?.classList.remove('open'); }
     });
     $('#design-search')?.addEventListener('input', (e) => { state.q = e.target.value.toLowerCase().trim(); renderGallery(); });
+    $('#design-gallery')?.addEventListener('wheel', (e) => {       // myszka: pionowe kółko -> poziomy scroll karuzeli
+      const el = e.currentTarget;
+      if (el.scrollWidth <= el.clientWidth + 4) return;
+      if (Math.abs(e.deltaX) >= Math.abs(e.deltaY)) return;       // gest już poziomy (touchpad) — zostaw
+      el.scrollLeft += e.deltaY; e.preventDefault();
+    }, { passive: false });
     $('#strip-text')?.addEventListener('input', (e) => {
       const clean = sanitizeText(e.target.value);
       if (clean !== e.target.value) e.target.value = clean;
