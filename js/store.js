@@ -97,9 +97,11 @@
       state.designId = state.designs[0]?.id || null;
     } catch (e) { console.error('Błąd ładowania danych', e); const g = $('#design-gallery'); if (g) g.innerHTML = '<p class="muted">Nie udało się załadować wzorów. Odśwież stronę.</p>'; return; }
 
+    restoreBuild();                       // link #k=... albo autozapis -> ustawia state przed renderem
     renderGallery(); renderSizes(); renderPalettes(); applyStripVisibility();
     renderGeoControls(); renderEmblems(); applyBaseVisibility();
     renderDelivery(); updatePreview(); bindUI(); renderCart(); cookieBanner();
+    if (window.__fromShareLink) toast('Wczytano udostępniony projekt ✨');
   }
 
   // ——————————————————— GALERIA ———————————————————
@@ -149,6 +151,7 @@
     renderPalette('band-colors-bot', BAND_COLORS, state.bandColorBot, 'bb', 'Tło dolne');
   }
   function applyStripVisibility() {
+    $$('[data-strip]').forEach(s => { const a = s.dataset.strip === state.strip; s.classList.toggle('is-active', a); s.setAttribute('aria-pressed', a); });
     $('#strip-top-group')?.classList.toggle('off', !(state.strip === 'both' || state.strip === 'top'));
     $('#strip-bot-group')?.classList.toggle('off', !(state.strip === 'both' || state.strip === 'bot'));
   }
@@ -287,6 +290,7 @@
     window.__tumblerWant = { cap: p.capacityMl };
     window.Tumbler?.setSize(p.capacityMl);
     buildTexture();
+    saveBuild();
   }
 
   // ——————————————————— KOSZYK ———————————————————
@@ -306,6 +310,80 @@
     if (state.base === 'tile') return `Emblemat: ${state.tile.emblem} (kafelek)`;
     return (state.byId[state.designId] || {}).name || '—';
   }
+
+  // ——————————————————— PROJEKT: zapis / udostępnianie (config w URL) ———————————————————
+  // applyConfig(cfg) = jedno źródło prawdy: bierze komplet ustawień i odtwarza kubek 1:1.
+  // Te same pola co lecą do generate_order.py, więc podgląd = druk.
+  const BUILD_KEY = 'pixelsip_build_v1';
+  const isHex = (v) => /^#[0-9a-fA-F]{6}$/.test(v || '');
+  const noHash = (s) => String(s).replace(/^#/, '');
+  const addHashCol = (s) => (/^[0-9a-fA-F]{6}$/.test(s || '') ? '#' + s : s);
+  const okN = (set, n) => set.some(s => s.n === n);
+  function setStateFromConfig(cfg) {                 // tylko mutacja state + walidacja (bez renderów)
+    if (!cfg) return;
+    if (['scene', 'geo', 'tile'].includes(cfg.base)) state.base = cfg.base;
+    if (cfg.design && state.byId[cfg.design]) state.designId = cfg.design;
+    if (GEO_PATTERNS.some(p => p.id === cfg.wzor)) state.geo.pattern = cfg.wzor;
+    if (isHex(cfg.c1)) state.geo.c1 = cfg.c1;
+    if (isHex(cfg.c2)) state.geo.c2 = cfg.c2;
+    if (cfg.emb && state.emblems.some(e => e.id === cfg.emb)) state.tile.emblem = cfg.emb;
+    if (isHex(cfg.bg)) state.tile.bg = cfg.bg;
+    const gn = parseInt(cfg.gn, 10); if (okN(GEO_SIZES, gn)) state.geo.n = gn;     // walidacja = szew zawsze się domyka
+    const tn = parseInt(cfg.tn, 10); if (okN(TILE_SIZES, tn)) state.tile.n = tn;
+    if (cfg.size && state.prodById[cfg.size]) state.size = cfg.size;
+    if (['both', 'top', 'bot', 'none'].includes(cfg.strip)) state.strip = cfg.strip;
+    if (cfg.gt === 'glitch' || isHex(cfg.gt)) state.stripColorTop = cfg.gt;
+    if (isHex(cfg.gb)) state.bandColorTop = cfg.gb;
+    if (cfg.dt === 'glitch' || isHex(cfg.dt)) state.stripColorBot = cfg.dt;
+    if (isHex(cfg.db)) state.bandColorBot = cfg.db;
+  }
+  function applyConfig(cfg) {                          // mutacja + pełny re-render kreatora (dla linków/presetów w locie)
+    setStateFromConfig(cfg);
+    renderGallery(); renderSizes(); renderGeoControls(); renderEmblems();
+    renderPalettes(); applyStripVisibility(); applyBaseVisibility(); updatePreview();
+  }
+  function serializeBuild() {                          // state -> zwarty token (np. base.geo~wzor.romby~c1.0B0A16~...)
+    const p = [], add = (k, v) => { if (v != null && v !== '') p.push(k + '.' + v); };
+    add('base', state.base);
+    if (state.base === 'scene') add('design', state.designId);
+    else if (state.base === 'geo') { add('wzor', state.geo.pattern); add('c1', noHash(state.geo.c1)); add('c2', noHash(state.geo.c2)); add('gn', state.geo.n); }
+    else if (state.base === 'tile') { add('emb', state.tile.emblem); add('bg', noHash(state.tile.bg)); add('tn', state.tile.n); }
+    add('size', state.size); add('strip', state.strip);
+    add('gt', state.stripColorTop === 'glitch' ? 'glitch' : noHash(state.stripColorTop));
+    add('gb', noHash(state.bandColorTop));
+    add('dt', state.stripColorBot === 'glitch' ? 'glitch' : noHash(state.stripColorBot));
+    add('db', noHash(state.bandColorBot));
+    return p.join('~');
+  }
+  function parseBuild(str) {                            // token -> cfg (z przywróconym '#')
+    const d = {}; String(str).split('~').forEach(t => { const i = t.indexOf('.'); if (i > 0) d[t.slice(0, i)] = t.slice(i + 1); });
+    return {
+      base: d.base, design: d.design, wzor: d.wzor, c1: addHashCol(d.c1), c2: addHashCol(d.c2),
+      emb: d.emb, bg: addHashCol(d.bg), gn: d.gn, tn: d.tn, size: d.size, strip: d.strip,
+      gt: d.gt === 'glitch' ? 'glitch' : addHashCol(d.gt), gb: addHashCol(d.gb),
+      dt: d.dt === 'glitch' ? 'glitch' : addHashCol(d.dt), db: addHashCol(d.db),
+    };
+  }
+  function saveBuild() { try { localStorage.setItem(BUILD_KEY, serializeBuild()); } catch {} }
+  function restoreBuild() {                             // wołane w init PRZED renderami — ustawia tylko state
+    let fromLink = false, src = null;
+    const m = location.hash.match(/(?:^#|&)k=([^&]+)/);
+    if (m) { try { src = decodeURIComponent(m[1]); } catch { src = m[1]; } fromLink = true; }
+    else { try { src = localStorage.getItem(BUILD_KEY); } catch {} }
+    if (src) setStateFromConfig(parseBuild(src));
+    if (fromLink) {                                     // link zużyty — dalej rządzi normalny stan/autozapis
+      try { history.replaceState(null, '', location.pathname + location.search); } catch {}
+      window.__fromShareLink = true;
+    }
+  }
+  async function shareBuild() {
+    const url = location.origin + location.pathname + '#k=' + serializeBuild();
+    const data = { title: 'Pixel Sip', text: 'Zobacz mój kubek Pixel Sip 🎮', url };
+    try { if (navigator.share) { await navigator.share(data); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
+    try { await navigator.clipboard.writeText(url); toast('Skopiowano link do projektu ✓'); }
+    catch { window.prompt('Skopiuj link do swojego projektu:', url); }
+  }
+
   function addToCart() {
     const p = state.prodById[state.size]; if (!p) return;
     if (state.base === 'scene' && !state.byId[state.designId]) return;
@@ -453,6 +531,7 @@
       if (ec) { state.embCat = ec.dataset.embcat; renderEmblems(); return; }
       const ts = e.target.closest('[data-size-tile]');
       if (ts) { state.tile.n = +ts.dataset.sizeTile; $$('[data-size-tile]').forEach(s => s.classList.toggle('is-active', s === ts)); updatePreview(); return; }
+      if (e.target.closest('#share-build')) { shareBuild(); return; }
       if (e.target.closest('#add-to-cart, #sticky-add')) { addToCart(); return; }
       if (e.target.closest('#cart-toggle, #sticky-cart')) { openCart(); return; }
       if (e.target.closest('#cart-close')) { closeCart(); return; }
