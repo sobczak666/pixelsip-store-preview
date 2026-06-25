@@ -566,9 +566,12 @@
     const slides = $$('.hero__slide'), dots = $$('.hero__dot'), wrap = $('.hero__carousel');
     if (slides.length < 2) return;
     let i = 0, timer = null;
+    const hero = $('.hero');
     const go = (n) => { i = (n + slides.length) % slides.length;
       slides.forEach((s, k) => s.classList.toggle('is-active', k === i));
-      dots.forEach((d, k) => d.classList.toggle('is-active', k === i)); };
+      dots.forEach((d, k) => d.classList.toggle('is-active', k === i));
+      if (hero) hero.style.setProperty('--hero-bg', slides[i].style.backgroundImage); };   // tło hero = aktywna scena
+    go(0);
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const start = () => { if (reduce) return; clearInterval(timer); timer = setInterval(() => go(i + 1), 4200); };
     const stop = () => clearInterval(timer);
