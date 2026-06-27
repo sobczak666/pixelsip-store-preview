@@ -5,9 +5,12 @@
 
   // ——— KONFIG (do uzupełnienia przed startem sprzedaży — patrz GO-LIVE.md) ———
   const CONFIG = {
-    orderEndpoint: '',                 // np. 'https://formspree.io/f/xxxxxxx' — pusty => tryb demo (mailto + kopiuj)
+    orderEndpoint: 'https://api.pixelsip.pl/api/orders',   // backend Pixel Sip (OVH Warszawa) — zamówienia wpadają do panelu /admin. Pusty => fallback mailto+kopiuj
+    waitlistEndpoint: 'https://api.pixelsip.pl/api/waitlist',  // zapisy na niedostępne rozmiary (np. 900 ml)
     shopEmail: 'zamowienia@pixelsip.pl',
     currency: 'zł',
+    metaPixelId: '',                   // Meta (FB/IG) Pixel ID — puste => piksel nieaktywny
+    tiktokPixelId: '',                 // TikTok Pixel ID — puste => nieaktywny
   };
 
   const PLN = (v) => `${Number(v).toFixed(2).replace('.', ',')} ${CONFIG.currency}`;
@@ -19,9 +22,17 @@
     products: [], designs: [], byId: {}, prodById: {},
     size: null, designId: null, strip: 'both',
     stripColorTop: 'glitch', bandColorTop: '#000000', stripColorBot: 'glitch', bandColorBot: '#000000',
-    stripText: '',                       // '' = domyślny „PIXEL SIP"; inaczej własny napis (font Pixel Operator Bold)
-    stripSize: 1,                        // mnożnik wysokości paska/fontu (Mały/Średni/Duży/Wielki)
+    stripTextTop: '', stripTextBot: '',  // '' = domyślny „PIXEL SIP"; inaczej własny napis (góra/dół osobno)
+    stripSizeTop: 1, stripSizeBot: 1,    // mnożnik wysokości paska/fontu góra/dół osobno
     base: 'scene',
+    // ——— stan UI kreatora (zakładki + progressive disclosure); NIE idzie do serializeBuild ———
+    tab: 'design',          // 'design' | 'strip' | 'colors' | 'size'
+    colorSide: 'top',       // 'top' | 'bot' — którą stronę paska edytuje zakładka Kolory
+    colorKind: 'text',      // 'text' | 'bg'
+    syncStrip: true,        // dół taki sam jak góra (kolory + rozmiar)
+    splitText: false,       // osobny napis na dole
+    palExpanded: false,     // pełna paleta („Więcej kolorów")
+    colorsOpen: false,      // panel kolorów rozwinięty (vs baner)
     geo: { pattern: 'paski-pion', c1: '#0B0A16', c2: '#22E0E6', n: 10 },
     tile: { emblem: 'water-drop', bg: '#0B0A16', n: 6 },
     emblems: [], embCat: 'all',
@@ -62,10 +73,42 @@
     { id: '#5DF7A0', label: 'Zielony', css: '#5DF7A0' },
     { id: '#2EE6B0', label: 'Mięta', css: '#2EE6B0' },
   ];
-  const STRIP_COLORS = [{ id: 'glitch', label: 'Glitch', css: 'linear-gradient(90deg,#22E0E6,#fff,#FF2E97)' }, ...PALETTE];
-  const BAND_COLORS = PALETTE;
-  const colorLabel = (id) => (STRIP_COLORS.find(c => c.id === id) || {}).label || id;
-  const bandLabel = (id) => (BAND_COLORS.find(c => c.id === id) || {}).label || id;
+  const GLITCH = { id: 'glitch', label: 'Glitch', css: 'linear-gradient(90deg,#22E0E6,#fff,#FF2E97)' };
+  const UNIVERSAL = PALETTE.map(c => ({ ...c, group: 'Uniwersalne' }));
+  // 8 kolorów marki do „trybu prostego" palety (reszta pod „Więcej kolorów")
+  const QUICK_IDS = ['#22E0E6', '#FF2E97', '#9B5DE5', '#C6F542', '#FFFFFF', '#000000', '#FF8A3D', '#0B0A16'];
+  const quickSwatches = () => QUICK_IDS.map(id => UNIVERSAL.find(c => c.id === id)).filter(Boolean);
+  // kolory wyciągnięte z wybranej sceny + kontrasty (z designs.json)
+  function designSwatches() {
+    let d = null, grp = 'Z wzoru';
+    if (state.base === 'scene') d = state.byId[state.designId];
+    else if (state.base === 'tile') { d = state.emblems.find(e => e.id === state.tile.emblem); grp = 'Z emblematu'; }
+    if (!d) return [];
+    return (d.palette || []).map(h => ({ id: h.toUpperCase(), label: grp, css: h, group: grp }));
+  }
+  const dedupColors = arr => { const s = new Set(), o = []; for (const c of arr) { const k = String(c.id).toLowerCase(); if (s.has(k)) continue; s.add(k); o.push(c); } return o; };
+  const stripColors = () => dedupColors([GLITCH, ...designSwatches(), ...UNIVERSAL]);
+  const bandColors = () => dedupColors([...designSwatches(), ...UNIVERSAL]);
+  // ——— gradienty (format „grad:HEX:HEX" bez #) ———
+  const isGrad = v => typeof v === 'string' && v.startsWith('grad:');
+  const gradHexes = v => v.split(':').slice(1, 3).map(h => '#' + h);                 // -> ['#..','#..']
+  const gradCss = v => { const [a, b] = gradHexes(v); return `linear-gradient(90deg,${a},${b})`; };
+  const mkGrad = (a, b) => `grad:${String(a).replace('#', '').toUpperCase()}:${String(b).replace('#', '').toUpperCase()}`;
+  const canvasFill = (ctx, value, x0, x1) => {                                        // kolor lub poziomy gradient na canvasie
+    if (!isGrad(value)) return value;
+    const [a, b] = gradHexes(value); const g = ctx.createLinearGradient(x0, 0, x1, 0);
+    g.addColorStop(0, a); g.addColorStop(1, b); return g;
+  };
+  const GRADIENTS = [
+    { id: 'grad:22E0E6:FF2E97', label: 'Cyan → Magenta' },
+    { id: 'grad:7C3BFF:22E0E6', label: 'Indygo → Cyan' },
+    { id: 'grad:FF8A3D:FF2E97', label: 'Sunset' },
+    { id: 'grad:5DF7A0:3BA7FF', label: 'Mięta → Błękit' },
+    { id: 'grad:C04BFF:FF5D8F', label: 'Vapor' },
+    { id: 'grad:FFD23F:FF6B35', label: 'Bursztyn → Ceglasty' },
+  ].map(g => ({ ...g, css: gradCss(g.id), group: 'Gradienty' }));
+  const colorLabel = (id) => id === 'glitch' ? 'Glitch' : (UNIVERSAL.find(c => c.id === id)?.label || id);
+  const bandLabel = (id) => UNIVERSAL.find(c => c.id === id)?.label || id;
   const sideLabel = (t, b) => `napis ${colorLabel(t)}, tło ${bandLabel(b)}`;
   const stripDesc = () => {
     if (state.strip === 'none') return 'Pasek: bez paska';
@@ -83,10 +126,11 @@
   // ——————————————————— INIT ———————————————————
   async function init() {
     try {
+      const _dv = '?v=' + (window.__DV || '');   // cache-busting danych (ustawiane w index.html)
       const [p, d, em] = await Promise.all([
-        fetch('data/products.json').then(r => r.json()),
-        fetch('data/designs.json').then(r => r.json()),
-        fetch('data/emblems.json').then(r => r.json()).catch(() => []),
+        fetch('data/products.json' + _dv).then(r => r.json()),
+        fetch('data/designs.json' + _dv).then(r => r.json()),
+        fetch('data/emblems.json' + _dv).then(r => r.json()).catch(() => []),
       ]);
       state.emblems = em || [];
       state.products = p.products || [];
@@ -96,13 +140,14 @@
       state.designs = d || [];
       state.prodById = Object.fromEntries(state.products.map(x => [x.id, x]));
       state.byId = Object.fromEntries(state.designs.map(x => [x.id, x]));
-      state.size = state.products[0]?.id || null;
+      state.size = (state.products.find(p => !p.waitlist) || state.products[0])?.id || null;
       state.designId = state.designs[0]?.id || null;
     } catch (e) { console.error('Błąd ładowania danych', e); const g = $('#design-gallery'); if (g) g.innerHTML = '<p class="muted">Nie udało się załadować wzorów. Odśwież stronę.</p>'; return; }
 
     restoreBuild();                       // link #k=... albo autozapis -> ustawia state przed renderem
-    renderGallery(); renderSizes(); renderPalettes(); applyStripVisibility();
-    renderGeoControls(); renderEmblems(); applyBaseVisibility();
+    deriveStripModes();                   // dół=góra / osobny-napis z wczytanego stanu
+    renderGallery(); renderSizes(); renderPresets(); renderPalettes(); applyStripVisibility();
+    renderGeoControls(); renderEmblems(); applyBaseVisibility(); applyTabVisibility();
     renderDelivery(); updatePreview(); bindUI(); renderCart(); cookieBanner(); initHeroCarousel();
     if (window.__fromShareLink) toast('Wczytano udostępniony projekt ✨');
   }
@@ -141,7 +186,11 @@
 
   function renderSizes() {
     const wrap = $('#size-options'); if (!wrap) return;
-    wrap.innerHTML = state.products.map(p => `
+    wrap.innerHTML = state.products.map(p => p.waitlist ? `
+      <button class="size-opt size-opt--soon" data-waitlist="${esc(p.id)}" title="${esc(p.waitlistNote || 'Wkrótce')}">
+        <span class="size-opt__cap">${esc(p.sizeLabel)}</span>
+        <span class="size-opt__soon">Wkrótce · zapisz się</span>
+      </button>` : `
       <button class="size-opt${p.id === state.size ? ' is-active' : ''}" data-size="${esc(p.id)}" aria-pressed="${p.id === state.size}">
         <span class="size-opt__cap">${esc(p.sizeLabel)}</span>
         <span class="size-opt__price">${PLN(p.retailPrice)}</span>
@@ -153,26 +202,173 @@
     el.innerHTML = state.delivery.map(d => `
       <li><span>${esc(d.method)} <em class="muted">${esc(d.eta)}</em></span><b>${d.price === 0 ? 'gratis' : PLN(d.price)}</b></li>`).join('');
   }
-  function renderPalette(id, colors, current, pal, lbl) {
+  function renderPalette(id, colors, current, pal, lbl, mode = 'full') {
     const w = $('#' + id); if (!w) return;
-    w.innerHTML = colors.map(c => `<button class="swatch${c.id === current ? ' is-active' : ''}" data-pal="${pal}" data-val="${esc(c.id)}" title="${esc(c.label)}" aria-label="${lbl}: ${esc(c.label)}" style="background:${c.css}"></button>`).join('');
+    if (mode === 'quick') {                                   // tryb prosty: glitch (tylko napis) + 8 kolorów marki + „Więcej"
+      const isText = ['tt', 'bt'].includes(pal);
+      const list = isText ? [GLITCH, ...quickSwatches()] : quickSwatches();
+      const eq = (a, b) => String(a).toLowerCase() === String(b).toLowerCase();
+      let h = list.map(c => `<button class="swatch${eq(c.id, current) ? ' is-active' : ''}" data-pal="${pal}" data-val="${esc(c.id)}" title="${esc(c.label)}" aria-label="${esc(lbl)}: ${esc(c.label)}" style="background:${c.css}"></button>`).join('');
+      h += `<button class="swatch swatch--more" data-morecolors="1" title="Więcej kolorów" aria-label="Więcej kolorów">⋯</button>`;
+      w.innerHTML = h; return;
+    }
+    let html = '', lastGroup = null;
+    for (const c of colors) {
+      const grp = c.group || '';
+      if (grp !== lastGroup) { lastGroup = grp; if (grp) html += `<span class="swatch-group">${esc(grp)}</span>`; }
+      html += `<button class="swatch${c.id === current ? ' is-active' : ''}" data-pal="${pal}" data-val="${esc(c.id)}" title="${esc(c.label)}" aria-label="${esc(lbl)}: ${esc(c.label)}" style="background:${c.css}"></button>`;
+    }
+    // własny kolor (tryb zaawansowany) — dowolny hex spoza palety
+    const isHex = /^#[0-9a-f]{6}$/i.test(current || '');
+    const customActive = isHex && !colors.some(c => String(c.id).toLowerCase() === String(current).toLowerCase());
+    html += `<span class="swatch-group">Własny</span>`;
+    html += `<label class="swatch swatch--custom${customActive ? ' is-active' : ''}" title="Wybierz własny kolor"><input type="color" data-palcustom="${pal}" value="${isHex ? current : '#22E0E6'}" aria-label="${esc(lbl)}: własny kolor"></label>`;
+    // gradienty (tylko paski: napis + tło) — presety + własny (2 kolory)
+    if (['tt', 'tb', 'bt', 'bb'].includes(pal)) {
+      const isG = isGrad(current);
+      const [gc1, gc2] = isG ? gradHexes(current) : ['#22E0E6', '#FF2E97'];
+      html += `<span class="swatch-group">Gradienty</span>`;
+      for (const g of GRADIENTS) html += `<button class="swatch swatch--grad${g.id === current ? ' is-active' : ''}" data-pal="${pal}" data-val="${g.id}" title="${esc(g.label)}" aria-label="${esc(lbl)}: ${esc(g.label)}" style="background:${g.css}"></button>`;
+      const customGradActive = isG && !GRADIENTS.some(g => g.id === current);
+      html += `<span class="swatch-group">Własny gradient</span>`;
+      html += `<label class="swatch swatch--custom" title="Kolor początkowy gradientu"><input type="color" data-gradpart="${pal}:0" value="${gc1}"></label>`;
+      html += `<label class="swatch swatch--custom" title="Kolor końcowy gradientu"><input type="color" data-gradpart="${pal}:1" value="${gc2}"></label>`;
+      html += `<button class="swatch swatch--grad${customGradActive ? ' is-active' : ''}" data-pal="${pal}" data-val="${mkGrad(gc1, gc2)}" title="Zastosuj własny gradient" style="background:linear-gradient(90deg,${gc1},${gc2})"></button>`;
+    }
+    w.innerHTML = html;
+  }
+  function setPalColor(pal, val) {
+    if (pal === 'tt') { state.stripColorTop = val; if (state.syncStrip) state.stripColorBot = val; }
+    else if (pal === 'tb') { state.bandColorTop = val; if (state.syncStrip) state.bandColorBot = val; }
+    else if (pal === 'bt') state.stripColorBot = val; else if (pal === 'bb') state.bandColorBot = val;
+    else if (pal === 'g1') state.geo.c1 = val; else if (pal === 'g2') state.geo.c2 = val; else if (pal === 'tg') state.tile.bg = val;
   }
   function renderSizeBtns(id, sizes, current, kind) {
     const w = $('#' + id); if (!w) return;
     w.innerHTML = sizes.map(s => `<button class="strip-opt${s.n === current ? ' is-active' : ''}" data-size-${kind}="${s.n}">${esc(s.label)}</button>`).join('');
   }
   function renderPalettes() {
-    renderPalette('strip-colors-top', STRIP_COLORS, state.stripColorTop, 'tt', 'Napis górny');
-    renderPalette('band-colors-top', BAND_COLORS, state.bandColorTop, 'tb', 'Tło górne');
-    renderPalette('strip-colors-bot', STRIP_COLORS, state.stripColorBot, 'bt', 'Napis dolny');
-    renderPalette('band-colors-bot', BAND_COLORS, state.bandColorBot, 'bb', 'Tło dolne');
+    renderActivePalette();                                              // jedna aktywna paleta (zakładka Kolory)
+    renderPalette('tile-bg', bandColors(), state.tile.bg, 'tg', 'Kolor tła');   // tło kafelka emblematu (zakładka Wzór)
+  }
+  // ——— zakładka KOLORY: jedna paleta dla wybranej strony+celu (tt/tb/bt/bb) ———
+  function activePal() {
+    return state.colorSide === 'top' ? (state.colorKind === 'text' ? 'tt' : 'tb')
+                                     : (state.colorKind === 'text' ? 'bt' : 'bb');
+  }
+  function activeColor() {
+    const p = activePal();
+    return p === 'tt' ? state.stripColorTop : p === 'tb' ? state.bandColorTop
+         : p === 'bt' ? state.stripColorBot : state.bandColorBot;
+  }
+  function renderActivePalette() {
+    const pal = activePal(), isText = state.colorKind === 'text';
+    const colors = isText ? stripColors() : bandColors();
+    renderPalette('active-palette', colors, activeColor(), pal, isText ? 'Napis' : 'Tło', state.palExpanded ? 'full' : 'quick');
+    const more = $('#toggle-more-colors'); if (more) more.textContent = state.palExpanded ? 'Mniej kolorów ⌃' : 'Więcej kolorów ⌄';
+    const sizeKind = state.colorSide === 'top' ? 'striptop' : 'stripbot';
+    const sizeCur = state.colorSide === 'top' ? state.stripSizeTop : state.stripSizeBot;
+    renderSizeBtns('active-strip-size', STRIP_SIZES, sizeCur, sizeKind);
+    $$('[data-colside]').forEach(b => b.classList.toggle('is-active', b.dataset.colside === state.colorSide));
+    $$('[data-colkind]').forEach(b => b.classList.toggle('is-active', b.dataset.colkind === state.colorKind));
+  }
+  function applyColorsVisibility() {
+    const none = state.strip === 'none';
+    if (state.strip === 'top') state.colorSide = 'top';
+    else if (state.strip === 'bot') state.colorSide = 'bot';
+    $('#colors-none')?.classList.toggle('off', !none);
+    $('#colors-collapsed')?.classList.toggle('off', none || state.colorsOpen);
+    $('#colors-panel')?.classList.toggle('off', none || !state.colorsOpen);
+    const showSide = state.strip === 'both' && !state.syncStrip;        // wybór strony tylko gdy góra+dół i bez synchronizacji
+    $('#color-side')?.classList.toggle('off', !showSide);
+    const ts = $('#toggle-sync');
+    if (ts) { ts.classList.toggle('off', state.strip !== 'both'); ts.classList.toggle('is-active', state.syncStrip); ts.setAttribute('aria-pressed', state.syncStrip); }
+  }
+  function renderColorsSummary() {
+    const el = $('#colors-summary'); if (!el) return;
+    if (state.strip === 'none') { el.textContent = 'wyłączony'; return; }
+    const side = (t, b) => `${colorLabel(t)} na ${bandLabel(b)}`;
+    let s = state.strip === 'bot' ? side(state.stripColorBot, state.bandColorBot) : side(state.stripColorTop, state.bandColorTop);
+    if (state.strip === 'both' && !state.syncStrip) s += ' · dół osobno';
+    el.textContent = s;
   }
   function applyStripVisibility() {
-    const ti = $('#strip-text'); if (ti && ti.value !== state.stripText) ti.value = state.stripText;
-    renderSizeBtns('strip-sizes', STRIP_SIZES, state.stripSize, 'strip');
+    const tiT = $('#strip-text-top'); if (tiT && tiT.value !== state.stripTextTop) tiT.value = state.stripTextTop;
+    const tiB = $('#strip-text-bot'); if (tiB && tiB.value !== state.stripTextBot) tiB.value = state.stripTextBot;
     $$('[data-strip]').forEach(s => { const a = s.dataset.strip === state.strip; s.classList.toggle('is-active', a); s.setAttribute('aria-pressed', a); });
-    $('#strip-top-group')?.classList.toggle('off', !(state.strip === 'both' || state.strip === 'top'));
-    $('#strip-bot-group')?.classList.toggle('off', !(state.strip === 'both' || state.strip === 'bot'));
+    const splittable = state.strip === 'both';
+    const tsx = $('#toggle-split-text');
+    if (tsx) { tsx.classList.toggle('off', !splittable); tsx.classList.toggle('is-active', state.splitText && splittable); tsx.setAttribute('aria-pressed', state.splitText && splittable); }
+    $('#strip-text-bot-row')?.classList.toggle('off', !(state.splitText && splittable));
+    $('#strip-text-fields')?.classList.toggle('off', state.strip === 'none');
+    applyColorsVisibility();
+    renderActivePalette();
+  }
+  // ——— zakładki kreatora ———
+  const TAB_ORDER = ['design', 'strip', 'colors', 'size'];
+  const NEXT_LBL = { design: 'Dalej: Napis →', strip: 'Dalej: Kolory →', colors: 'Dalej: Rozmiar →' };
+  function applyTabVisibility() {
+    $$('[data-tabpanel]').forEach(p => p.classList.toggle('is-active', p.dataset.tabpanel === state.tab));
+    $$('[data-tab]').forEach(t => { const a = t.dataset.tab === state.tab; t.classList.toggle('is-active', a); t.setAttribute('aria-selected', a); });
+    const last = state.tab === 'size';
+    $('#sticky-next')?.classList.toggle('off', last);
+    $('#sticky-add')?.classList.toggle('off', !last);
+    const nx = $('#sticky-next'); if (nx) nx.textContent = NEXT_LBL[state.tab] || 'Dalej →';
+  }
+  function goTab(tab) { state.tab = tab; applyTabVisibility(); }
+  function renderBuildSummary() {
+    const el = $('#build-summary'); if (!el) return;
+    const p = state.prodById[state.size];
+    el.innerHTML = `<b>${esc(baseName())}</b> · ${esc(STRIP_LABEL[state.strip] || '')} · ${esc(p ? p.sizeLabel : '')}`;
+  }
+  // dół=góra i osobny-napis wynikają ze stanu (np. po wczytaniu share-linku z różną górą/dołem)
+  function deriveStripModes() {
+    state.syncStrip = state.stripColorTop === state.stripColorBot && state.bandColorTop === state.bandColorBot && state.stripSizeTop === state.stripSizeBot;
+    state.splitText = state.stripTextTop !== state.stripTextBot;
+  }
+  // ——— presety + losuj (oba przez applyConfig — jedno źródło prawdy) ———
+  function defaultSizeId() { return (state.products.find(p => !p.waitlist) || state.products[0])?.id || null; }
+  function presetList() {
+    const ds = state.designs; if (!ds.length) return [];
+    const at = f => ds[Math.min(ds.length - 1, Math.max(0, Math.round(f)))].id;
+    const combos = [
+      { label: 'Twój start', start: true },
+      { label: 'Neon', gt: 'glitch', gb: '#0B0A16', n: 1, design: at(ds.length * 0.12) },
+      { label: 'Vapor', gt: '#FFFFFF', gb: '#7C3BFF', n: 1, design: at(ds.length * 0.25) },
+      { label: 'Mono', gt: '#FFFFFF', gb: '#000000', n: 0.8, design: at(ds.length * 0.45) },
+      { label: 'Sunset', gt: '#0B0A16', gb: '#FF8A3D', n: 1.25, design: at(ds.length * 0.65) },
+      { label: 'Mięta', gt: '#0B0A16', gb: '#5DF7A0', n: 1, design: at(ds.length * 0.85) },
+    ];
+    return combos;
+  }
+  function renderPresets() {
+    const w = $('#presets'); if (!w) return;
+    const isStartActive = state.base === 'scene' && state.designId === (state.designs[0]?.id);
+    w.innerHTML = presetList().map((p, i) => `
+      <button class="preset${p.start && isStartActive ? ' is-active' : ''}" data-preset="${i}" type="button">
+        ${p.start ? '<span class="preset__star">★ start</span>' : ''}${esc(p.label)}
+      </button>`).join('');
+  }
+  function applyPreset(i) {
+    const p = presetList()[i]; if (!p) return;
+    if (p.start) {
+      applyConfig({ base: 'scene', design: state.designs[0]?.id, size: defaultSizeId(), strip: 'both',
+        gt: 'glitch', gb: '#000000', dt: 'glitch', db: '#000000', txt: '', txb: '', pst: 1, psb: 1 });
+      toast('Wczytano zestaw startowy ✨');
+    } else {
+      applyConfig({ base: 'scene', design: p.design, strip: 'both',
+        gt: p.gt, gb: p.gb, dt: p.gt, db: p.gb, pst: p.n, psb: p.n });
+      toast(`Zestaw: ${p.label} ✨`);
+    }
+  }
+  function randomBuild() {
+    const ds = state.designs; if (!ds.length) return;
+    const rnd = a => a[Math.floor(Math.random() * a.length)];
+    const bg = rnd(PALETTE).id;
+    const txt = Math.random() < 0.5 ? 'glitch' : rnd(['#FFFFFF', '#FFD23F', '#22E0E6', '#FF2E97', '#5DF7A0']);
+    const n = rnd(STRIP_SIZES).n;
+    applyConfig({ base: 'scene', design: rnd(ds).id, strip: 'both', gt: txt, gb: bg, dt: txt, db: bg, pst: n, psb: n });
+    toast('Wylosowano świeży setup ✨');
   }
   function renderGeoControls() {
     const pw = $('#geo-patterns');
@@ -191,7 +387,7 @@
       const items = state.emblems.filter(e => state.embCat === 'all' || e.category === state.embCat);
       tray.innerHTML = items.map(e => `<button class="emb${e.id === state.tile.emblem ? ' is-active' : ''}" data-emblem="${esc(e.id)}" title="${esc(e.id)}" aria-label="Emblemat ${esc(e.id)}"><img src="${esc(e.file)}" alt="" loading="lazy" width="64" height="64"></button>`).join('');
     }
-    renderPalette('tile-bg', PALETTE, state.tile.bg, 'tg', 'Kolor tła');
+    renderPalette('tile-bg', bandColors(), state.tile.bg, 'tg', 'Kolor tła');
     renderSizeBtns('tile-sizes', TILE_SIZES, state.tile.n, 'tile');
   }
   function applyBaseVisibility() {
@@ -238,11 +434,13 @@
       x.fillStyle = '#FF2E97'; x.fillText(text, bx - d, by - d);
       x.fillStyle = '#22E0E6'; x.fillText(text, bx + d, by + d);
       x.fillStyle = '#F5F5FC'; x.fillText(text, bx, by);
+    } else if (isGrad(color)) {
+      x.fillStyle = canvasFill(x, color, bx, bx + tw); x.fillText(text, bx, by);
     } else { x.fillStyle = color; x.fillText(text, bx, by); }
     stripCache[key] = c; return c;
   }
-  function stripFor(textColor) {                            // zawsze font: domyślnie „PIXEL SIP", albo własny napis
-    return renderCustomStrip(state.stripText || 'PIXEL SIP', textColor);
+  function stripFor(text, textColor) {                      // zawsze font: domyślnie „PIXEL SIP", albo własny napis
+    return renderCustomStrip(text || 'PIXEL SIP', textColor);
   }
   async function buildTexture() {
     const seq = ++texSeq;
@@ -252,17 +450,20 @@
     else if (state.base === 'tile') { if (!state.tile.emblem) return; baseImg = await loadImg('assets/emblems/' + state.tile.emblem + '.png'); }
     if (seq !== texSeq) return;
     if ((state.base === 'scene' || state.base === 'tile') && !baseImg) return;
-    const TW = TEX.width, TH = TEX.height, BAND = Math.round(TH * 0.135 * state.stripSize);
+    const TW = TEX.width, TH = TEX.height;
+    const BAND_T = Math.round(TH * 0.135 * state.stripSizeTop);   // wysokość paska góra
+    const BAND_B = Math.round(TH * 0.135 * state.stripSizeBot);   // wysokość paska dół
     const top = state.strip === 'both' || state.strip === 'top';
     const bot = state.strip === 'both' || state.strip === 'bot';
     tctx.imageSmoothingEnabled = false;
     tctx.fillStyle = '#000'; tctx.fillRect(0, 0, TW, TH);
-    const sy0 = top ? BAND : 0, sy1 = bot ? TH - BAND : TH;
+    const sy0 = top ? BAND_T : 0, sy1 = bot ? TH - BAND_B : TH;
     drawBase(0, sy0, TW, sy1 - sy0, baseImg);
-    const sh = Math.round(BAND * 0.58), mg = Math.round(TW * 0.05);
-    const band = (by, textColor, bandColorHex) => {
-      tctx.fillStyle = bandColorHex; tctx.fillRect(0, by, TW, BAND);
-      const strip = stripFor(textColor);
+    const mg = Math.round(TW * 0.05);
+    const band = (by, BAND, text, textColor, bandColorHex) => {
+      const sh = Math.round(BAND * 0.58);
+      tctx.fillStyle = canvasFill(tctx, bandColorHex, 0, TW); tctx.fillRect(0, by, TW, BAND);
+      const strip = stripFor(text, textColor);
       const bw = Math.round(strip.width * sh / strip.height), yy = by + (BAND - sh) / 2;
       tctx.imageSmoothingEnabled = false;
       if (2 * bw + 2 * mg + 24 <= TW) {                 // mieści się dwa razy (jak PIXEL SIP) -> dwie kopie
@@ -273,8 +474,8 @@
         tctx.drawImage(strip, (TW - cw) / 2, by + (BAND - ch) / 2, cw, ch);
       }
     };
-    if (top) band(0, state.stripColorTop, state.bandColorTop);
-    if (bot) band(TH - BAND, state.stripColorBot, state.bandColorBot);
+    if (top) band(0, BAND_T, state.stripTextTop, state.stripColorTop, state.bandColorTop);
+    if (bot) band(TH - BAND_B, BAND_B, state.stripTextBot, state.stripColorBot, state.bandColorBot);
     window.__tumblerCanvas = TEX;
     window.Tumbler?.setTextureCanvas(TEX);
   }
@@ -347,6 +548,10 @@
     window.__tumblerWant = { cap: p.capacityMl };
     window.Tumbler?.setSize(p.capacityMl);
     buildTexture();
+    renderColorsSummary(); renderBuildSummary();
+    const priceTxt = `Dodaj do koszyka · ${PLN(p.retailPrice)}`;
+    const pa = $('#preview-add'); if (pa) pa.textContent = priceTxt + ' 🛒';
+    const sa = $('#sticky-add'); if (sa) sa.textContent = priceTxt + ' 🛒';
     saveBuild();
   }
 
@@ -389,16 +594,19 @@
     const tn = parseInt(cfg.tn, 10); if (okN(TILE_SIZES, tn)) state.tile.n = tn;
     if (cfg.size && state.prodById[cfg.size]) state.size = cfg.size;
     if (['both', 'top', 'bot', 'none'].includes(cfg.strip)) state.strip = cfg.strip;
-    if (cfg.gt === 'glitch' || isHex(cfg.gt)) state.stripColorTop = cfg.gt;
-    if (isHex(cfg.gb)) state.bandColorTop = cfg.gb;
-    if (cfg.dt === 'glitch' || isHex(cfg.dt)) state.stripColorBot = cfg.dt;
-    if (isHex(cfg.db)) state.bandColorBot = cfg.db;
-    if (cfg.txt !== undefined) state.stripText = cfg.txt ? sanitizeText(b64urlDec(cfg.txt)) : '';
-    const ps = parseFloat(cfg.ps); if (STRIP_SIZES.some(s => s.n === ps)) state.stripSize = ps;
+    if (cfg.gt === 'glitch' || isHex(cfg.gt) || isGrad(cfg.gt)) state.stripColorTop = cfg.gt;
+    if (isHex(cfg.gb) || isGrad(cfg.gb)) state.bandColorTop = cfg.gb;
+    if (cfg.dt === 'glitch' || isHex(cfg.dt) || isGrad(cfg.dt)) state.stripColorBot = cfg.dt;
+    if (isHex(cfg.db) || isGrad(cfg.db)) state.bandColorBot = cfg.db;
+    if (cfg.txt !== undefined) state.stripTextTop = cfg.txt ? sanitizeText(b64urlDec(cfg.txt)) : '';
+    if (cfg.txb !== undefined) state.stripTextBot = cfg.txb ? sanitizeText(b64urlDec(cfg.txb)) : '';
+    const pst = parseFloat(cfg.pst); if (STRIP_SIZES.some(s => s.n === pst)) state.stripSizeTop = pst;
+    const psb = parseFloat(cfg.psb); if (STRIP_SIZES.some(s => s.n === psb)) state.stripSizeBot = psb;
   }
   function applyConfig(cfg) {                          // mutacja + pełny re-render kreatora (dla linków/presetów w locie)
     setStateFromConfig(cfg);
-    renderGallery(); renderSizes(); renderGeoControls(); renderEmblems();
+    deriveStripModes();
+    renderGallery(); renderSizes(); renderGeoControls(); renderEmblems(); renderPresets();
     renderPalettes(); applyStripVisibility(); applyBaseVisibility(); updatePreview();
   }
   function serializeBuild() {                          // state -> zwarty token (np. base.geo~wzor.romby~c1.0B0A16~...)
@@ -412,8 +620,10 @@
     add('gb', noHash(state.bandColorTop));
     add('dt', state.stripColorBot === 'glitch' ? 'glitch' : noHash(state.stripColorBot));
     add('db', noHash(state.bandColorBot));
-    add('txt', state.stripText ? b64urlEnc(state.stripText) : '');
-    if (state.stripSize !== 1) add('ps', state.stripSize);
+    add('txt', state.stripTextTop ? b64urlEnc(state.stripTextTop) : '');
+    add('txb', state.stripTextBot ? b64urlEnc(state.stripTextBot) : '');
+    if (state.stripSizeTop !== 1) add('pst', state.stripSizeTop);
+    if (state.stripSizeBot !== 1) add('psb', state.stripSizeBot);
     return p.join('~');
   }
   function parseBuild(str) {                            // token -> cfg (z przywróconym '#')
@@ -422,7 +632,8 @@
       base: d.base, design: d.design, wzor: d.wzor, c1: addHashCol(d.c1), c2: addHashCol(d.c2),
       emb: d.emb, bg: addHashCol(d.bg), gn: d.gn, tn: d.tn, size: d.size, strip: d.strip,
       gt: d.gt === 'glitch' ? 'glitch' : addHashCol(d.gt), gb: addHashCol(d.gb),
-      dt: d.dt === 'glitch' ? 'glitch' : addHashCol(d.dt), db: addHashCol(d.db), txt: d.txt, ps: d.ps,
+      dt: d.dt === 'glitch' ? 'glitch' : addHashCol(d.dt), db: addHashCol(d.db),
+      txt: d.txt, txb: d.txb, pst: d.pst, psb: d.psb,    // FIX: wcześniej gubione (dolny napis + rozmiary obu pasków)
     };
   }
   function saveBuild() { try { localStorage.setItem(BUILD_KEY, serializeBuild()); } catch {} }
@@ -453,15 +664,18 @@
     const cfg = {
       gora_tekst: hasT ? state.stripColorTop : '-', gora_tlo: hasT ? state.bandColorTop : '-',
       dol_tekst: hasB ? state.stripColorBot : '-', dol_tlo: hasB ? state.bandColorBot : '-',
-      napis: state.stripText ? b64urlEnc(state.stripText) : '',
-      psize: state.stripSize,
+      napis_top: state.stripTextTop ? b64urlEnc(state.stripTextTop) : '',
+      napis_bot: state.stripTextBot ? b64urlEnc(state.stripTextBot) : '',
+      psize_top: state.stripSizeTop,
+      psize_bot: state.stripSizeBot,
     };
     const bc = baseConfig();
-    const key = `${p.id}__${JSON.stringify(bc)}__${state.strip}__${cfg.gora_tekst}_${cfg.gora_tlo}_${cfg.dol_tekst}_${cfg.dol_tlo}__${cfg.napis}_${cfg.psize}`;
+    const key = `${p.id}__${JSON.stringify(bc)}__${state.strip}__${cfg.gora_tekst}_${cfg.gora_tlo}_${cfg.dol_tekst}_${cfg.dol_tlo}__${cfg.napis_top}_${cfg.napis_bot}_${cfg.psize_top}_${cfg.psize_bot}`;
     const ex = cart.find(i => i.key === key);
     if (ex) ex.qty += 1;
     else cart.push({ key, size: p.id, sizeLabel: p.sizeLabel, designName: baseName(), baseCfg: bc, strip: state.strip, cfg, stripDesc: stripDesc(), file: thumbURL(), price: p.retailPrice, qty: 1 });
     saveCart(cart); renderCart(); openCart();
+    track('AddToCart', { content_ids: [baseName()], content_type: 'product', value: p.retailPrice, currency: 'PLN' });
     toast(`Dodano: ${baseName()} · ${p.sizeLabel}`);
   }
   function setQty(key, delta) {
@@ -508,6 +722,7 @@
   function openCheckout() {
     if (!cart.length) return;
     const m = $('#checkout-modal'); if (!m) return;
+    track('InitiateCheckout', { value: cartTotal(), currency: 'PLN', num_items: cart.reduce((s, i) => s + i.qty, 0), content_ids: cart.map(i => i.designName) });
     $('#checkout-form').hidden = false; $('#co-success').hidden = true;   // reset
     $('#co-summary').innerHTML = cart.map(i => `<li>${i.qty}× <b>${esc(i.designName)}</b> (${esc(i.sizeLabel)}, ${esc(i.stripDesc || '')}) — ${PLN(i.price * i.qty)}</li>`).join('');
     $('#co-total').textContent = PLN(cartTotal());
@@ -529,11 +744,19 @@
     const f = e.target;
     const d = state.delivery[Number(f.delivery.value) || 0] || { method: '—', price: 0 };
     const adres = `${f.postal.value} ${f.city.value}, ${f.street.value}`;
+    // jeden ciąg configu na pozycję — używany i w mailu, i przez backend do odtworzenia pliku do druku
+    const cfgStr = i => `${Object.entries(i.baseCfg).map(([k, v]) => `${k}=${v}`).join(' ')} size=${i.size} strip=${i.strip} gora_tekst=${i.cfg.gora_tekst} gora_tlo=${i.cfg.gora_tlo} dol_tekst=${i.cfg.dol_tekst} dol_tlo=${i.cfg.dol_tlo}${i.cfg.napis_top ? ' napis_top=' + i.cfg.napis_top : ''}${i.cfg.napis_bot ? ' napis_bot=' + i.cfg.napis_bot : ''}${i.cfg.psize_top && i.cfg.psize_top !== 1 ? ' psize_top=' + i.cfg.psize_top : ''}${i.cfg.psize_bot && i.cfg.psize_bot !== 1 ? ' psize_bot=' + i.cfg.psize_bot : ''}`;
     const order = {
       klient: { imie: f.name.value, email: f.email.value, telefon: f.phone.value, adres, uwagi: f.notes.value },
       dostawa: d.method, dostawa_koszt: d.price,
-      pozycje: cart.map(i => `${i.qty}× ${i.designName} (${i.sizeLabel}, ${i.stripDesc || ''}) = ${(i.price * i.qty).toFixed(2)} zł\n   [config: ${Object.entries(i.baseCfg).map(([k, v]) => `${k}=${v}`).join(' ')} size=${i.size} strip=${i.strip} gora_tekst=${i.cfg.gora_tekst} gora_tlo=${i.cfg.gora_tlo} dol_tekst=${i.cfg.dol_tekst} dol_tlo=${i.cfg.dol_tlo}${i.cfg.napis ? ' napis=' + i.cfg.napis : ''}${i.cfg.psize && i.cfg.psize !== 1 ? ' psize=' + i.cfg.psize : ''}]`),
+      pozycje: cart.map(i => `${i.qty}× ${i.designName} (${i.sizeLabel}, ${i.stripDesc || ''}) = ${(i.price * i.qty).toFixed(2)} zł\n   [config: ${cfgStr(i)}]`),
       suma_produkty: cartTotal().toFixed(2), suma_calosc: (cartTotal() + (d.price || 0)).toFixed(2),
+      // pola, które czyta backend Pixel Sip (panel + druk); generyczne endpointy je zignorują
+      name: f.name.value, email: f.email.value, phone: f.phone.value, address: adres, notes: f.notes.value,
+      currency: 'zł', total: Number((cartTotal() + (d.price || 0)).toFixed(2)),
+      fbp: getCookie('_fbp'), fbc: getCookie('_fbc'),   // do Meta CAPI (lepsze dopasowanie)
+      delivery: d.method, delivery_price: d.price,
+      items: cart.map(i => ({ title: i.designName, size: i.size, qty: i.qty, price: i.price, config: cfgStr(i) })),
     };
     const btn = $('#co-submit'); btn.disabled = true; btn.textContent = 'Wysyłanie…';
     const txt = `Zamówienie Pixel Sip\n\n${order.pozycje.join('\n')}\n\nDostawa: ${order.dostawa} (${PLN(order.dostawa_koszt)})\nRAZEM: ${PLN(order.suma_calosc)}\n\nKlient: ${order.klient.imie}\nEmail: ${order.klient.email}\nTel: ${order.klient.telefon}\nAdres: ${order.klient.adres}\nUwagi: ${order.klient.uwagi}`;
@@ -541,6 +764,12 @@
       if (CONFIG.orderEndpoint) {
         const res = await fetch(CONFIG.orderEndpoint, { method: 'POST', headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }, body: JSON.stringify(order) });
         if (!res.ok) throw new Error('send failed');
+        let resp = {}; try { resp = await res.json(); } catch {}
+        if (resp.redirect) {                       // płatność online -> przekieruj do bramki (P24)
+          cart = []; saveCart(cart);
+          window.location.href = resp.redirect;
+          return;
+        }
       } else {
         try { await navigator.clipboard.writeText(txt); } catch {}
         window.location.href = `mailto:${CONFIG.shopEmail}?subject=${encodeURIComponent('Zamówienie Pixel Sip')}&body=${encodeURIComponent(txt)}`;
@@ -555,12 +784,102 @@
     } finally { btn.disabled = false; btn.textContent = 'Zamawiam i płacę'; isSubmitting = false; }
   }
 
-  // ——————————————————— COOKIES ———————————————————
+  // ——————————————————— ZGODY (cookies) + ŚLEDZENIE ———————————————————
+  // RODO: piksele marketingowe ładują się DOPIERO po zgodzie. Odrzucenie = równie łatwe.
+  let _pixelsReady = false;
+  function consentState() { try { return localStorage.getItem('pixelsip_consent'); } catch { return null; } }
+  function getCookie(name) { return (document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)') || [])[2] || ''; }
+
   function cookieBanner() {
     const b = $('#cookie-banner'); if (!b) return;
-    if (localStorage.getItem('pixelsip_cookie')) return;
-    b.hidden = false;
-    b.querySelector('[data-cookie]')?.addEventListener('click', () => { try { localStorage.setItem('pixelsip_cookie', '1'); } catch {} b.hidden = true; });
+    b.querySelector('[data-consent="accept"]')?.addEventListener('click', () => setConsent('granted'));
+    b.querySelector('[data-consent="reject"]')?.addEventListener('click', () => setConsent('denied'));
+    document.querySelector('[data-cookie-settings]')?.addEventListener('click', (e) => { e.preventDefault(); b.hidden = false; });  // wycofanie/zmiana zgody
+    const c = consentState();
+    if (c === 'granted') loadPixels();
+    if (!c) b.hidden = false;                            // brak decyzji -> pokaż baner
+  }
+  function setConsent(v) {
+    try { localStorage.setItem('pixelsip_consent', v); } catch {}
+    const b = $('#cookie-banner'); if (b) b.hidden = true;
+    if (v === 'granted') { loadPixels(); track('ViewContent', viewContentData()); }
+  }
+
+  function loadPixels() {
+    if (_pixelsReady) return;
+    if (CONFIG.metaPixelId) {                            // Meta Pixel (standardowy loader)
+      !function (f, b, e, v, n, t, s) {
+        if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) };
+        if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = [];
+        t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s);
+      }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+      window.fbq('init', CONFIG.metaPixelId); window.fbq('track', 'PageView');
+    }
+    if (CONFIG.tiktokPixelId) {                          // TikTok Pixel
+      !function (w, d, t) {
+        w.TiktokAnalyticsObject = t; var ttq = w[t] = w[t] || []; ttq.methods = ['page', 'track', 'identify', 'instances', 'debug', 'on', 'off', 'once', 'ready', 'alias', 'group', 'enableCookie', 'disableCookie'];
+        ttq.setAndDefer = function (e, n) { e[n] = function () { e.push([n].concat(Array.prototype.slice.call(arguments, 0))) } };
+        for (var i = 0; i < ttq.methods.length; i++) ttq.setAndDefer(ttq, ttq.methods[i]);
+        ttq.load = function (e) { var n = 'https://analytics.tiktok.com/i18n/pixel/events.js'; ttq._i = ttq._i || {}; ttq._i[e] = []; ttq._i[e]._u = n; ttq._t = ttq._t || {}; ttq._t[e] = +new Date; var o = d.createElement('script'); o.type = 'text/javascript'; o.async = !0; o.src = n + '?sdkid=' + e + '&lib=' + t; var a = d.getElementsByTagName('script')[0]; a.parentNode.insertBefore(o, a) };
+        ttq.load(CONFIG.tiktokPixelId); ttq.page();
+      }(window, document, 'ttq');
+    }
+    _pixelsReady = true;
+  }
+
+  // wyślij zdarzenie e-commerce do aktywnych pikseli (no-op bez zgody / bez ID)
+  function track(event, data) {
+    if (consentState() !== 'granted' || !_pixelsReady) return;
+    try { if (window.fbq) window.fbq('track', event, data); } catch {}
+    try {
+      if (window.ttq) {
+        const map = { ViewContent: 'ViewContent', AddToCart: 'AddToCart', InitiateCheckout: 'InitiateCheckout', Purchase: 'CompletePayment' };
+        window.ttq.track(map[event] || event, { value: data.value, currency: data.currency, content_id: (data.content_ids || [])[0] });
+      }
+    } catch {}
+  }
+  function viewContentData() {
+    const p = state.prodById?.[state.size] || {};
+    return { content_ids: [baseName()], content_type: 'product', value: p.retailPrice || 0, currency: 'PLN' };
+  }
+
+  // ——————————————————— WAITLIST (rozmiary „wkrótce", np. 900 ml) ———————————————————
+  function openWaitlist(productId) {
+    const p = state.prodById[productId] || {}; const lbl = p.sizeLabel || '900 ml';
+    let m = $('#waitlist-modal');
+    if (!m) {
+      m = document.createElement('div'); m.id = 'waitlist-modal'; m.className = 'wl-modal';
+      m.innerHTML = `<div class="wl-box" role="dialog" aria-modal="true" aria-label="Zapisz się na powiadomienie">
+        <button class="wl-close" aria-label="Zamknij">×</button>
+        <h3 class="wl-title"></h3><p class="wl-lead"></p>
+        <form class="wl-form">
+          <input type="email" name="email" required placeholder="Twój e-mail" autocomplete="email">
+          <label class="wl-consent"><input type="checkbox" name="ok" required> Chcę dostać powiadomienie mailem o dostępności tego rozmiaru.</label>
+          <button class="btn btn--primary btn--block" type="submit">Powiadom mnie</button>
+        </form>
+        <p class="wl-msg" hidden></p></div>`;
+      document.body.appendChild(m);
+      m.addEventListener('click', e => { if (e.target === m || e.target.closest('.wl-close')) m.classList.remove('open'); });
+      m.querySelector('.wl-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        const email = e.target.email.value.trim(), msg = m.querySelector('.wl-msg'), btn = e.target.querySelector('button[type=submit]');
+        btn.disabled = true; btn.textContent = 'Zapisuję…';
+        try {
+          if (CONFIG.waitlistEndpoint) {
+            const r = await fetch(CONFIG.waitlistEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, product: m.dataset.product }) });
+            if (!r.ok) throw 0;
+          }
+          e.target.hidden = true; msg.hidden = false; msg.className = 'wl-msg ok'; msg.textContent = '✅ Dzięki! Damy znać, gdy ten rozmiar ruszy.';
+        } catch { msg.hidden = false; msg.className = 'wl-msg err'; msg.textContent = 'Coś poszło nie tak — spróbuj później.'; btn.disabled = false; btn.textContent = 'Powiadom mnie'; }
+      });
+    }
+    m.dataset.product = productId;
+    m.querySelector('.wl-title').textContent = `${lbl} — wkrótce`;
+    m.querySelector('.wl-lead').textContent = p.waitlistNote || 'Pracujemy nad tym rozmiarem. Zostaw maila — damy znać, gdy ruszy.';
+    const f = m.querySelector('.wl-form'), msg = m.querySelector('.wl-msg');
+    f.hidden = false; f.reset(); const b = f.querySelector('button[type=submit]'); b.disabled = false; b.textContent = 'Powiadom mnie';
+    msg.hidden = true;
+    m.classList.add('open');
   }
   function initHeroCarousel() {
     const slides = $$('.hero__slide'), dots = $$('.hero__dot'), wrap = $('.hero__carousel');
@@ -584,40 +903,67 @@
   // ——————————————————— UI BINDING ———————————————————
   function bindUI() {
     document.addEventListener('click', (e) => {
+      // ——— zakładki / skróty / panel kolorów (nowy flow) ———
+      const tab = e.target.closest('[data-tab]');
+      if (tab) { goTab(tab.dataset.tab); $('#config-tabs')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); return; }
+      if (e.target.closest('#sticky-next')) { const i = TAB_ORDER.indexOf(state.tab); goTab(TAB_ORDER[Math.min(TAB_ORDER.length - 1, i + 1)]); $('#configurator')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+      const preset = e.target.closest('[data-preset]');
+      if (preset) { applyPreset(+preset.dataset.preset); return; }
+      if (e.target.closest('#btn-random')) { randomBuild(); return; }
+      const cside = e.target.closest('[data-colside]');
+      if (cside) { state.colorSide = cside.dataset.colside; state.palExpanded = false; renderActivePalette(); return; }
+      const ckind = e.target.closest('[data-colkind]');
+      if (ckind) { state.colorKind = ckind.dataset.colkind; state.palExpanded = false; renderActivePalette(); return; }
+      if (e.target.closest('#toggle-sync')) {
+        state.syncStrip = !state.syncStrip;
+        if (state.syncStrip) { state.stripColorBot = state.stripColorTop; state.bandColorBot = state.bandColorTop; state.stripSizeBot = state.stripSizeTop; state.colorSide = 'top'; }
+        applyColorsVisibility(); renderActivePalette(); renderColorsSummary(); updatePreview(); return;
+      }
+      if (e.target.closest('#toggle-more-colors') || e.target.closest('[data-morecolors]')) { state.palExpanded = !state.palExpanded; renderActivePalette(); return; }
+      if (e.target.closest('#colors-expand')) { state.colorsOpen = true; applyColorsVisibility(); renderActivePalette(); return; }
+      if (e.target.closest('#toggle-split-text')) {
+        state.splitText = !state.splitText;
+        if (!state.splitText) { state.stripTextBot = state.stripTextTop; const b = $('#strip-text-bot'); if (b) b.value = state.stripTextBot; }
+        applyStripVisibility(); updatePreview(); return;
+      }
       const gnav = e.target.closest('[data-gallery-nav]');
       if (gnav) { scrollGallery(+gnav.dataset.galleryNav); return; }
       const card = e.target.closest('[data-design]');
-      if (card) { state.designId = card.dataset.design; renderGallery(); updatePreview(); $('#configurator')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); return; }
+      if (card) { state.designId = card.dataset.design; renderGallery(); renderPalettes(); updatePreview(); $('#configurator')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); return; }
       const sz = e.target.closest('[data-size]');
       if (sz) { state.size = sz.dataset.size; renderSizes(); updatePreview(); return; }
+      const wl = e.target.closest('[data-waitlist]');
+      if (wl) { openWaitlist(wl.dataset.waitlist); return; }
       const chip = e.target.closest('[data-cat]');
       if (chip) { state.cat = chip.dataset.cat; $$('[data-cat]').forEach(c => c.classList.toggle('is-active', c === chip)); renderGallery(); return; }
       const strip = e.target.closest('[data-strip]');
       if (strip) { state.strip = strip.dataset.strip; $$('[data-strip]').forEach(s => { const a = s === strip; s.classList.toggle('is-active', a); s.setAttribute('aria-pressed', a); }); applyStripVisibility(); updatePreview(); return; }
       const sw = e.target.closest('[data-pal]');
       if (sw) {
-        const pal = sw.dataset.pal, val = sw.dataset.val;
-        if (pal === 'tt') state.stripColorTop = val; else if (pal === 'tb') state.bandColorTop = val; else if (pal === 'bt') state.stripColorBot = val; else if (pal === 'bb') state.bandColorBot = val;
-        else if (pal === 'g1') state.geo.c1 = val; else if (pal === 'g2') state.geo.c2 = val; else if (pal === 'tg') state.tile.bg = val;
+        const pal = sw.dataset.pal;
+        setPalColor(pal, sw.dataset.val);
         $$(`[data-pal="${pal}"]`).forEach(s => s.classList.toggle('is-active', s === sw));
+        document.querySelector(`.swatch--custom input[data-palcustom="${pal}"]`)?.closest('.swatch--custom')?.classList.remove('is-active');
         updatePreview(); return;
       }
-      const ps = e.target.closest('[data-size-strip]');
-      if (ps) { state.stripSize = +ps.dataset.sizeStrip; $$('[data-size-strip]').forEach(s => s.classList.toggle('is-active', s === ps)); updatePreview(); return; }
+      const psT = e.target.closest('[data-size-striptop]');
+      if (psT) { state.stripSizeTop = +psT.dataset.sizeStriptop; if (state.syncStrip) state.stripSizeBot = state.stripSizeTop; $$('[data-size-striptop]').forEach(s => s.classList.toggle('is-active', s === psT)); updatePreview(); return; }
+      const psB = e.target.closest('[data-size-stripbot]');
+      if (psB) { state.stripSizeBot = +psB.dataset.sizeStripbot; $$('[data-size-stripbot]').forEach(s => s.classList.toggle('is-active', s === psB)); updatePreview(); return; }
       const bt = e.target.closest('[data-base]');
-      if (bt) { state.base = bt.dataset.base; applyBaseVisibility(); if (state.base === 'scene') updateGalleryNav(); updatePreview(); return; }
+      if (bt) { state.base = bt.dataset.base; applyBaseVisibility(); renderPalettes(); if (state.base === 'scene') updateGalleryNav(); updatePreview(); return; }
       const gp = e.target.closest('[data-geopat]');
       if (gp) { state.geo.pattern = gp.dataset.geopat; $$('[data-geopat]').forEach(s => s.classList.toggle('is-active', s === gp)); updatePreview(); return; }
       const gs = e.target.closest('[data-size-geo]');
       if (gs) { state.geo.n = +gs.dataset.sizeGeo; $$('[data-size-geo]').forEach(s => s.classList.toggle('is-active', s === gs)); updatePreview(); return; }
       const em = e.target.closest('[data-emblem]');
-      if (em) { state.tile.emblem = em.dataset.emblem; $$('[data-emblem]').forEach(s => s.classList.toggle('is-active', s === em)); updatePreview(); return; }
+      if (em) { state.tile.emblem = em.dataset.emblem; $$('[data-emblem]').forEach(s => s.classList.toggle('is-active', s === em)); renderPalettes(); updatePreview(); return; }
       const ec = e.target.closest('[data-embcat]');
       if (ec) { state.embCat = ec.dataset.embcat; renderEmblems(); return; }
       const ts = e.target.closest('[data-size-tile]');
       if (ts) { state.tile.n = +ts.dataset.sizeTile; $$('[data-size-tile]').forEach(s => s.classList.toggle('is-active', s === ts)); updatePreview(); return; }
-      if (e.target.closest('#share-build')) { shareBuild(); return; }
-      if (e.target.closest('#add-to-cart, #sticky-add')) { addToCart(); return; }
+      if (e.target.closest('#share-build, #preview-share')) { shareBuild(); return; }
+      if (e.target.closest('#add-to-cart, #sticky-add, #preview-add')) { addToCart(); return; }
       if (e.target.closest('#cart-toggle, #sticky-cart')) { openCart(); return; }
       if (e.target.closest('#cart-close')) { closeCart(); return; }
       if (e.target.closest('#overlay')) { closeCart(); closeCheckout(); return; }
@@ -630,6 +976,27 @@
       if (e.target.closest('#nav a')) { $('#nav')?.classList.remove('open'); }
     });
     $('#design-search')?.addEventListener('input', (e) => { state.q = e.target.value.toLowerCase().trim(); renderGallery(); });
+    document.addEventListener('input', (e) => {                    // własny kolor (picker) — live, bez re-renderu
+      const ci = e.target.closest('[data-palcustom]'); if (!ci) return;
+      const pal = ci.dataset.palcustom;
+      setPalColor(pal, ci.value.toUpperCase());
+      $$(`[data-pal="${pal}"]`).forEach(s => s.classList.remove('is-active'));
+      ci.closest('.swatch--custom')?.classList.add('is-active');
+      updatePreview();
+    });
+    document.addEventListener('input', (e) => {                    // własny gradient (2 kolory) — live
+      const gp = e.target.closest('[data-gradpart]'); if (!gp) return;
+      const pal = gp.dataset.gradpart.split(':')[0];
+      const ins = $$(`[data-gradpart^="${pal}:"]`);
+      const c0 = ins.find(i => i.dataset.gradpart === pal + ':0')?.value || '#22E0E6';
+      const c1 = ins.find(i => i.dataset.gradpart === pal + ':1')?.value || '#FF2E97';
+      setPalColor(pal, mkGrad(c0, c1));
+      $$(`[data-pal="${pal}"]`).forEach(s => s.classList.remove('is-active'));
+      const grads = [...(gp.closest('.strip-colors')?.querySelectorAll('.swatch--grad') || [])];
+      const pv = grads[grads.length - 1];
+      if (pv) { pv.style.background = `linear-gradient(90deg,${c0},${c1})`; pv.dataset.val = mkGrad(c0, c1); pv.classList.add('is-active'); }
+      updatePreview();
+    });
     $('#design-gallery')?.addEventListener('wheel', (e) => {       // myszka: pionowe kółko -> poziomy scroll karuzeli
       const el = e.currentTarget;
       if (el.scrollWidth <= el.clientWidth + 4) return;
@@ -638,10 +1005,17 @@
     }, { passive: false });
     $('#design-gallery')?.addEventListener('scroll', updateGalleryNav, { passive: true });
     window.addEventListener('resize', updateGalleryNav, { passive: true });
-    $('#strip-text')?.addEventListener('input', (e) => {
+    $('#strip-text-top')?.addEventListener('input', (e) => {
       const clean = sanitizeText(e.target.value);
       if (clean !== e.target.value) e.target.value = clean;
-      state.stripText = clean; updatePreview();
+      state.stripTextTop = clean;
+      if (!state.splitText) { state.stripTextBot = clean; const b = $('#strip-text-bot'); if (b) b.value = clean; }   // tryb prosty: jeden napis na obie strony
+      updatePreview();
+    });
+    $('#strip-text-bot')?.addEventListener('input', (e) => {
+      const clean = sanitizeText(e.target.value);
+      if (clean !== e.target.value) e.target.value = clean;
+      state.stripTextBot = clean; updatePreview();
     });
     $('#checkout-form')?.addEventListener('submit', submitOrder);
     $('#co-delivery')?.addEventListener('change', updateGrand);

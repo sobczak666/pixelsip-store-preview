@@ -3,600 +3,1383 @@
   "id": "arcade-cab",
   "category": "akcenty",
   "categoryLabel": "Akcenty",
-  "file": "assets/emblems/arcade-cab.png"
+  "file": "assets/emblems/arcade-cab.png",
+  "palette": [
+   "#260D45",
+   "#110423",
+   "#692AB7",
+   "#FF2BBE",
+   "#FDC354",
+   "#9E56F9"
+  ]
  },
  {
   "id": "cloud",
   "category": "akcenty",
   "categoryLabel": "Akcenty",
-  "file": "assets/emblems/cloud.png"
+  "file": "assets/emblems/cloud.png",
+  "palette": [
+   "#FCFCE3",
+   "#BEBEBD",
+   "#3F3B48",
+   "#FDFCFA",
+   "#4D4953"
+  ]
  },
  {
   "id": "controller",
   "category": "akcenty",
   "categoryLabel": "Akcenty",
-  "file": "assets/emblems/controller.png"
+  "file": "assets/emblems/controller.png",
+  "palette": [
+   "#3E3F4D",
+   "#1C1B26",
+   "#535463",
+   "#2C2D39",
+   "#848297",
+   "#F3C790"
+  ]
  },
  {
   "id": "dice",
   "category": "akcenty",
   "categoryLabel": "Akcenty",
-  "file": "assets/emblems/dice.png"
+  "file": "assets/emblems/dice.png",
+  "palette": [
+   "#9F1238",
+   "#680D32",
+   "#F95A79",
+   "#F9F8F7",
+   "#231F1E",
+   "#D5D3D3"
+  ]
  },
  {
   "id": "flame",
   "category": "akcenty",
   "categoryLabel": "Akcenty",
-  "file": "assets/emblems/flame.png"
+  "file": "assets/emblems/flame.png",
+  "palette": [
+   "#FAE405",
+   "#FDA800",
+   "#FE5000",
+   "#9B2D08",
+   "#160F08",
+   "#F8BF02"
+  ]
  },
  {
   "id": "headphones",
   "category": "akcenty",
   "categoryLabel": "Akcenty",
-  "file": "assets/emblems/headphones.png"
+  "file": "assets/emblems/headphones.png",
+  "palette": [
+   "#A6A5E6",
+   "#E26B98",
+   "#6E67B0",
+   "#F5AFD3",
+   "#4A3F7E",
+   "#382660"
+  ]
  },
  {
   "id": "joystick",
   "category": "akcenty",
   "categoryLabel": "Akcenty",
-  "file": "assets/emblems/joystick.png"
+  "file": "assets/emblems/joystick.png",
+  "palette": [
+   "#393938",
+   "#1A1919",
+   "#0D0A09",
+   "#F91810",
+   "#A0A0A0",
+   "#7F0602"
+  ]
  },
  {
   "id": "leaf",
   "category": "akcenty",
   "categoryLabel": "Akcenty",
-  "file": "assets/emblems/leaf.png"
+  "file": "assets/emblems/leaf.png",
+  "palette": [
+   "#93D144",
+   "#4D861B",
+   "#454644",
+   "#3E6416",
+   "#71A43B",
+   "#62972B"
+  ]
  },
  {
   "id": "plus",
   "category": "akcenty",
   "categoryLabel": "Akcenty",
-  "file": "assets/emblems/plus.png"
+  "file": "assets/emblems/plus.png",
+  "palette": [
+   "#2BFF00",
+   "#292431",
+   "#0D0B13",
+   "#4E4B53",
+   "#BFFD7C",
+   "#FAF2F1"
+  ]
  },
  {
   "id": "sparkle",
   "category": "akcenty",
   "categoryLabel": "Akcenty",
-  "file": "assets/emblems/sparkle.png"
+  "file": "assets/emblems/sparkle.png",
+  "palette": [
+   "#FAFAF9",
+   "#5A5957",
+   "#D7D7D5",
+   "#969491",
+   "#CCCAC6",
+   "#A4A3A1"
+  ]
  },
  {
   "id": "chip",
   "category": "cyberpunk-glitch",
   "categoryLabel": "Cyberpunk",
-  "file": "assets/emblems/chip.png"
+  "file": "assets/emblems/chip.png",
+  "palette": [
+   "#06022D",
+   "#272355",
+   "#210E47",
+   "#564B71",
+   "#E074EB",
+   "#586393"
+  ]
  },
  {
   "id": "circuit",
   "category": "cyberpunk-glitch",
   "categoryLabel": "Cyberpunk",
-  "file": "assets/emblems/circuit.png"
+  "file": "assets/emblems/circuit.png",
+  "palette": [
+   "#7A0108"
+  ]
  },
  {
   "id": "cyber-eye",
   "category": "cyberpunk-glitch",
   "categoryLabel": "Cyberpunk",
-  "file": "assets/emblems/cyber-eye.png"
+  "file": "assets/emblems/cyber-eye.png",
+  "palette": [
+   "#130928",
+   "#4C1151",
+   "#8E89D2",
+   "#EEBFD3",
+   "#C54BA0",
+   "#473F80"
+  ]
  },
  {
   "id": "datamosh",
   "category": "cyberpunk-glitch",
   "categoryLabel": "Cyberpunk",
-  "file": "assets/emblems/datamosh.png"
+  "file": "assets/emblems/datamosh.png",
+  "palette": [
+   "#A851BF",
+   "#FA6FB9",
+   "#77E3FD",
+   "#5DD4E9",
+   "#0199B8",
+   "#6B0899"
+  ]
  },
  {
   "id": "glitch-drop",
   "category": "cyberpunk-glitch",
   "categoryLabel": "Cyberpunk",
-  "file": "assets/emblems/glitch-drop.png"
+  "file": "assets/emblems/glitch-drop.png",
+  "palette": [
+   "#1760B1",
+   "#1D9FD7",
+   "#112982",
+   "#59EAFF",
+   "#EEF9FA",
+   "#E52BEF"
+  ]
  },
  {
   "id": "pixel-skull",
   "category": "cyberpunk-glitch",
   "categoryLabel": "Cyberpunk",
-  "file": "assets/emblems/pixel-skull.png"
+  "file": "assets/emblems/pixel-skull.png",
+  "palette": [
+   "#0B0721",
+   "#8C4296",
+   "#70F5F7",
+   "#E9DFF8",
+   "#C6C6C9",
+   "#7A358A"
+  ]
  },
  {
   "id": "signal",
   "category": "cyberpunk-glitch",
   "categoryLabel": "Cyberpunk",
-  "file": "assets/emblems/signal.png"
+  "file": "assets/emblems/signal.png",
+  "palette": [
+   "#F698CE",
+   "#EBB8DF",
+   "#3D0343",
+   "#BD4181",
+   "#520750",
+   "#CF5A94"
+  ]
  },
  {
   "id": "terminal",
   "category": "cyberpunk-glitch",
   "categoryLabel": "Cyberpunk",
-  "file": "assets/emblems/terminal.png"
+  "file": "assets/emblems/terminal.png",
+  "palette": [
+   "#39FF53",
+   "#0A0807",
+   "#3E3B4F",
+   "#211F30",
+   "#036701",
+   "#FAFFFB"
+  ]
  },
  {
   "id": "vhs",
   "category": "cyberpunk-glitch",
   "categoryLabel": "Cyberpunk",
-  "file": "assets/emblems/vhs.png"
+  "file": "assets/emblems/vhs.png",
+  "palette": [
+   "#080708",
+   "#01B3F5",
+   "#810099",
+   "#3957D0",
+   "#FAD9F9",
+   "#DEB1FF"
+  ]
  },
  {
   "id": "warning-icon",
   "category": "cyberpunk-glitch",
   "categoryLabel": "Cyberpunk",
-  "file": "assets/emblems/warning-icon.png"
+  "file": "assets/emblems/warning-icon.png",
+  "palette": [
+   "#FBF400",
+   "#D72C00",
+   "#EB6800",
+   "#FEA200",
+   "#3A2B1F",
+   "#EB4800"
+  ]
  },
  {
   "id": "banner",
   "category": "odznaki",
   "categoryLabel": "Odznaki",
-  "file": "assets/emblems/banner.png"
+  "file": "assets/emblems/banner.png",
+  "palette": [
+   "#FE3BA7",
+   "#FF2E85",
+   "#7A005D",
+   "#FAE8D0",
+   "#FBE0BA",
+   "#FBC280"
+  ]
  },
  {
   "id": "circle-emblem",
   "category": "odznaki",
   "categoryLabel": "Odznaki",
-  "file": "assets/emblems/circle-emblem.png"
+  "file": "assets/emblems/circle-emblem.png",
+  "palette": [
+   "#FCBFDE",
+   "#361051",
+   "#451F60",
+   "#BE2D9D",
+   "#EEE8E9",
+   "#27033B"
+  ]
  },
  {
   "id": "crown",
   "category": "odznaki",
   "categoryLabel": "Odznaki",
-  "file": "assets/emblems/crown.png"
+  "file": "assets/emblems/crown.png",
+  "palette": [
+   "#0C0903",
+   "#CA8A01",
+   "#FBCF01",
+   "#F8F4E7",
+   "#734201",
+   "#885100"
+  ]
  },
  {
   "id": "hex-badge",
   "category": "odznaki",
   "categoryLabel": "Odznaki",
-  "file": "assets/emblems/hex-badge.png"
+  "file": "assets/emblems/hex-badge.png",
+  "palette": [
+   "#17134C",
+   "#321547",
+   "#D05590",
+   "#FE9BD8",
+   "#741969",
+   "#4E175B"
+  ]
  },
  {
   "id": "laurel",
   "category": "odznaki",
   "categoryLabel": "Odznaki",
-  "file": "assets/emblems/laurel.png"
+  "file": "assets/emblems/laurel.png",
+  "palette": [
+   "#D9A645",
+   "#A17318",
+   "#5B3904",
+   "#B48227",
+   "#896012",
+   "#744C0B"
+  ]
  },
  {
   "id": "medal",
   "category": "odznaki",
   "categoryLabel": "Odznaki",
-  "file": "assets/emblems/medal.png"
+  "file": "assets/emblems/medal.png",
+  "palette": [
+   "#F0D375",
+   "#F3B743",
+   "#BB2803",
+   "#E19639",
+   "#720101",
+   "#0D0804"
+  ]
  },
  {
   "id": "rosette",
   "category": "odznaki",
   "categoryLabel": "Odznaki",
-  "file": "assets/emblems/rosette.png"
+  "file": "assets/emblems/rosette.png",
+  "palette": [
+   "#FCDB71",
+   "#C64A4C",
+   "#A53938",
+   "#201914",
+   "#BE8508",
+   "#DA595B"
+  ]
  },
  {
   "id": "shield-badge",
   "category": "odznaki",
   "categoryLabel": "Odznaki",
-  "file": "assets/emblems/shield-badge.png"
+  "file": "assets/emblems/shield-badge.png",
+  "palette": [
+   "#100413",
+   "#470D38",
+   "#FDC575",
+   "#921D49",
+   "#34032C",
+   "#B2716B"
+  ]
  },
  {
   "id": "starburst",
   "category": "odznaki",
   "categoryLabel": "Odznaki",
-  "file": "assets/emblems/starburst.png"
+  "file": "assets/emblems/starburst.png",
+  "palette": [
+   "#F1E501",
+   "#F6FE3E",
+   "#37351F",
+   "#FFF8B4",
+   "#37450A",
+   "#FDFC96"
+  ]
  },
  {
   "id": "trophy",
   "category": "odznaki",
   "categoryLabel": "Odznaki",
-  "file": "assets/emblems/trophy.png"
+  "file": "assets/emblems/trophy.png",
+  "palette": [
+   "#F9D368",
+   "#EAB12E",
+   "#CE8815",
+   "#262938",
+   "#B9730C",
+   "#FEFCFB"
+  ]
  },
  {
   "id": "alien",
   "category": "postacie",
   "categoryLabel": "Postacie",
-  "file": "assets/emblems/alien.png"
+  "file": "assets/emblems/alien.png",
+  "palette": [
+   "#7AC04F",
+   "#1A1521",
+   "#38644C",
+   "#FDFDF9",
+   "#3C2E46",
+   "#8DCD5E"
+  ]
  },
  {
   "id": "blob-mascot",
   "category": "postacie",
   "categoryLabel": "Postacie",
-  "file": "assets/emblems/blob-mascot.png"
+  "file": "assets/emblems/blob-mascot.png",
+  "palette": [
+   "#E545AB",
+   "#160F13",
+   "#8B2C7C",
+   "#FC8ECD",
+   "#580053",
+   "#FDF1B7"
+  ]
  },
  {
   "id": "cat",
   "category": "postacie",
   "categoryLabel": "Postacie",
-  "file": "assets/emblems/cat.png"
+  "file": "assets/emblems/cat.png",
+  "palette": [
+   "#4C394B",
+   "#272321",
+   "#FDF4E6",
+   "#3A263A",
+   "#DCC9DD",
+   "#6D5165"
+  ]
  },
  {
   "id": "dragon-head",
   "category": "postacie",
   "categoryLabel": "Postacie",
-  "file": "assets/emblems/dragon-head.png"
+  "file": "assets/emblems/dragon-head.png",
+  "palette": [
+   "#F5A408",
+   "#A03C0D",
+   "#312D27",
+   "#F9D490",
+   "#C5561D",
+   "#CD6F02"
+  ]
  },
  {
   "id": "frog",
   "category": "postacie",
   "categoryLabel": "Postacie",
-  "file": "assets/emblems/frog.png"
+  "file": "assets/emblems/frog.png",
+  "palette": [
+   "#0A0906",
+   "#FEFEBB",
+   "#3A6D27",
+   "#99D753",
+   "#57983C",
+   "#CF6305"
+  ]
  },
  {
   "id": "ghost",
   "category": "postacie",
   "categoryLabel": "Postacie",
-  "file": "assets/emblems/ghost.png"
+  "file": "assets/emblems/ghost.png",
+  "palette": [
+   "#FDFDFD",
+   "#BCBBBC",
+   "#382B4E"
+  ]
  },
  {
   "id": "hero-sip",
   "category": "postacie",
   "categoryLabel": "Postacie",
-  "file": "assets/emblems/hero-sip.png"
+  "file": "assets/emblems/hero-sip.png",
+  "palette": [
+   "#120E0C",
+   "#450C35",
+   "#FADACB",
+   "#973977",
+   "#2F2620",
+   "#EEBD5B"
+  ]
  },
  {
   "id": "knight",
   "category": "postacie",
   "categoryLabel": "Postacie",
-  "file": "assets/emblems/knight.png"
+  "file": "assets/emblems/knight.png",
+  "palette": [
+   "#0C0A09",
+   "#5F5E5D",
+   "#A2A1A0",
+   "#4B010E",
+   "#383735",
+   "#9A0E2D"
+  ]
  },
  {
   "id": "robot",
   "category": "postacie",
   "categoryLabel": "Postacie",
-  "file": "assets/emblems/robot.png"
+  "file": "assets/emblems/robot.png",
+  "palette": [
+   "#0C080C",
+   "#B664DC",
+   "#561974",
+   "#B2FCFF",
+   "#F6F1DA",
+   "#192B43"
+  ]
  },
  {
   "id": "skeleton",
   "category": "postacie",
   "categoryLabel": "Postacie",
-  "file": "assets/emblems/skeleton.png"
+  "file": "assets/emblems/skeleton.png",
+  "palette": [
+   "#090706",
+   "#9B414A",
+   "#581F2E",
+   "#444341",
+   "#807F7E",
+   "#FBFAFA"
+  ]
  },
  {
   "id": "slime",
   "category": "postacie",
   "categoryLabel": "Postacie",
-  "file": "assets/emblems/slime.png"
+  "file": "assets/emblems/slime.png",
+  "palette": [
+   "#15A6F5",
+   "#056CC4",
+   "#071A42",
+   "#75F2ED",
+   "#FDFFFE",
+   "#EE108D"
+  ]
  },
  {
   "id": "wizard",
   "category": "postacie",
   "categoryLabel": "Postacie",
-  "file": "assets/emblems/wizard.png"
+  "file": "assets/emblems/wizard.png",
+  "palette": [
+   "#0A0706",
+   "#69636E",
+   "#403A43",
+   "#3E2424",
+   "#F3DBC2",
+   "#D94555"
+  ]
  },
  {
   "id": "battery",
   "category": "power-ups",
   "categoryLabel": "Power-upy",
-  "file": "assets/emblems/battery.png"
+  "file": "assets/emblems/battery.png",
+  "palette": [
+   "#25032C",
+   "#63005B",
+   "#F4A869",
+   "#034E70",
+   "#EA7EBE",
+   "#FBBD77"
+  ]
  },
  {
   "id": "bomb",
   "category": "power-ups",
   "categoryLabel": "Power-upy",
-  "file": "assets/emblems/bomb.png"
+  "file": "assets/emblems/bomb.png",
+  "palette": [
+   "#1E1629",
+   "#302A3B",
+   "#0E071B",
+   "#E98B5A",
+   "#EBC36B",
+   "#ECED99"
+  ]
  },
  {
   "id": "fire-flower",
   "category": "power-ups",
   "categoryLabel": "Power-upy",
-  "file": "assets/emblems/fire-flower.png"
+  "file": "assets/emblems/fire-flower.png",
+  "palette": [
+   "#0D0A09",
+   "#FCAB2A",
+   "#F7E660",
+   "#63955C",
+   "#F9553D",
+   "#3C6039"
+  ]
  },
  {
   "id": "green-shroom",
   "category": "power-ups",
   "categoryLabel": "Power-upy",
-  "file": "assets/emblems/green-shroom.png"
+  "file": "assets/emblems/green-shroom.png",
+  "palette": [
+   "#2B7E2E",
+   "#060602",
+   "#154610",
+   "#3DB049",
+   "#FCFCF9",
+   "#E6CFA6"
+  ]
  },
  {
   "id": "lightning",
   "category": "power-ups",
   "categoryLabel": "Power-upy",
-  "file": "assets/emblems/lightning.png"
+  "file": "assets/emblems/lightning.png",
+  "palette": [
+   "#F9FE0F",
+   "#FABF00",
+   "#3D3C33"
+  ]
  },
  {
   "id": "magnet",
   "category": "power-ups",
   "categoryLabel": "Power-upy",
-  "file": "assets/emblems/magnet.png"
+  "file": "assets/emblems/magnet.png",
+  "palette": [
+   "#DA3D3A",
+   "#222020",
+   "#7E1D1A",
+   "#31302D",
+   "#EC7978",
+   "#C0241F"
+  ]
  },
  {
   "id": "mushroom",
   "category": "power-ups",
   "categoryLabel": "Power-upy",
-  "file": "assets/emblems/mushroom.png"
+  "file": "assets/emblems/mushroom.png",
+  "palette": [
+   "#DD3537",
+   "#FDE1A9",
+   "#950227",
+   "#D0A07B",
+   "#0B0605",
+   "#690215"
+  ]
  },
  {
   "id": "power-crystal",
   "category": "power-ups",
   "categoryLabel": "Power-upy",
-  "file": "assets/emblems/power-crystal.png"
+  "file": "assets/emblems/power-crystal.png",
+  "palette": [
+   "#4C0A92",
+   "#9B1DC9",
+   "#DC31FF",
+   "#F5AEFF",
+   "#B021DF",
+   "#E9E5FD"
+  ]
  },
  {
   "id": "power-star",
   "category": "power-ups",
   "categoryLabel": "Power-upy",
-  "file": "assets/emblems/power-star.png"
+  "file": "assets/emblems/power-star.png",
+  "palette": [
+   "#FDD442",
+   "#FCB848",
+   "#36110C",
+   "#802F2E",
+   "#F19B55",
+   "#96403B"
+  ]
  },
  {
   "id": "shield-bubble",
   "category": "power-ups",
   "categoryLabel": "Power-upy",
-  "file": "assets/emblems/shield-bubble.png"
+  "file": "assets/emblems/shield-bubble.png",
+  "palette": [
+   "#12C9FF",
+   "#0E75B8",
+   "#938AB6",
+   "#4D456A",
+   "#E9F0FB",
+   "#80EBFE"
+  ]
  },
  {
   "id": "speed-boots",
   "category": "power-ups",
   "categoryLabel": "Power-upy",
-  "file": "assets/emblems/speed-boots.png"
+  "file": "assets/emblems/speed-boots.png",
+  "palette": [
+   "#100C0B",
+   "#853E41",
+   "#60272E",
+   "#330E1B",
+   "#252222",
+   "#6B5269"
+  ]
  },
  {
   "id": "stopwatch",
   "category": "power-ups",
   "categoryLabel": "Power-upy",
-  "file": "assets/emblems/stopwatch.png"
+  "file": "assets/emblems/stopwatch.png",
+  "palette": [
+   "#FDFDFD",
+   "#313339",
+   "#57362E",
+   "#872839",
+   "#D8444B",
+   "#6F4B3F"
+  ]
  },
  {
   "id": "chest",
   "category": "rpg-items",
   "categoryLabel": "RPG",
-  "file": "assets/emblems/chest.png"
+  "file": "assets/emblems/chest.png",
+  "palette": [
+   "#330A02",
+   "#272522",
+   "#502313",
+   "#565453",
+   "#945534",
+   "#070503"
+  ]
  },
  {
   "id": "coin",
   "category": "rpg-items",
   "categoryLabel": "RPG",
-  "file": "assets/emblems/coin.png"
+  "file": "assets/emblems/coin.png",
+  "palette": [
+   "#FBEA00",
+   "#050402",
+   "#834001",
+   "#C18200",
+   "#FCB200",
+   "#A05E00"
+  ]
  },
  {
   "id": "elixir",
   "category": "rpg-items",
   "categoryLabel": "RPG",
-  "file": "assets/emblems/elixir.png"
+  "file": "assets/emblems/elixir.png",
+  "palette": [
+   "#BE6643",
+   "#693327",
+   "#F7D547",
+   "#F7EEEA",
+   "#D29401",
+   "#381819"
+  ]
  },
  {
   "id": "gem",
   "category": "rpg-items",
   "categoryLabel": "RPG",
-  "file": "assets/emblems/gem.png"
+  "file": "assets/emblems/gem.png",
+  "palette": [
+   "#38AEFE",
+   "#98DAFC",
+   "#F9F9FA",
+   "#12100D",
+   "#2457B0",
+   "#4080DC"
+  ]
  },
  {
   "id": "helmet",
   "category": "rpg-items",
   "categoryLabel": "RPG",
-  "file": "assets/emblems/helmet.png"
+  "file": "assets/emblems/helmet.png",
+  "palette": [
+   "#B0B0BC",
+   "#575667",
+   "#060404",
+   "#2E2D3A",
+   "#FEFDFD",
+   "#6E6B80"
+  ]
  },
  {
   "id": "key",
   "category": "rpg-items",
   "categoryLabel": "RPG",
-  "file": "assets/emblems/key.png"
+  "file": "assets/emblems/key.png",
+  "palette": [
+   "#0C0805",
+   "#956520",
+   "#E4C180",
+   "#F2ECE9",
+   "#D8B26C",
+   "#AC792C"
+  ]
  },
  {
   "id": "potion-health",
   "category": "rpg-items",
   "categoryLabel": "RPG",
-  "file": "assets/emblems/potion-health.png"
+  "file": "assets/emblems/potion-health.png",
+  "palette": [
+   "#69042A",
+   "#98909C",
+   "#AA2040",
+   "#1D1020",
+   "#555269",
+   "#3D051F"
+  ]
  },
  {
   "id": "potion-mana",
   "category": "rpg-items",
   "categoryLabel": "RPG",
-  "file": "assets/emblems/potion-mana.png"
+  "file": "assets/emblems/potion-mana.png",
+  "palette": [
+   "#72FAFD",
+   "#05BCF0",
+   "#41ADD5",
+   "#151111",
+   "#0284BD",
+   "#035A82"
+  ]
  },
  {
   "id": "potion-stamina",
   "category": "rpg-items",
   "categoryLabel": "RPG",
-  "file": "assets/emblems/potion-stamina.png"
+  "file": "assets/emblems/potion-stamina.png",
+  "palette": [
+   "#1A3729",
+   "#83BC76",
+   "#086328",
+   "#2DDE49",
+   "#DCFFB1",
+   "#345844"
+  ]
  },
  {
   "id": "ring",
   "category": "rpg-items",
   "categoryLabel": "RPG",
-  "file": "assets/emblems/ring.png"
+  "file": "assets/emblems/ring.png",
+  "palette": [
+   "#0D0B0A",
+   "#FAD560",
+   "#39375E",
+   "#FEF39F",
+   "#1F1B34",
+   "#DCA157"
+  ]
  },
  {
   "id": "scroll",
   "category": "rpg-items",
   "categoryLabel": "RPG",
-  "file": "assets/emblems/scroll.png"
+  "file": "assets/emblems/scroll.png",
+  "palette": [
+   "#FDE9C0",
+   "#EDCDA0",
+   "#D7B07F",
+   "#563E34",
+   "#B69068",
+   "#FEFDFD"
+  ]
  },
  {
   "id": "shield",
   "category": "rpg-items",
   "categoryLabel": "RPG",
-  "file": "assets/emblems/shield.png"
+  "file": "assets/emblems/shield.png",
+  "palette": [
+   "#4C0E10",
+   "#A61B20",
+   "#CF762C",
+   "#FAC350",
+   "#130E10",
+   "#C95654"
+  ]
  },
  {
   "id": "sword",
   "category": "rpg-items",
   "categoryLabel": "RPG",
-  "file": "assets/emblems/sword.png"
+  "file": "assets/emblems/sword.png",
+  "palette": [
+   "#FDFDFC",
+   "#BBBAC3",
+   "#0E0B0B",
+   "#706E70",
+   "#362E20",
+   "#AFADB5"
+  ]
  },
  {
   "id": "wand",
   "category": "rpg-items",
   "categoryLabel": "RPG",
-  "file": "assets/emblems/wand.png"
+  "file": "assets/emblems/wand.png",
+  "palette": [
+   "#050320",
+   "#5C2B4E",
+   "#3C0E35",
+   "#F7C852",
+   "#FFFEF9",
+   "#AA6056"
+  ]
  },
  {
   "id": "cooldown",
   "category": "ui-hud",
   "categoryLabel": "UI/HUD",
-  "file": "assets/emblems/cooldown.png"
+  "file": "assets/emblems/cooldown.png",
+  "palette": [
+   "#FDAFEF",
+   "#6BB9EC",
+   "#20215A",
+   "#EF7FDA",
+   "#2A94D9",
+   "#342665"
+  ]
  },
  {
   "id": "cursor",
   "category": "ui-hud",
   "categoryLabel": "UI/HUD",
-  "file": "assets/emblems/cursor.png"
+  "file": "assets/emblems/cursor.png",
+  "palette": [
+   "#DA8782",
+   "#26192B",
+   "#85336D",
+   "#FDF0DE"
+  ]
  },
  {
   "id": "healthbar",
   "category": "ui-hud",
   "categoryLabel": "UI/HUD",
-  "file": "assets/emblems/healthbar.png"
+  "file": "assets/emblems/healthbar.png",
+  "palette": [
+   "#3F293B",
+   "#F61E21",
+   "#941719",
+   "#561211",
+   "#54364B",
+   "#7E6576"
+  ]
  },
  {
   "id": "heart-empty",
   "category": "ui-hud",
   "categoryLabel": "UI/HUD",
-  "file": "assets/emblems/heart-empty.png"
+  "file": "assets/emblems/heart-empty.png",
+  "palette": [
+   "#FBAFAC",
+   "#2B2827",
+   "#DF7B7A",
+   "#8B4C4B",
+   "#B67571",
+   "#413E3D"
+  ]
  },
  {
   "id": "heart-full",
   "category": "ui-hud",
   "categoryLabel": "UI/HUD",
-  "file": "assets/emblems/heart-full.png"
+  "file": "assets/emblems/heart-full.png",
+  "palette": [
+   "#ED0019",
+   "#8B0024",
+   "#FB4B4B",
+   "#FE8487",
+   "#FADEE0",
+   "#440114"
+  ]
  },
  {
   "id": "heart-half",
   "category": "ui-hud",
   "categoryLabel": "UI/HUD",
-  "file": "assets/emblems/heart-half.png"
+  "file": "assets/emblems/heart-half.png",
+  "palette": [
+   "#FD2B32",
+   "#C51D24",
+   "#7E171A"
+  ]
  },
  {
   "id": "level-badge",
   "category": "ui-hud",
   "categoryLabel": "UI/HUD",
-  "file": "assets/emblems/level-badge.png"
+  "file": "assets/emblems/level-badge.png",
+  "palette": [
+   "#140D12",
+   "#542D60",
+   "#33163E",
+   "#FD58EF",
+   "#E28FFE",
+   "#A52791"
+  ]
  },
  {
   "id": "manabar",
   "category": "ui-hud",
   "categoryLabel": "UI/HUD",
-  "file": "assets/emblems/manabar.png"
+  "file": "assets/emblems/manabar.png",
+  "palette": [
+   "#2B59C9",
+   "#62ACF7",
+   "#141842",
+   "#2538A5",
+   "#CADFF7",
+   "#758DDD"
+  ]
  },
  {
   "id": "staminabar",
   "category": "ui-hud",
   "categoryLabel": "UI/HUD",
-  "file": "assets/emblems/staminabar.png"
+  "file": "assets/emblems/staminabar.png",
+  "palette": [
+   "#2E2B2D",
+   "#2C7D03",
+   "#474046",
+   "#1F4703",
+   "#B4FFB3",
+   "#989095"
+  ]
  },
  {
   "id": "star-empty",
   "category": "ui-hud",
   "categoryLabel": "UI/HUD",
-  "file": "assets/emblems/star-empty.png"
+  "file": "assets/emblems/star-empty.png",
+  "palette": [
+   "#0D0C0B",
+   "#A8A7A7",
+   "#4D4C4B",
+   "#999897",
+   "#3D3C3A",
+   "#60605E"
+  ]
  },
  {
   "id": "star-full",
   "category": "ui-hud",
   "categoryLabel": "UI/HUD",
-  "file": "assets/emblems/star-full.png"
+  "file": "assets/emblems/star-full.png",
+  "palette": [
+   "#FCD01A",
+   "#FDE054",
+   "#BD7B02",
+   "#E09405",
+   "#854B08",
+   "#A26102"
+  ]
  },
  {
   "id": "xpbar",
   "category": "ui-hud",
   "categoryLabel": "UI/HUD",
-  "file": "assets/emblems/xpbar.png"
+  "file": "assets/emblems/xpbar.png",
+  "palette": [
+   "#F9D101",
+   "#FEFDF8",
+   "#232222",
+   "#13110D",
+   "#C59800",
+   "#464447"
+  ]
  },
  {
   "id": "boombox",
   "category": "vaporwave",
   "categoryLabel": "Vaporwave",
-  "file": "assets/emblems/boombox.png"
+  "file": "assets/emblems/boombox.png",
+  "palette": [
+   "#160535",
+   "#583A7D",
+   "#300E57",
+   "#2F9CD6",
+   "#9769AE",
+   "#2A4091"
+  ]
  },
  {
   "id": "cassette",
   "category": "vaporwave",
   "categoryLabel": "Vaporwave",
-  "file": "assets/emblems/cassette.png"
+  "file": "assets/emblems/cassette.png",
+  "palette": [
+   "#443259",
+   "#1D1433",
+   "#F97CFB",
+   "#F1EBFC",
+   "#D5B7F9",
+   "#72578B"
+  ]
  },
  {
   "id": "dolphin",
   "category": "vaporwave",
   "categoryLabel": "Vaporwave",
-  "file": "assets/emblems/dolphin.png"
+  "file": "assets/emblems/dolphin.png",
+  "palette": [
+   "#77A8FB",
+   "#6956F5",
+   "#91E8E3",
+   "#E580EA",
+   "#27133C",
+   "#B543E1"
+  ]
  },
  {
   "id": "grid-sun",
   "category": "vaporwave",
   "categoryLabel": "Vaporwave",
-  "file": "assets/emblems/grid-sun.png"
+  "file": "assets/emblems/grid-sun.png",
+  "palette": [
+   "#1A0134",
+   "#F3007C",
+   "#F7B25E",
+   "#FBD65E",
+   "#CD007B",
+   "#4A014C"
+  ]
  },
  {
   "id": "palm",
   "category": "vaporwave",
   "categoryLabel": "Vaporwave",
-  "file": "assets/emblems/palm.png"
+  "file": "assets/emblems/palm.png",
+  "palette": [
+   "#E27BFD",
+   "#FAB8FC",
+   "#DE5FEC",
+   "#7E54FB",
+   "#9001AB",
+   "#5B1890"
+  ]
  },
  {
   "id": "prism",
   "category": "vaporwave",
   "categoryLabel": "Vaporwave",
-  "file": "assets/emblems/prism.png"
+  "file": "assets/emblems/prism.png",
+  "palette": [
+   "#221449",
+   "#671EC1",
+   "#4C099E",
+   "#F9E6F1",
+   "#BD28E4",
+   "#9127FE"
+  ]
  },
  {
   "id": "retro-phone",
   "category": "vaporwave",
   "categoryLabel": "Vaporwave",
-  "file": "assets/emblems/retro-phone.png"
+  "file": "assets/emblems/retro-phone.png",
+  "palette": [
+   "#FEBDE3",
+   "#0D0A0A",
+   "#F9F1FC",
+   "#B5AFD3",
+   "#AD75A6",
+   "#5E6391"
+  ]
  },
  {
   "id": "statue-bust",
   "category": "vaporwave",
   "categoryLabel": "Vaporwave",
-  "file": "assets/emblems/statue-bust.png"
+  "file": "assets/emblems/statue-bust.png",
+  "palette": [
+   "#FDD7CF",
+   "#C180A5",
+   "#34273D",
+   "#6E2C7C",
+   "#803A90",
+   "#55186D"
+  ]
  },
  {
   "id": "bubble",
   "category": "woda",
   "categoryLabel": "Woda",
-  "file": "assets/emblems/bubble.png"
+  "file": "assets/emblems/bubble.png",
+  "palette": [
+   "#7DE8FC",
+   "#53B9D6",
+   "#FBFDFD",
+   "#333333",
+   "#125971",
+   "#28758C"
+  ]
  },
  {
   "id": "canteen",
   "category": "woda",
   "categoryLabel": "Woda",
-  "file": "assets/emblems/canteen.png"
+  "file": "assets/emblems/canteen.png",
+  "palette": [
+   "#96909A",
+   "#18141E",
+   "#646069",
+   "#DCDBDD",
+   "#807D84",
+   "#B5AEBE"
+  ]
  },
  {
   "id": "droplet-face",
   "category": "woda",
   "categoryLabel": "Woda",
-  "file": "assets/emblems/droplet-face.png"
+  "file": "assets/emblems/droplet-face.png",
+  "palette": [
+   "#50B7F5",
+   "#7FE7FD",
+   "#4D8CD5",
+   "#B0FAFE",
+   "#446192",
+   "#FCFCFC"
+  ]
  },
  {
   "id": "faucet-drip",
   "category": "woda",
   "categoryLabel": "Woda",
-  "file": "assets/emblems/faucet-drip.png"
+  "file": "assets/emblems/faucet-drip.png",
+  "palette": [
+   "#32302F",
+   "#C9C8C8",
+   "#7A7977",
+   "#F2F0F3",
+   "#B7B6B6",
+   "#C8CEDF"
+  ]
  },
  {
   "id": "ice-cube",
   "category": "woda",
   "categoryLabel": "Woda",
-  "file": "assets/emblems/ice-cube.png"
+  "file": "assets/emblems/ice-cube.png",
+  "palette": [
+   "#93E5FC",
+   "#2A5F9A",
+   "#47ACE7",
+   "#FCFEFC",
+   "#3B3937",
+   "#54524F"
+  ]
  },
  {
   "id": "raincloud",
   "category": "woda",
   "categoryLabel": "Woda",
-  "file": "assets/emblems/raincloud.png"
+  "file": "assets/emblems/raincloud.png",
+  "palette": [
+   "#FBFCFC",
+   "#B7B7B7",
+   "#4E5052",
+   "#8558AB",
+   "#DFDBD9",
+   "#8F66BD"
+  ]
  },
  {
   "id": "soda-can",
   "category": "woda",
   "categoryLabel": "Woda",
-  "file": "assets/emblems/soda-can.png"
+  "file": "assets/emblems/soda-can.png",
+  "palette": [
+   "#660A6D",
+   "#59055A",
+   "#370A2A",
+   "#993CB0",
+   "#FDB1BE",
+   "#E57BF7"
+  ]
  },
  {
   "id": "sports-bottle",
   "category": "woda",
   "categoryLabel": "Woda",
-  "file": "assets/emblems/sports-bottle.png"
+  "file": "assets/emblems/sports-bottle.png",
+  "palette": [
+   "#557DAD",
+   "#395F89",
+   "#85C4F8",
+   "#6A8EBD",
+   "#24211E",
+   "#304C68"
+  ]
  },
  {
   "id": "water-drop",
   "category": "woda",
   "categoryLabel": "Woda",
-  "file": "assets/emblems/water-drop.png"
+  "file": "assets/emblems/water-drop.png",
+  "palette": [
+   "#329CEE",
+   "#3FBDFA",
+   "#8AEBFF",
+   "#2E395A",
+   "#236AB5",
+   "#5CB6FB"
+  ]
  },
  {
   "id": "water-glass",
   "category": "woda",
   "categoryLabel": "Woda",
-  "file": "assets/emblems/water-glass.png"
+  "file": "assets/emblems/water-glass.png",
+  "palette": [
+   "#76D3F4",
+   "#E2EDF4",
+   "#353A4A",
+   "#8F92A7",
+   "#6590AE",
+   "#5A7A94"
+  ]
  },
  {
   "id": "water-splash",
   "category": "woda",
   "categoryLabel": "Woda",
-  "file": "assets/emblems/water-splash.png"
+  "file": "assets/emblems/water-splash.png",
+  "palette": [
+   "#C6E7FE",
+   "#FCFDFE",
+   "#1E94D8",
+   "#57A2DA",
+   "#151615",
+   "#086EB2"
+  ]
  },
  {
   "id": "wave",
   "category": "woda",
   "categoryLabel": "Woda",
-  "file": "assets/emblems/wave.png"
+  "file": "assets/emblems/wave.png",
+  "palette": [
+   "#FCFDFD",
+   "#1F4E7C",
+   "#122A47",
+   "#378EBC",
+   "#7FC2E6",
+   "#B4E7ED"
+  ]
  }
 ]

@@ -3,60 +3,6 @@
  "freeShippingThreshold": 199,
  "products": [
   {
-   "id": "tumbler-900",
-   "name": "PIXEL SIP Tumbler 900 ml — Stay Hydrated, Stay Pixelated",
-   "sizeLabel": "900 ml",
-   "capacityMl": 900,
-   "retailPrice": 129,
-   "compareAt": 159,
-   "shortDesc": "Maksymalny zapas many na cały raid — 900 ml stali, podwójna ścianka i pixel-art, który należy do Twojego setupu, a nie do szafki z gadżetami.",
-   "specs": [
-    {
-     "label": "Pojemność",
-     "value": "900 ml"
-    },
-    {
-     "label": "Materiał",
-     "value": "Stal nierdzewna, podwójna ścianka (zewn. 304 / wewn. 201)"
-    },
-    {
-     "label": "Wymiary",
-     "value": "Ø 7,5 × 25,4 cm"
-    },
-    {
-     "label": "Kolor",
-     "value": "Biały matowy"
-    },
-    {
-     "label": "Pokrywka i słomka",
-     "value": "Przezroczysta pokrywka + metalowa słomka wielokrotnego użytku"
-    },
-    {
-     "label": "Nadruk",
-     "value": "Sublimacyjny pixel-art, full-wrap, na całej powierzchni"
-    },
-    {
-     "label": "Izolacja",
-     "value": "Termiczna (double-wall) — zimne zostaje zimne, ciepłe ciepłe"
-    },
-    {
-     "label": "SKU",
-     "value": "BW34PS-900WT"
-    }
-   ],
-   "image": "assets/products/tumbler-900-12514_1.jpg",
-   "gallery": [
-    "assets/products/tumbler-900-12514_1.jpg"
-   ],
-   "mockup": {
-    "photo": "assets/products/tumbler-900-12514_1-cut.png",
-    "left": 5.26,
-    "top": 25.37,
-    "width": 70.39,
-    "height": 70.15
-   }
-  },
-  {
    "id": "tumbler-600",
    "name": "PIXEL SIP Tumbler 600 ml — Stay Hydrated, Stay Pixelated",
    "sizeLabel": "600 ml",
@@ -111,6 +57,62 @@
     "width": 78.47,
     "height": 67.66
    }
+  },
+  {
+   "id": "tumbler-900",
+   "name": "PIXEL SIP Tumbler 900 ml — Stay Hydrated, Stay Pixelated",
+   "sizeLabel": "900 ml",
+   "capacityMl": 900,
+   "retailPrice": 129,
+   "compareAt": 159,
+   "shortDesc": "Maksymalny zapas many na cały raid — 900 ml stali, podwójna ścianka i pixel-art, który należy do Twojego setupu, a nie do szafki z gadżetami.",
+   "specs": [
+    {
+     "label": "Pojemność",
+     "value": "900 ml"
+    },
+    {
+     "label": "Materiał",
+     "value": "Stal nierdzewna, podwójna ścianka (zewn. 304 / wewn. 201)"
+    },
+    {
+     "label": "Wymiary",
+     "value": "Ø 7,5 × 25,4 cm"
+    },
+    {
+     "label": "Kolor",
+     "value": "Biały matowy"
+    },
+    {
+     "label": "Pokrywka i słomka",
+     "value": "Przezroczysta pokrywka + metalowa słomka wielokrotnego użytku"
+    },
+    {
+     "label": "Nadruk",
+     "value": "Sublimacyjny pixel-art, full-wrap, na całej powierzchni"
+    },
+    {
+     "label": "Izolacja",
+     "value": "Termiczna (double-wall) — zimne zostaje zimne, ciepłe ciepłe"
+    },
+    {
+     "label": "SKU",
+     "value": "BW34PS-900WT"
+    }
+   ],
+   "image": "assets/products/tumbler-900-12514_1.jpg",
+   "gallery": [
+    "assets/products/tumbler-900-12514_1.jpg"
+   ],
+   "mockup": {
+    "photo": "assets/products/tumbler-900-12514_1-cut.png",
+    "left": 5.26,
+    "top": 25.37,
+    "width": 70.39,
+    "height": 70.15
+   },
+   "waitlist": true,
+   "waitlistNote": "900 ml w planach — zapisz się, damy znać gdy ruszy."
   }
  ],
  "bundles": [
