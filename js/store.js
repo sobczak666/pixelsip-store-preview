@@ -204,9 +204,11 @@
   }
   function renderPalette(id, colors, current, pal, lbl, mode = 'full') {
     const w = $('#' + id); if (!w) return;
-    if (mode === 'quick') {                                   // tryb prosty: glitch (tylko napis) + 8 kolorów marki + „Więcej"
+    if (mode === 'quick') {                                   // tryb prosty: glitch (napis) + PALETA Z KUBKA (wzór/emblemat) + „Więcej"
       const isText = ['tt', 'bt'].includes(pal);
-      const list = isText ? [GLITCH, ...quickSwatches()] : quickSwatches();
+      const fromMug = colors.filter(c => c.group === 'Z wzoru' || c.group === 'Z emblematu');
+      const base = fromMug.length ? fromMug : quickSwatches();   // fallback: kolory marki, gdy wzór nie ma palety
+      const list = isText ? [GLITCH, ...base] : base;
       const eq = (a, b) => String(a).toLowerCase() === String(b).toLowerCase();
       let h = list.map(c => `<button class="swatch${eq(c.id, current) ? ' is-active' : ''}" data-pal="${pal}" data-val="${esc(c.id)}" title="${esc(c.label)}" aria-label="${esc(lbl)}: ${esc(c.label)}" style="background:${c.css}"></button>`).join('');
       h += `<button class="swatch swatch--more" data-morecolors="1" title="Więcej kolorów" aria-label="Więcej kolorów">⋯</button>`;
@@ -364,10 +366,13 @@
   function randomBuild() {
     const ds = state.designs; if (!ds.length) return;
     const rnd = a => a[Math.floor(Math.random() * a.length)];
-    const bg = rnd(PALETTE).id;
-    const txt = Math.random() < 0.5 ? 'glitch' : rnd(['#FFFFFF', '#FFD23F', '#22E0E6', '#FF2E97', '#5DF7A0']);
-    const n = rnd(STRIP_SIZES).n;
-    applyConfig({ base: 'scene', design: rnd(ds).id, strip: 'both', gt: txt, gb: bg, dt: txt, db: bg, pst: n, psb: n });
+    const rndText = () => Math.random() < 0.4 ? 'glitch' : rnd(['#FFFFFF', '#FFD23F', '#22E0E6', '#FF2E97', '#5DF7A0', '#C6F542', '#FF8A3D']);
+    const strip = rnd(['both', 'both', 'both', 'top', 'bot']);   // najczęściej oba, czasem jeden
+    applyConfig({
+      base: 'scene', design: rnd(ds).id, strip,
+      gt: rndText(), gb: rnd(PALETTE).id, pst: rnd(STRIP_SIZES).n,   // góra i dół losowane NIEZALEŻNIE
+      dt: rndText(), db: rnd(PALETTE).id, psb: rnd(STRIP_SIZES).n,
+    });
     toast('Wylosowano świeży setup ✨');
   }
   function renderGeoControls() {
@@ -460,16 +465,23 @@
     const sy0 = top ? BAND_T : 0, sy1 = bot ? TH - BAND_B : TH;
     drawBase(0, sy0, TW, sy1 - sy0, baseImg);
     const mg = Math.round(TW * 0.05);
+    const shRef = Math.round(Math.round(TH * 0.135) * 0.58);   // sh przy rozmiarze paska = 1 (referencja, identyczna jak w printgen.py)
     const band = (by, BAND, text, textColor, bandColorHex) => {
       const sh = Math.round(BAND * 0.58);
       tctx.fillStyle = canvasFill(tctx, bandColorHex, 0, TW); tctx.fillRect(0, by, TW, BAND);
       const strip = stripFor(text, textColor);
-      const bw = Math.round(strip.width * sh / strip.height), yy = by + (BAND - sh) / 2;
+      const ratio = strip.width / strip.height;
+      // liczba kopii zależy TYLKO od długości napisu (rozmiar referencyjny), NIE od bieżącego rozmiaru paska
+      const twoCopies = (2 * Math.round(shRef * ratio) + 2 * mg + 24) <= TW;
       tctx.imageSmoothingEnabled = false;
-      if (2 * bw + 2 * mg + 24 <= TW) {                 // mieści się dwa razy (jak PIXEL SIP) -> dwie kopie
-        tctx.drawImage(strip, mg, yy, bw, sh); tctx.drawImage(strip, TW - mg - bw, yy, bw, sh);
-      } else {                                          // dłuższy napis -> jedna kopia wyśrodkowana (zachowaj proporcje)
-        let cw = bw, ch = sh; const maxw = TW - 2 * mg;
+      if (twoCopies) {                                  // krótki napis (np. PIXEL SIP) -> zawsze dwie kopie
+        let bw = Math.round(sh * ratio), ch = sh;
+        const maxBw = Math.floor((TW - 2 * mg - 24) / 2);   // duży pasek: przytnij, by 2 kopie wciąż się mieściły
+        if (bw > maxBw) { bw = maxBw; ch = Math.round(bw / ratio); }
+        const yy = by + (BAND - ch) / 2;
+        tctx.drawImage(strip, mg, yy, bw, ch); tctx.drawImage(strip, TW - mg - bw, yy, bw, ch);
+      } else {                                          // dłuższy napis -> zawsze jedna kopia wyśrodkowana
+        let cw = Math.round(sh * ratio), ch = sh; const maxw = TW - 2 * mg;
         if (cw > maxw) { cw = maxw; ch = Math.round(strip.height * cw / strip.width); }
         tctx.drawImage(strip, (TW - cw) / 2, by + (BAND - ch) / 2, cw, ch);
       }
