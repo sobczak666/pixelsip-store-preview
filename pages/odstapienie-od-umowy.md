@@ -1,6 +1,6 @@
 # Prawo odstąpienia od umowy — PIXEL SIP
 
-**Data wejścia w życie:** [DO UZUPEŁNIENIA: data]
+**Data wejścia w życie:** 29 czerwca 2026 r.
 
 > TL;DR: standardowo masz 14 dni na zwrot bez podawania powodu. **ALE** — nasze tumblery z nadrukiem powstają na Twoje zamówienie (wybierasz wzór / personalizujesz), więc te są jak custom skin: nie da się ich „odkupić" z powrotem. Dlatego dla produktów personalizowanych prawo do 14-dniowego odstąpienia **nie przysługuje**. Czytaj dalej, opisujemy to dokładnie.
 
@@ -18,8 +18,8 @@ Prawo odstąpienia od umowy zawartej na odległość przysługuje **Konsumentowi
 2. Termin 14 dni liczy się od dnia objęcia Produktu w posiadanie przez Konsumenta lub wskazaną przez niego osobę trzecią (inną niż przewoźnik). Gdy umowa obejmuje wiele Produktów dostarczanych osobno — od objęcia w posiadanie ostatniego z nich.
 3. Do zachowania terminu wystarczy **wysłanie oświadczenia przed jego upływem**.
 4. Oświadczenie można złożyć:
-   - na adres e-mail [EMAIL], lub
-   - pisemnie na adres [ADRES],
+   - na adres e-mail kontakt@pixelsip.pl, lub
+   - pisemnie na adres ul. Ratuszowa 11, 03-450 Warszawa,
    - przy użyciu wzoru formularza zamieszczonego na końcu tego dokumentu (skorzystanie z niego nie jest obowiązkowe).
 
 ## 3. ⚠️ KLUCZOWY WYJĄTEK — produkty personalizowane / na zamówienie
@@ -31,7 +31,7 @@ Prawo odstąpienia od umowy zawartej na odległość przysługuje **Konsumentowi
 
 3. Składając zamówienie na taki Produkt, Konsument przyjmuje to do wiadomości. Informację o braku prawa odstąpienia prezentujemy także wyraźnie **przed złożeniem zamówienia** (przy podsumowaniu koszyka / przy przycisku zakupu).
 4. **To nie ogranicza Twoich praw z tytułu reklamacji.** Jeśli Produkt jest wadliwy, uszkodzony, niezgodny z zamówieniem lub dotarł zniszczony — pełną ochronę masz na podstawie przepisów o niezgodności towaru z umową (rękojmia konsumencka). Zasady opisuje § 7 Regulaminu. Wyjątek z art. 38 pkt 3 dotyczy wyłącznie rezygnacji „bez powodu", a nie wad.
-5. **Kiedy odstąpienie JEST możliwe:** jeżeli w ofercie pojawi się Produkt **standardowy, nieprefabrykowany na zamówienie** (np. tumbler bez nadruku, gotowy egzemplarz magazynowy, akcesorium katalogowe) — wówczas obowiązuje pełne 14-dniowe prawo odstąpienia opisane w pkt 2, 4 i 6. Charakter Produktu (personalizowany / standardowy) wskazujemy w jego opisie.
+5. **Kiedy odstąpienie JEST możliwe:** obecnie cała oferta to produkty personalizowane, więc prawo odstąpienia nie ma do nich zastosowania. Gdyby w przyszłości w ofercie pojawił się Produkt **standardowy, nieprefabrykowany na zamówienie** (np. tumbler bez nadruku, gotowy egzemplarz magazynowy, akcesorium katalogowe) — wówczas obowiązywać będzie pełne 14-dniowe prawo odstąpienia opisane w pkt 2, 4 i 6. Charakter Produktu (personalizowany / standardowy) wskazujemy zawsze w jego opisie.
 
 ## 4. Skutki odstąpienia (dla Produktów, których prawo to dotyczy)
 
@@ -42,12 +42,12 @@ Prawo odstąpienia od umowy zawartej na odległość przysługuje **Konsumentowi
 
 ## 5. Zwrot Produktu
 
-1. Produkt należy zwrócić niezwłocznie, nie później niż **14 dni** od dnia odstąpienia, na adres: [ADRES] [DO UZUPEŁNIENIA — jeśli zwroty przyjmowane są pod innym adresem, podaj go].
+1. Produkt należy zwrócić niezwłocznie, nie później niż **14 dni** od dnia odstąpienia, na adres: ul. Ratuszowa 11, 03-450 Warszawa.
 2. Konsument odpowiada za zmniejszenie wartości Produktu wynikające z korzystania z niego w sposób wykraczający poza konieczny do stwierdzenia charakteru, cech i funkcjonowania Produktu.
 
 ## 6. Koszty zwrotu
 
-Konsument ponosi **bezpośrednie koszty odesłania Produktu** (koszt przesyłki zwrotnej). [DO UZUPEŁNIENIA — jeśli zdecydujesz pokrywać koszt zwrotu, zmień ten zapis.]
+Konsument ponosi **bezpośrednie koszty odesłania Produktu** (koszt przesyłki zwrotnej).
 
 ---
 
@@ -59,9 +59,9 @@ Konsument ponosi **bezpośrednie koszty odesłania Produktu** (koszt przesyłki 
 
 **Adresat:**
 
-[NAZWA FIRMY]
-[ADRES]
-E-mail: [EMAIL]
+PIOTR SOBCZYŃSKI MODA-MIX SPORT STYLE
+ul. Ratuszowa 11, 03-450 Warszawa
+E-mail: kontakt@pixelsip.pl
 
 Ja/My(*) niniejszym informuję/informujemy(*) o moim/naszym(*) odstąpieniu od umowy sprzedaży następujących rzeczy:
 
@@ -77,4 +77,4 @@ Ja/My(*) niniejszym informuję/informujemy(*) o moim/naszym(*) odstąpieniu od u
 
 ---
 
-> Wątpliwości, czy Twój produkt podlega zwrotowi? Napisz do nas na [EMAIL] — sprawdzimy i podpowiemy. GG.
+> Wątpliwości, czy Twój produkt podlega zwrotowi? Napisz do nas na kontakt@pixelsip.pl — sprawdzimy i podpowiemy. GG.

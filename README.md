@@ -42,4 +42,4 @@ python3 convert_pages.py   # po zmianie dokumentów prawnych
 ```
 
 ## Status jakości
-Przeszedł wieloagentowy adversarialny review (responsywność, JS/koszyk, prawo PL, SEO/a11y, brand/konwersja) — naprawiono błędy krytyczne i wysokie. Pozostałe do uzupełnienia: dane firmy + bramka płatności (patrz GO-LIVE.md).
+Przeszedł wieloagentowy adversarialny review (responsywność, JS/koszyk, prawo PL, SEO/a11y, brand/konwersja) oraz audyt zgodności pod wymogi PayU „Wymagania dla Twojej strony" + prawo konsumenckie PL/RODO (2026-06-29) — naprawiono błędy krytyczne i wysokie. Dane firmy (JDG) wpisane, wszystkie 6 wymogów PayU spełnione. Pozostałe: aktywacja bramki PayU (klucze) + skrzynka kontakt@ (patrz GO-LIVE.md).

@@ -231,7 +231,7 @@ button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
 .build-summary b{color:var(--cyan)}
 /* widoczność (toggle .off) */
 .tab-content.off,.linkrow.off,.seg.off,.preview__cta.off,.preset.off,
-#colors-panel.off,#colors-collapsed.off,#colors-none.off,#strip-text-fields.off,#strip-text-bot-row.off,
+#colors-panel.off,#colors-collapsed.off,#colors-none.off,#strip-text-fields.off,#strip-bot-block.off,#strip-top-header.off,
 #sticky-next.off,#sticky-add.off{display:none}
 
 /* ===== Personalizacja / dostawa / trust / zgody ===== */

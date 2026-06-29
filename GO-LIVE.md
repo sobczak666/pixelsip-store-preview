@@ -5,20 +5,17 @@ Zanim ruszysz ze sprzedażą, uzupełnij poniższe — to są rzeczy, których n
 
 ## 🔴 KRYTYCZNE (bez tego nie sprzedawaj legalnie)
 
-### 1. Dane sprzedawcy
-W plikach `pages/*.md` są placeholdery do wypełnienia (potem uruchom `python3 convert_pages.py`):
-- `[NAZWA FIRMY]`, `[NIP]`, `[REGON]`, `[ADRES]`, `[EMAIL]`, `[TELEFON]`, `[godziny obsługi]`, `[data]`, `[adres URL sklepu]`, `[numer rachunku]`
-- W `index.html` (generowane z `build_index.py`) stopka ma `[NAZWA FIRMY], [NIP]` — popraw w `build_index.py` (szukaj `[NAZWA FIRMY]`) i uruchom `python3 build_index.py`.
-- Sprawdź, co zostało: `grep -rn "DO UZUPEŁNIENIA\|\[NAZWA\|\[NIP\|\[ADRES\|\[EMAIL" pages/`
+### 1. Dane sprzedawcy — ✅ ZROBIONE (2026-06-29)
+Dane JDG wpisane we wszystkie dokumenty i stopki: **PIOTR SOBCZYŃSKI MODA-MIX SPORT STYLE**, NIP 1130115908, REGON 011375243, ul. Ratuszowa 11, 03-450 Warszawa, kontakt@pixelsip.pl. Zero placeholderów (zweryfikowane grepem + audytem wieloagentowym pod wymogi PayU). Dokumenty przeszły audyt prawny PL/RODO.
+- ⚠️ Do zrobienia po stronie poczty: utworzyć skrzynkę **kontakt@pixelsip.pl** (lub alias → zamowienia@). Opcjonalnie telefon kontaktowy (PayU akceptuje sam e-mail).
 
-### 2. Płatności (wybierz jedną drogę)
-W `js/store.js` → obiekt `CONFIG`:
-- **Najszybciej (zamówienia mailem):** załóż darmowe konto [Formspree](https://formspree.io), stwórz formularz, wklej endpoint do `CONFIG.orderEndpoint`. Zamówienia będą przychodzić mailem; płatność realizujesz przelewem/BLIK ręcznie.
-- **Pełna bramka (automatyczne płatności):** podłącz Przelewy24 / Stripe / PayU / [Snipcart](https://snipcart.com). Punkt integracji: funkcja `submitOrder()` w `store.js` — zamiast `mailto` przekieruj do utworzonej sesji płatności bramki. Uzupełnij też operatora w `pages/regulamin.md` § 5.
-- Ustaw `CONFIG.shopEmail` na swój adres zamówień.
+### 2. Płatności — bramka **PayU** (backend gotowy, czeka na klucze)
+- Wybór: **PayU** (przełączone z Przelewy24). Integracja po stronie backendu — patrz `backend/` (`payu.py` budowane) i `backend/OPERACJE.md`.
+- Do aktywacji: konto PayU → POS ID, drugi klucz (MD5 do podpisu), OAuth client_id/secret → ustaw w `/etc/pixelsip.env` na VPS.
+- `CONFIG.orderEndpoint` w `js/store.js` już wskazuje na `https://api.pixelsip.pl/api/orders`; `CONFIG.shopEmail` = kontakt@pixelsip.pl.
 
-### 3. Domena
-- W `build_index.py`: `og:image` i `url` w JSON-LD wskazują na `https://pixelsip.pl` — zmień na swoją domenę, uruchom `python3 build_index.py`.
+### 3. Domena — ✅ pixelsip.pl (OVH)
+- `url`/JSON-LD wskazują `https://pixelsip.pl`. Sklep prywatnie na `sklep.pixelsip.pl` (basic_auth) do czasu publicznego startu.
 
 ## 📦 Realizacja zamówienia (config → plik do druku)
 
@@ -40,7 +37,7 @@ Sklep nie predefiniuje wariantów — klient konfiguruje (wzór + rozmiar + pozy
 
 ## 🟡 WAŻNE (zrób przed lub tuż po starcie)
 
-- **Polityka prywatności — odbiorcy danych (RODO):** w `pages/polityka-prywatnosci.md` uzupełnij realnych dostawców (hosting, operator płatności, kurier, e-mail, ewentualnie analytics). Re-konwersja: `python3 convert_pages.py`.
+- **Polityka prywatności — odbiorcy danych (RODO):** ✅ uzupełnione (OVH, PayU S.A., InPost, DPD, biuro rachunkowe, Meta). Jeśli włączysz TikTok Pixel — najpierw dopisz TikTok do polityki (sekcje 4/9/10) i do banera cookie.
 - **Analytics/cookies:** jeśli dodasz Google Analytics / Meta Pixel — dopisz je w polityce i rozszerz baner cookie o zgodę „odrzuć/akceptuj statystyki".
 - **Zgody:** newsletter i checkout mają już wymagane checkboxy zgody — podłącz je do swojego systemu (Formspree/mailing).
 - **Zdjęcia produktu:** używamy zdjęć producenta (`assets/products/`). Docelowo zrób własne sesyjne — wzmacnia premium i unika zależności.

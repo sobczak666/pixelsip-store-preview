@@ -32,9 +32,9 @@ Dokładny koszt dostawy zawsze widzisz w koszyku, zanim klikniesz „Kupuję i p
 
 ## Zwroty — przeczytaj, zanim klikniesz
 
-**Ważne: większość naszych tumblerów to produkty personalizowane (nadruk powstaje na Twoje zamówienie).** Zgodnie z art. 38 pkt 3 ustawy o prawach konsumenta, **dla produktów wykonywanych na zamówienie 14-dniowe prawo odstąpienia (zwrot bez podania przyczyny) NIE przysługuje** — tak jak custom skina czdyż nie da się „odsprzedać" z powrotem.
+**Ważne: wszystkie obecnie dostępne tumblery to produkty personalizowane (nadruk powstaje na Twoje zamówienie).** Zgodnie z art. 38 pkt 3 ustawy o prawach konsumenta, **dla produktów wykonywanych na zamówienie 14-dniowe prawo odstąpienia (zwrot bez podania przyczyny) NIE przysługuje** — tak jak custom skina nie da się „odsprzedać" z powrotem.
 
-- **Produkty standardowe / nieprefabrykowane na zamówienie** (jeśli takie są w ofercie — oznaczamy to w opisie) **możesz zwrócić w 14 dni** bez podawania przyczyny.
+- **Produkty standardowe / nieprefabrykowane na zamówienie** — gdybyśmy w przyszłości wprowadzili takie do oferty (oznaczymy to w opisie), **będzie je można zwrócić w 14 dni** bez podawania przyczyny. Obecnie w ofercie ich nie ma.
 - Pełne zasady i wzór formularza znajdziesz w dokumencie **„Prawo odstąpienia od umowy"**.
 
 ### To nie dotyczy wad — masz pełną ochronę reklamacyjną
@@ -42,16 +42,16 @@ Dokładny koszt dostawy zawsze widzisz w koszyku, zanim klikniesz „Kupuję i p
 Jeśli tumbler dotarł **uszkodzony, wadliwy, niezgodny z zamówieniem** (zły rozmiar, wadliwy nadruk, rozszczelnienie) — **reklamuj go**. Odpowiadamy za zgodność towaru z umową przez **2 lata**.
 
 **Jak zgłosić reklamację:**
-1. Napisz na [EMAIL] — podaj numer zamówienia, opis problemu i (jeśli możesz) zdjęcia.
+1. Napisz na kontakt@pixelsip.pl — podaj numer zamówienia, opis problemu i (jeśli możesz) zdjęcia.
 2. Odpowiemy w ciągu **14 dni**.
 3. Jeśli reklamacja jest zasadna — naprawimy, wymienimy albo zwrócimy pieniądze, zgodnie z Regulaminem.
 
 ### Jak zwrócić produkt podlegający zwrotowi
-1. Wyślij oświadczenie o odstąpieniu (e-mail na [EMAIL] lub formularz z dokumentu „Prawo odstąpienia od umowy") w ciągu 14 dni od odbioru.
-2. Odeślij produkt w ciągu 14 dni na adres: [ADRES].
-3. Koszt przesyłki zwrotnej pokrywa kupujący. [DO UZUPEŁNIENIA — zmień, jeśli pokrywasz zwroty.]
+1. Wyślij oświadczenie o odstąpieniu (e-mail na kontakt@pixelsip.pl lub formularz z dokumentu „Prawo odstąpienia od umowy") w ciągu 14 dni od odbioru.
+2. Odeślij produkt w ciągu 14 dni na adres: ul. Ratuszowa 11, 03-450 Warszawa.
+3. Koszt przesyłki zwrotnej pokrywa kupujący.
 4. Pieniądze zwracamy w ciągu 14 dni, tą samą metodą płatności.
 
 ---
 
-**Pytania?** Pisz na [EMAIL] lub dzwoń [TELEFON]. *Stay Hydrated, Stay Pixelated.*
+**Pytania?** Pisz na kontakt@pixelsip.pl. *Stay Hydrated, Stay Pixelated.*

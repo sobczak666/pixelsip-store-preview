@@ -1,6 +1,6 @@
 # Regulamin sklepu internetowego PIXEL SIP
 
-**Data wejścia w życie:** [DO UZUPEŁNIENIA: data]
+**Data wejścia w życie:** 29 czerwca 2026 r.
 
 > *Stay Hydrated, Stay Pixelated.* Zanim klikniesz „Kupuję i płacę", rzuć okiem na zasady gry. Nudne? Trochę. Ale dzięki temu wiesz dokładnie, na czym stoisz — bez ukrytych questów i pułapek.
 
@@ -8,17 +8,16 @@
 
 ## § 1. Postanowienia ogólne i dane Sprzedawcy
 
-1. Niniejszy Regulamin określa zasady korzystania ze sklepu internetowego dostępnego pod adresem [DO UZUPEŁNIENIA: adres URL sklepu] (dalej: **„Sklep"**) oraz zasady zawierania i wykonywania umów sprzedaży za jego pośrednictwem.
+1. Niniejszy Regulamin określa zasady korzystania ze sklepu internetowego dostępnego pod adresem https://pixelsip.pl (dalej: **„Sklep"**) oraz zasady zawierania i wykonywania umów sprzedaży za jego pośrednictwem.
 2. Sklep prowadzony jest przez:
-   - **Nazwa:** [NAZWA FIRMY]
-   - **Adres:** [ADRES]
-   - **NIP:** [NIP]
-   - **REGON:** [REGON]
-   - **E-mail:** [EMAIL]
-   - **Telefon:** [TELEFON]
+   - **Nazwa:** Piotr Sobczyński prowadzący jednoosobową działalność gospodarczą pod firmą „PIOTR SOBCZYŃSKI MODA-MIX SPORT STYLE"
+   - **Adres:** ul. Ratuszowa 11, 03-450 Warszawa
+   - **NIP:** 1130115908
+   - **REGON:** 011375243
+   - **E-mail:** kontakt@pixelsip.pl
 
    (dalej: **„Sprzedawca"**).
-3. Kontakt ze Sprzedawcą jest możliwy pod wskazanym wyżej adresem e-mail oraz numerem telefonu, w dni robocze w godzinach [DO UZUPEŁNIENIA: godziny obsługi].
+3. Kontakt ze Sprzedawcą jest możliwy pod wskazanym wyżej adresem e-mail, w dni robocze (poniedziałek–piątek) w godz. 9:00–17:00.
 4. Regulamin jest nieodpłatnie udostępniany w Sklepie w sposób umożliwiający jego pozyskanie, odtworzenie, utrwalenie i wydrukowanie.
 5. Postanowienia Regulaminu nie wyłączają ani nie ograniczają praw konsumentów wynikających z bezwzględnie obowiązujących przepisów prawa. W razie sprzeczności pierwszeństwo mają te przepisy.
 
@@ -53,11 +52,8 @@
 2. Cena podana przy Produkcie w chwili złożenia Zamówienia jest wiążąca dla obu stron.
 3. Łączna cena, którą Klient zobowiązany jest zapłacić, obejmuje cenę Produktów oraz koszty dostawy. Całkowita kwota do zapłaty jest widoczna przed złożeniem Zamówienia, przed kliknięciem przycisku potwierdzającego.
 4. Sprzedawca udostępnia następujące metody płatności:
-   a) szybki przelew / płatność elektroniczna za pośrednictwem operatora Przelewy24 (BLIK, karta, szybki przelew);
-   b) BLIK;
-   c) karta płatnicza;
-   d) przelew tradycyjny na rachunek bankowy: [DO UZUPEŁNIENIA: numer rachunku];
-   e) [DO UZUPEŁNIENIA: ewentualnie płatność za pobraniem].
+   a) szybka płatność elektroniczna za pośrednictwem operatora **PayU** (PayU S.A.) — BLIK, karta płatnicza, szybki przelew online;
+   b) płatność za pobraniem (przy odbiorze przesyłki) — jeżeli wybrano dostawę kurierską za pobraniem.
 5. W przypadku płatności z góry Klient zobowiązany jest dokonać płatności w terminie 3 dni robocze od zawarcia Umowy. Brak płatności w tym terminie może skutkować anulowaniem Zamówienia.
 6. Do każdego Zamówienia Sprzedawca wystawia dowód zakupu (paragon lub, na życzenie i po podaniu danych, fakturę).
 
@@ -65,13 +61,13 @@
 
 1. Z uwagi na to, że Produkty są wykonywane na zamówienie (nadruk powstaje po złożeniu Zamówienia), termin realizacji obejmuje czas produkcji oraz czas dostawy.
 2. Czas produkcji (przygotowania Produktu do wysyłki) wynosi standardowo 2–4 dni robocze, chyba że w opisie Produktu lub w trakcie składania Zamówienia wskazano inaczej (np. edycje limitowane lub przedsprzedaż).
-3. Dostawa realizowana jest na terytorium Polska za pośrednictwem kurier i paczkomaty InPost. Dostępne sposoby i koszty dostawy oraz przewidywane terminy wskazane są w trakcie składania Zamówienia oraz w dokumencie **„Dostawa i zwroty"**.
+3. Dostawa realizowana jest na terytorium Rzeczypospolitej Polskiej za pośrednictwem firm kurierskich oraz paczkomatów (InPost, DPD). Dostępne sposoby i koszty dostawy oraz przewidywane terminy wskazane są w trakcie składania Zamówienia oraz w dokumencie **„Dostawa i zwroty"**.
 4. Sprzedawca obowiązany jest dostarczyć Produkt bez wad.
 5. Niebezpieczeństwo przypadkowej utraty lub uszkodzenia Produktu przechodzi na Konsumenta (oraz PnPK) z chwilą wydania Produktu Konsumentowi. Za wydanie uważa się powierzenie Produktu przewoźnikowi, jeżeli Sprzedawca nie miał wpływu na wybór przewoźnika przez Konsumenta.
 
-## § 7. Reklamacje — niezgodność towaru z umową (Konsument i PnPK)
+## § 7. Reklamacje — niezgodność towaru z umową (Konsument)
 
-1. Sprzedawca odpowiada wobec Konsumenta oraz PnPK za zgodność Produktu z Umową na zasadach określonych w rozdziale 5a ustawy o prawach konsumenta.
+1. Sprzedawca odpowiada wobec Konsumenta za zgodność Produktu z Umową na zasadach określonych w rozdziale 5a ustawy o prawach konsumenta.
 2. Sprzedawca ponosi odpowiedzialność za brak zgodności Produktu z Umową istniejący w chwili jego dostarczenia i ujawniony w ciągu **dwóch lat** od tej chwili.
 3. Jeżeli Produkt jest niezgodny z Umową, Konsument może żądać jego **naprawy lub wymiany**. Sprzedawca może dokonać wymiany, gdy Konsument żąda naprawy, lub naprawy, gdy żąda wymiany, jeżeli wybrany przez Konsumenta sposób jest niemożliwy albo wymagałby nadmiernych kosztów.
 4. Konsument może złożyć oświadczenie o **obniżeniu ceny albo odstąpieniu od Umowy**, gdy:
@@ -80,18 +76,19 @@
    c) brak zgodności jest na tyle istotny, że uzasadnia obniżenie ceny albo odstąpienie bez uprzedniego żądania naprawy/wymiany;
    d) z oświadczenia Sprzedawcy lub okoliczności wynika, że nie doprowadzi on Produktu do zgodności w rozsądnym czasie lub bez nadmiernych niedogodności.
    Konsument nie może odstąpić od Umowy, jeżeli brak zgodności jest nieistotny.
-5. Reklamację należy zgłosić na adres e-mail [EMAIL] lub pisemnie na adres [ADRES]. W zgłoszeniu warto podać: dane Klienta, numer zamówienia, opis niezgodności, żądanie oraz — jeśli to możliwe — zdjęcia.
+5. Reklamację należy zgłosić na adres e-mail kontakt@pixelsip.pl lub pisemnie na adres ul. Ratuszowa 11, 03-450 Warszawa. W zgłoszeniu warto podać: dane Klienta, numer zamówienia, opis niezgodności, żądanie oraz — jeśli to możliwe — zdjęcia.
 6. Sprzedawca ustosunkuje się do reklamacji w terminie **14 dni** od jej otrzymania. Brak odpowiedzi w tym terminie oznacza uznanie reklamacji.
 7. **Uwaga dotycząca personalizacji:** indywidualny charakter nadruku (np. wybrany wzór, kolorystyka, nick) nie stanowi wady. Reklamacja może natomiast obejmować rzeczywiste wady Produktu (np. uszkodzenie tumblera, rozszczelnienie, wyraźnie wadliwy lub niezgodny z zamówieniem nadruk, niewłaściwy rozmiar). Drobne różnice odcieni względem zdjęć na ekranie, wynikające z technologii sublimacji i ustawień wyświetlacza, nie są wadą.
 
-## § 8. Reklamacje — Klienci niebędący Konsumentami (rękojmia / B2B)
+## § 8. Reklamacje — Przedsiębiorca na prawach konsumenta (PnPK) oraz pozostali Przedsiębiorcy
 
-1. W odniesieniu do Klientów niebędących Konsumentami ani PnPK (zakup w charakterze zawodowym) stosuje się przepisy o rękojmi z Kodeksu cywilnego, przy czym odpowiedzialność Sprzedawcy z tytułu rękojmi za wady Produktu zostaje **wyłączona** (art. 558 § 1 k.c.).
+1. Do **Przedsiębiorcy na prawach konsumenta (PnPK)** stosuje się przepisy o rękojmi za wady z Kodeksu cywilnego, z modyfikacjami wynikającymi z art. 556⁴ i 556⁵ k.c. — w szczególności wobec PnPK **nie stosuje się** wyłączenia ani ograniczenia rękojmi przewidzianego dla relacji B2B (ust. 2). Reklamację PnPK zgłasza w sposób wskazany w § 7 ust. 5; Sprzedawca rozpatruje ją w terminie 14 dni.
+2. W odniesieniu do Klientów niebędących Konsumentami ani PnPK (zakup mający dla Klienta charakter zawodowy) stosuje się przepisy o rękojmi z Kodeksu cywilnego, przy czym odpowiedzialność Sprzedawcy z tytułu rękojmi za wady Produktu zostaje **wyłączona** (art. 558 § 1 k.c.).
 
 ## § 9. Prawo odstąpienia od umowy
 
 1. Konsument oraz PnPK, który zawarł umowę na odległość, może co do zasady odstąpić od niej w terminie **14 dni** bez podawania przyczyny i bez ponoszenia kosztów innych niż wskazane w przepisach.
-2. **WAŻNE — WYJĄTEK:** prawo odstąpienia **nie przysługuje** w odniesieniu do Produktów wykonywanych na zamówienie / personalizowanych, tj. nieprefabrykowanych, wyprodukowanych według specyfikacji Klienta lub służących zaspokojeniu jego zindywidualizowanych potrzeb (art. 38 pkt 3 ustawy o prawach konsumenta). Większość tumblerów PIXEL SIP z nadrukiem powstaje po złożeniu Zamówienia i jest objęta tym wyjątkiem.
+2. **WAŻNE — WYJĄTEK:** prawo odstąpienia **nie przysługuje** w odniesieniu do Produktów wykonywanych na zamówienie / personalizowanych, tj. nieprefabrykowanych, wyprodukowanych według specyfikacji Klienta lub służących zaspokojeniu jego zindywidualizowanych potrzeb (art. 38 pkt 3 ustawy o prawach konsumenta). Wszystkie obecnie oferowane tumblery PIXEL SIP z nadrukiem powstają po złożeniu Zamówienia i są objęte tym wyjątkiem.
 3. Szczegółowe zasady, terminy, skutki odstąpienia oraz pełny zakres wyjątku opisano w odrębnym dokumencie **„Prawo odstąpienia od umowy"**, który stanowi integralną część Regulaminu. Dokument ten zawiera również wzór formularza odstąpienia.
 
 ## § 10. Dane osobowe
@@ -110,4 +107,4 @@
 1. Sprzedawca zastrzega sobie prawo do zmiany Regulaminu z ważnych przyczyn (np. zmiana przepisów, zmiana metod płatności lub dostawy). Do Zamówień złożonych przed wejściem w życie zmian stosuje się Regulamin w brzmieniu dotychczasowym.
 2. O zmianie Regulaminu Sprzedawca poinformuje poprzez publikację nowej wersji w Sklepie, a zarejestrowanych Klientów — dodatkowo na wskazany adres e-mail.
 3. W sprawach nieuregulowanych zastosowanie mają przepisy prawa polskiego, w szczególności Kodeksu cywilnego oraz ustawy o prawach konsumenta.
-4. Niniejszy Regulamin obowiązuje od dnia [DO UZUPEŁNIENIA: data].
+4. Niniejszy Regulamin obowiązuje od dnia 29 czerwca 2026 r.

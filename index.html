@@ -14,9 +14,9 @@
 <link rel="icon" href="assets/brand/favicon.png" type="image/png">
 <link rel="preload" href="assets/fonts/Silkscreen-Bold.ttf" as="font" type="font/ttf" crossorigin>
 <link rel="preload" href="assets/fonts/PixelOperator-Bold.ttf" as="font" type="font/ttf" crossorigin>
-<link rel="stylesheet" href="css/styles.css?v=a9357f66">
+<link rel="stylesheet" href="css/styles.css?v=86ab0740">
 <script type="importmap">{"imports":{"three":"./js/vendor/three.module.js"}}</script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "name": "Pixel Sip", "url": "https://pixelsip.pl", "logo": "assets/brand/symbol.png", "description": "Premium tumblery 600 i 900 ml ze stali nierdzewnej z nadrukiem pixel-art. 56 wzorów: retro, cyberpunk, neon. Stay Hydrated, Stay Pixelated.", "slogan": "Stay Hydrated, Stay Pixelated"}, {"@type": "Product", "name": "PIXEL SIP Tumbler 600 ml — Stay Hydrated, Stay Pixelated", "image": "assets/products/tumbler-600-12513_1.jpg", "description": "Kompaktowy daily driver na biurko gracza — 600 ml stali, podwójna ścianka i nadruk pixel-art, który pasuje do każdego loadoutu.", "sku": "BW34PS-600WT", "brand": {"@type": "Brand", "name": "Pixel Sip"}, "offers": {"@type": "Offer", "priceCurrency": "PLN", "price": 109, "availability": "https://schema.org/InStock", "itemCondition": "https://schema.org/NewCondition"}}, {"@type": "Product", "name": "PIXEL SIP Tumbler 900 ml — Stay Hydrated, Stay Pixelated", "image": "assets/products/tumbler-900-12514_1.jpg", "description": "Maksymalny zapas many na cały raid — 900 ml stali, podwójna ścianka i pixel-art, który należy do Twojego setupu, a nie do szafki z gadżetami.", "sku": "BW34PS-900WT", "brand": {"@type": "Brand", "name": "Pixel Sip"}, "offers": {"@type": "Offer", "priceCurrency": "PLN", "price": 129, "availability": "https://schema.org/InStock", "itemCondition": "https://schema.org/NewCondition"}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "name": "Pixel Sip", "url": "https://pixelsip.pl", "logo": "assets/brand/symbol.png", "description": "Premium tumblery 600 i 900 ml ze stali nierdzewnej z nadrukiem pixel-art. 56 wzorów: retro, cyberpunk, neon. Stay Hydrated, Stay Pixelated.", "slogan": "Stay Hydrated, Stay Pixelated"}, {"@type": "Product", "name": "PIXEL SIP Tumbler 600 ml — Stay Hydrated, Stay Pixelated", "image": "assets/products/tumbler-600-12513_1.jpg", "description": "Kompaktowy daily driver na biurko gracza — 600 ml stali, podwójna ścianka i nadruk pixel-art, który pasuje do każdego loadoutu.", "sku": "BW34PS-600WT", "brand": {"@type": "Brand", "name": "Pixel Sip"}, "offers": {"@type": "Offer", "priceCurrency": "PLN", "price": 109, "availability": "https://schema.org/InStock", "itemCondition": "https://schema.org/NewCondition"}}, {"@type": "Product", "name": "PIXEL SIP Tumbler 900 ml — Stay Hydrated, Stay Pixelated", "image": "assets/products/tumbler-900-12514_1.jpg", "description": "Maksymalny zapas many na cały raid — 900 ml stali, podwójna ścianka i pixel-art, który należy do Twojego setupu, a nie do szafki z gadżetami.", "sku": "BW34PS-900WT", "brand": {"@type": "Brand", "name": "Pixel Sip"}, "offers": {"@type": "Offer", "priceCurrency": "PLN", "price": 129, "availability": "https://schema.org/PreOrder", "itemCondition": "https://schema.org/NewCondition"}}]}</script>
 </head>
 <body>
 
@@ -136,10 +136,16 @@
           </div>
         </div>
         <div class="field" id="strip-text-fields">
+          <div class="strip-group__h off" id="strip-top-header">Pasek górny</div>
           <label>Twój napis <span class="hint">— max 14 znaków, puste = „PIXEL SIP"</span></label>
           <div class="strip-text-row"><input id="strip-text-top" type="text" maxlength="14" placeholder="PIXEL SIP — własny napis" autocomplete="off" spellcheck="false" aria-label="Napis paska (górny)"></div>
-          <button class="linkrow" id="toggle-split-text" type="button" aria-pressed="false" style="margin-top:10px">🔁 Inny napis na dole</button>
-          <div class="strip-text-row off" id="strip-text-bot-row" style="margin-top:10px"><input id="strip-text-bot" type="text" maxlength="14" placeholder="Napis dolnego paska" autocomplete="off" spellcheck="false" aria-label="Napis paska dolnego"></div>
+          <div class="color-row color-row--sep" style="margin-top:10px"><span class="color-lbl">Rozmiar</span><div class="strip-opts" id="strip-sizes-top" style="flex:1"></div></div>
+          <button class="linkrow" id="toggle-split-text" type="button" aria-pressed="false" style="margin-top:12px">🔁 Osobny napis i rozmiar na dole</button>
+          <div class="off" id="strip-bot-block" style="margin-top:12px">
+            <div class="strip-group__h">Pasek dolny</div>
+            <div class="strip-text-row"><input id="strip-text-bot" type="text" maxlength="14" placeholder="Napis dolnego paska" autocomplete="off" spellcheck="false" aria-label="Napis paska dolnego"></div>
+            <div class="color-row"><span class="color-lbl">Rozmiar</span><div class="strip-opts" id="strip-sizes-bot" style="flex:1"></div></div>
+          </div>
           <p class="muted" style="font-size:.82rem;margin-top:10px">To Twój kubek — wpisz ksywę, gildię albo cokolwiek. ⌨️</p>
         </div>
       </div>
@@ -147,11 +153,7 @@
       <!-- ZAKŁADKA: KOLORY -->
       <div class="tab-content" data-tabpanel="colors" role="tabpanel">
         <p class="tab-banner off" id="colors-none">Pasek wyłączony — włącz go w zakładce „Napis", żeby dobrać kolory.</p>
-        <div id="colors-collapsed">
-          <p class="tab-banner">Pasek: <b id="colors-summary">—</b></p>
-          <button id="colors-expand" class="btn btn--ghost btn--block" type="button">🎨 Dostosuj kolory paska</button>
-        </div>
-        <div id="colors-panel" class="off">
+        <div id="colors-panel">
           <button class="linkrow is-active" id="toggle-sync" type="button" aria-pressed="true">🔁 Dół taki sam jak góra</button>
           <div class="seg off" id="color-side" style="margin-top:12px">
             <button class="strip-opt is-active" data-colside="top">Pasek górny</button>
@@ -163,7 +165,6 @@
           </div>
           <div class="strip-colors" id="active-palette" style="margin-top:12px"></div>
           <button class="linkrow" id="toggle-more-colors" type="button" style="margin-top:10px">Więcej kolorów ⌄</button>
-          <div class="color-row color-row--sep" style="margin-top:14px"><span class="color-lbl">Rozmiar paska</span><div class="strip-opts" id="active-strip-size" style="flex:1"></div></div>
         </div>
       </div>
 
@@ -195,17 +196,17 @@
 <!-- PRODUKTY / SPECYFIKACJA -->
 <section class="section" id="produkty"><div class="wrap">
   <div class="center" style="margin-bottom:30px"><span class="kicker">Produkty</span><h2>Dwa rozmiary, jedna jakość</h2><p class="lead">Stal nierdzewna, podwójna ścianka, słomka i pokrywka w zestawie. Wybierasz tylko ile many ma się zmieścić.</p></div>
-  <div class="specs"><article class="spec-card"><div class="prod-photo"><img src="assets/products/tumbler-600-12513_1.jpg" alt="Tumbler 600 ml ze stali nierdzewnej, biały" loading="lazy"></div><h3>600 ml <span class="cap">tumbler</span></h3><div class="price">109,00 zł <s>139,00 zł</s></div><p class="muted" style="margin-bottom:14px">Kompaktowy daily driver na biurko gracza — 600 ml stali, podwójna ścianka i nadruk pixel-art, który pasuje do każdego loadoutu.</p><table class="spec-table"><tr><td>Pojemność</td><td>600 ml</td></tr><tr><td>Materiał</td><td>Stal nierdzewna, podwójna ścianka (zewn. 304 / wewn. 201)</td></tr><tr><td>Wymiary</td><td>Ø 7,5 × 21,3 cm</td></tr><tr><td>Kolor</td><td>Biały matowy</td></tr><tr><td>Pokrywka i słomka</td><td>Pokrywka + metalowa słomka wielokrotnego użytku</td></tr><tr><td>Nadruk</td><td>Sublimacyjny pixel-art, full-wrap, na całej powierzchni</td></tr><tr><td>Izolacja</td><td>Termiczna (double-wall) — utrzymuje temperaturę napoju</td></tr><tr><td>SKU</td><td>BW34PS-600WT</td></tr></table><a href="#configurator" class="btn btn--ghost btn--block" style="margin-top:18px">Wybierz wzór w tym rozmiarze</a></article><article class="spec-card"><div class="prod-photo"><img src="assets/products/tumbler-900-12514_1.jpg" alt="Tumbler 900 ml ze stali nierdzewnej, biały" loading="lazy"></div><h3>900 ml <span class="cap">tumbler</span></h3><div class="price">129,00 zł <s>159,00 zł</s></div><p class="muted" style="margin-bottom:14px">Maksymalny zapas many na cały raid — 900 ml stali, podwójna ścianka i pixel-art, który należy do Twojego setupu, a nie do szafki z gadżetami.</p><table class="spec-table"><tr><td>Pojemność</td><td>900 ml</td></tr><tr><td>Materiał</td><td>Stal nierdzewna, podwójna ścianka (zewn. 304 / wewn. 201)</td></tr><tr><td>Wymiary</td><td>Ø 7,5 × 25,4 cm</td></tr><tr><td>Kolor</td><td>Biały matowy</td></tr><tr><td>Pokrywka i słomka</td><td>Przezroczysta pokrywka + metalowa słomka wielokrotnego użytku</td></tr><tr><td>Nadruk</td><td>Sublimacyjny pixel-art, full-wrap, na całej powierzchni</td></tr><tr><td>Izolacja</td><td>Termiczna (double-wall) — zimne zostaje zimne, ciepłe ciepłe</td></tr><tr><td>SKU</td><td>BW34PS-900WT</td></tr></table><a href="#configurator" class="btn btn--ghost btn--block" style="margin-top:18px">Wybierz wzór w tym rozmiarze</a></article></div>
+  <div class="specs"><article class="spec-card"><div class="prod-photo"><img src="assets/products/tumbler-600-12513_1.jpg" alt="Tumbler 600 ml ze stali nierdzewnej, biały" loading="lazy"></div><h3>600 ml <span class="cap">tumbler</span></h3><div class="price">109,00 zł </div><p class="muted" style="margin-bottom:14px">Kompaktowy daily driver na biurko gracza — 600 ml stali, podwójna ścianka i nadruk pixel-art, który pasuje do każdego loadoutu.</p><table class="spec-table"><tr><td>Pojemność</td><td>600 ml</td></tr><tr><td>Materiał</td><td>Stal nierdzewna, podwójna ścianka (zewn. 304 / wewn. 201)</td></tr><tr><td>Wymiary</td><td>Ø 7,5 × 21,3 cm</td></tr><tr><td>Kolor</td><td>Biały matowy</td></tr><tr><td>Pokrywka i słomka</td><td>Pokrywka + metalowa słomka wielokrotnego użytku</td></tr><tr><td>Nadruk</td><td>Sublimacyjny pixel-art, full-wrap, na całej powierzchni</td></tr><tr><td>Izolacja</td><td>Termiczna (double-wall) — utrzymuje temperaturę napoju</td></tr><tr><td>SKU</td><td>BW34PS-600WT</td></tr></table><a href="#configurator" class="btn btn--ghost btn--block" style="margin-top:18px">Wybierz wzór w tym rozmiarze</a></article><article class="spec-card"><div class="prod-photo"><img src="assets/products/tumbler-900-12514_1.jpg" alt="Tumbler 900 ml ze stali nierdzewnej, biały" loading="lazy"></div><h3>900 ml <span class="cap">tumbler</span><span style="display:inline-block;margin-left:8px;padding:2px 8px;border:1px solid var(--cyan);border-radius:6px;font-size:.6rem;letter-spacing:.04em;color:var(--cyan);vertical-align:middle">WKRÓTCE</span></h3><div class="price muted" style="font-size:.95rem">Cena docelowo 129,00 zł — produkt jeszcze niedostępny</div><p class="muted" style="margin-bottom:14px">Maksymalny zapas many na cały raid — 900 ml stali, podwójna ścianka i pixel-art, który należy do Twojego setupu, a nie do szafki z gadżetami.</p><table class="spec-table"><tr><td>Pojemność</td><td>900 ml</td></tr><tr><td>Materiał</td><td>Stal nierdzewna, podwójna ścianka (zewn. 304 / wewn. 201)</td></tr><tr><td>Wymiary</td><td>Ø 7,5 × 25,4 cm</td></tr><tr><td>Kolor</td><td>Biały matowy</td></tr><tr><td>Pokrywka i słomka</td><td>Przezroczysta pokrywka + metalowa słomka wielokrotnego użytku</td></tr><tr><td>Nadruk</td><td>Sublimacyjny pixel-art, full-wrap, na całej powierzchni</td></tr><tr><td>Izolacja</td><td>Termiczna (double-wall) — zimne zostaje zimne, ciepłe ciepłe</td></tr><tr><td>SKU</td><td>BW34PS-900WT</td></tr></table><a href="#configurator" class="btn btn--ghost btn--block" style="margin-top:18px">Zapisz się na listę →</a></article></div>
   <div class="bundles"><div class="bundle"><h3>Duo Loadout (600 ml + 900 ml)</h3><p class="muted">Pełen ekwipunek nawodnienia: 900 ml na sesje maraton + 600 ml na wypady poza bazę. Dwie sztuki taniej niż osobno — i jedna wysyłka.</p><b>209,00 zł</b></div><div class="bundle"><h3>Starter Pack — 900 ml + naklejki + kod na kolejny drop</h3><p class="muted">Wejście do gry: tumbler 900 ml, arkusz pixelowych naklejek na setup i kod -15% na następny numerowany drop. Gotowy, trafiony prezent dla gracza prosto z pudełka.</p><b>139,00 zł</b></div></div>
   <div class="delivery-info">
     <div><h3>Dostawa</h3><ul id="delivery-list" class="delivery-ul"></ul></div>
-    <div class="gift-note"><h3>🎁 Na prezent dla gracza</h3><p class="muted">Pakujemy gift-ready — bezpieczny, trafiony prezent nawet jeśli nie znasz się na grach. Zamawiasz dla teamu, gildii albo na event? <a href="mailto:zamowienia@pixelsip.pl">Napisz po wycenę zestawu →</a></p></div>
+    <div class="gift-note"><h3>🎁 Na prezent dla gracza</h3><p class="muted">Pakujemy gift-ready — bezpieczny, trafiony prezent nawet jeśli nie znasz się na grach. Zamawiasz dla teamu, gildii albo na event? <a href="mailto:kontakt@pixelsip.pl">Napisz po wycenę zestawu →</a></p></div>
   </div>
 </div></section>
 
 <!-- TRUST STRIP -->
 <section style="background:var(--bg2);border-block:1px solid var(--line)"><div class="wrap trust-strip">
-  <span>🔒 Bezpieczne płatności · BLIK · Przelewy24</span>
+  <span>🔒 Bezpieczne płatności · BLIK · PayU</span>
   <span>🚚 Darmowa wysyłka od 199 zł</span>
   <span>🛡️ Gwarancja jakości — wada? wymieniamy</span>
   <span>🇵🇱 Projekt i realizacja w Polsce</span>
@@ -214,7 +215,7 @@
 <!-- FAQ -->
 <section class="section" id="faq" style="background:var(--bg2)"><div class="wrap">
   <div class="center" style="margin-bottom:30px"><span class="kicker">FAQ</span><h2>Zanim klikniesz „kup"</h2></div>
-  <div class="faq"><div class="faq-item"><button class="faq-q" aria-expanded="false">Czy nadruk się zetrze albo wyblaknie po kilku miesiącach?</button><div class="faq-a"><p>Nie, bo to sublimacja, nie naklejka. Grafika jest wtopiona w powłokę butelki, więc nie łuszczy się i nie odpryskuje. Przy myciu ręcznym (zgodnie z pielęgnacją) wzór zostaje ostry i nasycony na lata. Zmywarka to jedyny realny boss, który może mu zaszkodzić.</p></div></div><div class="faq-item"><button class="faq-q" aria-expanded="false">Mogę wrzucić tumbler do zmywarki?</button><div class="faq-a"><p>Szczerze: lepiej nie. Wysoka temperatura i detergenty w zmywarce potrafią zmatowić nadruk i osłabić izolację podwójnej ścianki. Mycie ręczne zajmuje 30 sekund i to jedyny sposób, żeby butelka wyglądała jak nowa po setkach sesji.</p></div></div><div class="faq-item"><button class="faq-q" aria-expanded="false">Jakie są pojemności i którą wybrać?</button><div class="faq-a"><p>Na start robimy 600 ml — kompaktowy, idealny na biurko i do plecaka, ze stali nierdzewnej z podwójną ścianką. Wersję 900 ml mamy w planach — jeśli Cię interesuje, zapisz się na powiadomienie przy wyborze rozmiaru, a damy znać, gdy ruszy.</p></div></div><div class="faq-item"><button class="faq-q" aria-expanded="false">Czy butelka faktycznie trzyma temperaturę?</button><div class="faq-a"><p>Tak. Podwójna ścianka ze stali nierdzewnej izoluje napój, więc zimne zostaje zimne, a ciepłe ciepłe przez wiele godzin. Bonus: obudowa nie poci się na biurku, więc żadnych mokrych kółek pod myszką ani na klawiaturze.</p></div></div><div class="faq-item"><button class="faq-q" aria-expanded="false">Ile trwa realizacja i jak szybko dojdzie?</button><div class="faq-a"><p>Każdy tumbler zdobi się na zamówienie, więc realizacja zajmuje zwykle 2-4 dni robocze, a potem kurier dostarcza paczkę w 1-2 dni robocze. Status śledzisz na bieżąco. Drop nowych wzorów potrafi wydłużyć kolejkę, ale dajemy znać z wyprzedzeniem.</p></div></div><div class="faq-item"><button class="faq-q" aria-expanded="false">Czy mogę zwrócić butelkę, jeśli wzór mi nie podejdzie?</button><div class="faq-a"><p>Twój kubek powstaje na zamówienie z wybranym przez Ciebie wzorem, więc jako produkt personalizowany nie podlega standardowemu 14-dniowemu zwrotowi (art. 38 ustawy o prawach konsumenta) — przypominamy o tym też przy składaniu zamówienia. Ale spokojnie: wadliwy nadruk, uszkodzenie w transporcie albo nasz błąd? Piszesz, my wymieniamy. Zależy nam, żebyś był zadowolony.</p></div></div><div class="faq-item"><button class="faq-q" aria-expanded="false">Co ze słomką i pokrywką?</button><div class="faq-a"><p>W zestawie dostajesz szczelną pokrywkę i wielorazową słomkę. Pokrywka ogranicza rozlewanie przy nieuważnym ruchu (zdarza się w klatchu), a słomkę i wieczko myjesz osobno. Na wymianę słomek też damy radę.</p></div></div><div class="faq-item"><button class="faq-q" aria-expanded="false">Da się zamówić własny wzór albo grafikę gildii?</button><div class="faq-a"><p>Pracujemy nad custom dropami i zamówieniami grupowymi (gildie, teamy, prezenty firmowe bez korpo-nudy). Jeśli masz pomysł na własny pixel-art albo logo teamu, napisz do nas, a sprawdzimy, czy da się to wbić na stal.</p></div></div></div>
+  <div class="faq"><div class="faq-item"><button class="faq-q" aria-expanded="false">Czy nadruk się zetrze albo wyblaknie po kilku miesiącach?</button><div class="faq-a"><p>Nie, bo to sublimacja, nie naklejka. Grafika jest wtopiona w powłokę butelki, więc nie łuszczy się i nie odpryskuje. Przy myciu ręcznym (zgodnie z pielęgnacją) wzór zostaje ostry i nasycony na lata. Zmywarka to jedyny realny boss, który może mu zaszkodzić.</p></div></div><div class="faq-item"><button class="faq-q" aria-expanded="false">Mogę wrzucić tumbler do zmywarki?</button><div class="faq-a"><p>Szczerze: lepiej nie. Wysoka temperatura i detergenty w zmywarce potrafią zmatowić nadruk i osłabić izolację podwójnej ścianki. Mycie ręczne zajmuje 30 sekund i to jedyny sposób, żeby butelka wyglądała jak nowa po setkach sesji.</p></div></div><div class="faq-item"><button class="faq-q" aria-expanded="false">Jakie są pojemności i którą wybrać?</button><div class="faq-a"><p>Na start robimy 600 ml — kompaktowy, idealny na biurko i do plecaka, ze stali nierdzewnej z podwójną ścianką. Wersję 900 ml mamy w planach — jeśli Cię interesuje, zapisz się na powiadomienie przy wyborze rozmiaru, a damy znać, gdy ruszy.</p></div></div><div class="faq-item"><button class="faq-q" aria-expanded="false">Czy butelka faktycznie trzyma temperaturę?</button><div class="faq-a"><p>Tak. Podwójna ścianka ze stali nierdzewnej izoluje napój, więc zimne zostaje zimne, a ciepłe ciepłe przez wiele godzin. Bonus: obudowa nie poci się na biurku, więc żadnych mokrych kółek pod myszką ani na klawiaturze.</p></div></div><div class="faq-item"><button class="faq-q" aria-expanded="false">Ile trwa realizacja i jak szybko dojdzie?</button><div class="faq-a"><p>Każdy tumbler zdobi się na zamówienie, więc realizacja zajmuje zwykle 2-4 dni robocze, a potem kurier dostarcza paczkę w 1-2 dni robocze. Status śledzisz na bieżąco. Drop nowych wzorów potrafi wydłużyć kolejkę, ale dajemy znać z wyprzedzeniem.</p></div></div><div class="faq-item"><button class="faq-q" aria-expanded="false">Czy mogę zwrócić butelkę, jeśli wzór mi nie podejdzie?</button><div class="faq-a"><p>Twój kubek powstaje na zamówienie z wybranym przez Ciebie wzorem, więc jako produkt personalizowany nie podlega standardowemu 14-dniowemu zwrotowi (art. 38 pkt 3 ustawy o prawach konsumenta) — przypominamy o tym też przy składaniu zamówienia. Ale spokojnie: wadliwy nadruk, uszkodzenie w transporcie albo nasz błąd? Piszesz, my wymieniamy. Zależy nam, żebyś był zadowolony.</p></div></div><div class="faq-item"><button class="faq-q" aria-expanded="false">Co ze słomką i pokrywką?</button><div class="faq-a"><p>W zestawie dostajesz szczelną pokrywkę i wielorazową słomkę. Pokrywka ogranicza rozlewanie przy nieuważnym ruchu (zdarza się w klatchu), a słomkę i wieczko myjesz osobno. Na wymianę słomek też damy radę.</p></div></div><div class="faq-item"><button class="faq-q" aria-expanded="false">Da się zamówić własny wzór albo grafikę gildii?</button><div class="faq-a"><p>Pracujemy nad custom dropami i zamówieniami grupowymi (gildie, teamy, prezenty firmowe bez korpo-nudy). Jeśli masz pomysł na własny pixel-art albo logo teamu, napisz do nas, a sprawdzimy, czy da się to wbić na stal.</p></div></div></div>
 </div></section>
 
 <!-- NEWSLETTER -->
@@ -244,9 +245,9 @@
     <div class="foot__brand"><img class="mark" src="assets/brand/wordmark.png?v=ca35e595" alt="Pixel Sip" style="height:24px;image-rendering:pixelated"><p>Stay Hydrated, Stay Pixelated. Hydratacja dla Twojego setupu.</p></div>
     <div><h4>Sklep</h4><a href="#configurator">Zaprojektuj tumbler</a><a href="#kolekcja">Wzory</a><a href="#produkty">Produkty</a></div>
     <div><h4>Informacje</h4><a href="pages/regulamin.html">Regulamin</a><a href="pages/polityka-prywatnosci.html">Polityka prywatności</a><a href="pages/dostawa-i-zwroty.html">Dostawa i zwroty</a><a href="pages/odstapienie-od-umowy.html">Odstąpienie od umowy</a><a href="#" data-cookie-settings>Ustawienia cookies</a></div>
-    <div><h4>Kontakt</h4><a href="mailto:zamowienia@pixelsip.pl">zamowienia@pixelsip.pl</a><a href="#">Instagram</a><a href="#">TikTok</a><a href="#">Discord</a></div>
+    <div><h4>Kontakt</h4><a href="mailto:kontakt@pixelsip.pl">kontakt@pixelsip.pl</a><a href="#">Instagram</a><a href="#">TikTok</a><a href="#">Discord</a></div>
   </div>
-  <div class="foot__bottom"><span>© 2026 Pixel Sip · [NAZWA FIRMY], [NIP]</span><span>Płatności: BLIK · karta · przelewy24 · dostawa: InPost · kurier</span></div>
+  <div class="foot__bottom"><span>© 2026 Pixel Sip · PIOTR SOBCZYŃSKI MODA-MIX SPORT STYLE, NIP 1130115908</span><span>Płatności: BLIK · karta · PayU · dostawa: InPost · kurier</span></div>
 </div></footer>
 
 <!-- KOSZYK -->
@@ -276,9 +277,9 @@
       <label>Uwagi (opcjonalnie)</label><textarea name="notes" rows="2"></textarea>
       <label class="co-consent"><input type="checkbox" name="terms" required> Zamawiam z obowiązkiem zapłaty i akceptuję <a href="pages/regulamin.html">regulamin</a> oraz <a href="pages/odstapienie-od-umowy.html">informację o prawie odstąpienia</a>. Wiem, że wzór jest <b>personalizowany</b> i nie podlega 14-dniowemu zwrotowi (poza wadą).</label>
       <button id="co-submit" class="btn btn--primary btn--block btn--lg" type="submit" style="margin-top:16px">Zamawiam i płacę</button>
-      <p class="muted" style="font-size:.78rem;margin-top:10px">💳 Płatność: BLIK / Przelewy24 / przelew — finalizowana po potwierdzeniu zamówienia (konfiguracja bramki: patrz GO-LIVE). W trybie demo zamówienie trafia mailem.</p>
+      <p class="muted" style="font-size:.78rem;margin-top:10px">💳 Płatność: BLIK / karta / szybki przelew przez PayU — finalizowana zaraz po złożeniu zamówienia. W trybie demo zamówienie trafia mailem.</p>
     </form>
-    <div id="co-success" hidden><div class="big">🎮💦</div><h3>Dzięki za zamówienie!</h3><p class="muted">Skopiowaliśmy treść zamówienia i otworzyliśmy Twój e-mail. Jeśli okno nie wyskoczyło — wklej poniższe i wyślij na zamowienia@pixelsip.pl:</p><textarea id="co-order-text" readonly rows="7" style="width:100%;margin-top:10px;font-size:.8rem"></textarea></div>
+    <div id="co-success" hidden><div class="big">🎮💦</div><h3>Dzięki za zamówienie!</h3><p class="muted">Skopiowaliśmy treść zamówienia i otworzyliśmy Twój e-mail. Jeśli okno nie wyskoczyło — wklej poniższe i wyślij na kontakt@pixelsip.pl:</p><textarea id="co-order-text" readonly rows="7" style="width:100%;margin-top:10px;font-size:.8rem"></textarea></div>
   </div>
 </div></div>
 
@@ -291,7 +292,7 @@
 
 <!-- COOKIES / ZGODY (RODO: piksele marketingowe dopiero po zgodzie) -->
 <div id="cookie-banner" role="dialog" aria-label="Zgoda na pliki cookie" hidden>
-  <span>Używamy cookies niezbędnych do działania sklepu (koszyk). Za Twoją zgodą używamy też cookies <b>marketingowych</b> (Meta, TikTok) do reklam i pomiaru konwersji. <a href="pages/polityka-prywatnosci.html">Więcej w polityce prywatności</a>.</span>
+  <span>Używamy cookies niezbędnych do działania sklepu (koszyk). Za Twoją zgodą używamy też cookies <b>marketingowych</b> (Meta) do reklam i pomiaru konwersji. <a href="pages/polityka-prywatnosci.html">Więcej w polityce prywatności</a>.</span>
   <div class="cookie-actions">
     <button class="btn" data-consent="reject">Tylko niezbędne</button>
     <button class="btn btn--primary" data-consent="accept">Akceptuję wszystkie</button>
@@ -299,7 +300,7 @@
 </div>
 
 <script type="module" src="js/tumbler3d.js?v=626d2461"></script>
-<script>window.__DV='31b69792'</script>
-<script src="js/store.js?v=e1a455b6"></script>
+<script>window.__DV='eeaeab31'</script>
+<script src="js/store.js?v=eac5deaa"></script>
 </body>
 </html>

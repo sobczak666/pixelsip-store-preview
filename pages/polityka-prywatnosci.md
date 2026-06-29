@@ -1,6 +1,6 @@
 # Polityka prywatności PIXEL SIP
 
-**Data ostatniej aktualizacji:** [DO UZUPEŁNIENIA: data]
+**Data ostatniej aktualizacji:** 29 czerwca 2026 r.
 
 > Twoje dane to nie loot, który handlujemy na lewo. Tu znajdziesz po ludzku, co zbieramy, po co i jak możesz to kontrolować. Wszystko zgodnie z RODO.
 
@@ -10,18 +10,15 @@
 
 Administratorem Twoich danych osobowych jest:
 
-- **Nazwa:** [NAZWA FIRMY]
-- **Adres:** [ADRES]
-- **NIP:** [NIP]
-- **REGON:** [REGON]
-- **E-mail (kontakt w sprawach danych):** [EMAIL]
-- **Telefon:** [TELEFON]
+- **Nazwa:** Piotr Sobczyński prowadzący jednoosobową działalność gospodarczą pod firmą „PIOTR SOBCZYŃSKI MODA-MIX SPORT STYLE"
+- **Adres:** ul. Ratuszowa 11, 03-450 Warszawa
+- **NIP:** 1130115908
+- **REGON:** 011375243
+- **E-mail (kontakt w sprawach danych):** kontakt@pixelsip.pl
 
 (dalej: **„Administrator"** lub **„my"**).
 
-W sprawach dotyczących ochrony danych osobowych możesz kontaktować się z nami pod adresem e-mail [EMAIL].
-
-[DO UZUPEŁNIENIA — jeżeli powołano Inspektora Ochrony Danych (IOD), podaj jego dane kontaktowe. Jeśli nie ma obowiązku powołania IOD, usuń ten akapit.]
+W sprawach dotyczących ochrony danych osobowych możesz kontaktować się z nami pod adresem e-mail kontakt@pixelsip.pl.
 
 ## 2. Jakie dane przetwarzamy
 
@@ -53,12 +50,10 @@ Podanie danych potrzebnych do realizacji zamówienia jest dobrowolne, ale niezb�
 
 Twoje dane możemy przekazywać zaufanym podmiotom, które wspierają nas w prowadzeniu sklepu, wyłącznie w niezbędnym zakresie i na podstawie umów powierzenia przetwarzania:
 
-- dostawca serwera/hostingu sklepu (OVH — serwer w Polsce/UE);
-- operator płatności (Przelewy24);
-- firmy kurierskie i operatorzy logistyczni / paczkomaty [DO UZUPEŁNIENIA];
-- dostawca usługi nadruku / podwykonawca produkcji, jeśli korzystamy z zewnętrznego druku [DO UZUPEŁNIENIA];
-- biuro rachunkowe / dostawca systemu fakturowania [DO UZUPEŁNIENIA];
-- dostawca narzędzia do wysyłki newslettera [DO UZUPEŁNIENIA];
+- dostawca serwera/hostingu sklepu — **OVH Sp. z o.o.** (serwer w Polsce, Warszawa);
+- operator płatności — **PayU S.A.** z siedzibą w Poznaniu (ul. Grunwaldzka 186, 60-166 Poznań), obsługujący płatności online (BLIK, karty, szybkie przelewy);
+- firmy kurierskie i operatorzy logistyczni — **InPost Sp. z o.o.** (paczkomaty i kurier) oraz **DPD Polska Sp. z o.o.**;
+- biuro rachunkowe prowadzące obsługę księgową i rozliczenia podatkowe;
 - dostawca narzędzi reklamowych i pomiaru konwersji — **Meta Platforms Ireland Limited** (Facebook/Instagram; piksel i Conversions API, patrz sekcja 10);
 - organy publiczne — gdy wynika to z przepisów prawa.
 
@@ -86,7 +81,7 @@ Masz prawo do:
 - **sprzeciwu** wobec przetwarzania opartego na uzasadnionym interesie, w tym wobec marketingu bezpośredniego;
 - **wycofania zgody** w dowolnym momencie — bez wpływu na zgodność z prawem przetwarzania sprzed wycofania.
 
-Aby skorzystać z praw, napisz do nas na [EMAIL].
+Aby skorzystać z praw, napisz do nas na kontakt@pixelsip.pl.
 
 Masz również prawo wniesienia **skargi do Prezesa Urzędu Ochrony Danych Osobowych (PUODO)**, ul. Stawki 2, 00-193 Warszawa, jeżeli uznasz, że przetwarzamy Twoje dane niezgodnie z prawem.
 

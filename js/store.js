@@ -7,7 +7,7 @@
   const CONFIG = {
     orderEndpoint: 'https://api.pixelsip.pl/api/orders',   // backend Pixel Sip (OVH Warszawa) — zamówienia wpadają do panelu /admin. Pusty => fallback mailto+kopiuj
     waitlistEndpoint: 'https://api.pixelsip.pl/api/waitlist',  // zapisy na niedostępne rozmiary (np. 900 ml)
-    shopEmail: 'zamowienia@pixelsip.pl',
+    shopEmail: 'kontakt@pixelsip.pl',
     currency: 'zł',
     metaPixelId: '',                   // Meta (FB/IG) Pixel ID — puste => piksel nieaktywny
     tiktokPixelId: '',                 // TikTok Pixel ID — puste => nieaktywny
@@ -32,7 +32,6 @@
     syncStrip: true,        // dół taki sam jak góra (kolory + rozmiar)
     splitText: false,       // osobny napis na dole
     palExpanded: false,     // pełna paleta („Więcej kolorów")
-    colorsOpen: false,      // panel kolorów rozwinięty (vs baner)
     geo: { pattern: 'paski-pion', c1: '#0B0A16', c2: '#22E0E6', n: 10 },
     tile: { emblem: 'water-drop', bg: '#0B0A16', n: 6 },
     emblems: [], embCat: 'all',
@@ -263,14 +262,12 @@
     return p === 'tt' ? state.stripColorTop : p === 'tb' ? state.bandColorTop
          : p === 'bt' ? state.stripColorBot : state.bandColorBot;
   }
+  const isSplit = () => state.splitText && state.strip === 'both';   // osobny dół (napis + rozmiar) — tylko gdy oba paski
   function renderActivePalette() {
     const pal = activePal(), isText = state.colorKind === 'text';
     const colors = isText ? stripColors() : bandColors();
     renderPalette('active-palette', colors, activeColor(), pal, isText ? 'Napis' : 'Tło', state.palExpanded ? 'full' : 'quick');
     const more = $('#toggle-more-colors'); if (more) more.textContent = state.palExpanded ? 'Mniej kolorów ⌃' : 'Więcej kolorów ⌄';
-    const sizeKind = state.colorSide === 'top' ? 'striptop' : 'stripbot';
-    const sizeCur = state.colorSide === 'top' ? state.stripSizeTop : state.stripSizeBot;
-    renderSizeBtns('active-strip-size', STRIP_SIZES, sizeCur, sizeKind);
     $$('[data-colside]').forEach(b => b.classList.toggle('is-active', b.dataset.colside === state.colorSide));
     $$('[data-colkind]').forEach(b => b.classList.toggle('is-active', b.dataset.colkind === state.colorKind));
   }
@@ -279,8 +276,7 @@
     if (state.strip === 'top') state.colorSide = 'top';
     else if (state.strip === 'bot') state.colorSide = 'bot';
     $('#colors-none')?.classList.toggle('off', !none);
-    $('#colors-collapsed')?.classList.toggle('off', none || state.colorsOpen);
-    $('#colors-panel')?.classList.toggle('off', none || !state.colorsOpen);
+    $('#colors-panel')?.classList.toggle('off', none);   // palety od razu widoczne; tylko „bez paska" je chowa
     const showSide = state.strip === 'both' && !state.syncStrip;        // wybór strony tylko gdy góra+dół i bez synchronizacji
     $('#color-side')?.classList.toggle('off', !showSide);
     const ts = $('#toggle-sync');
@@ -297,11 +293,14 @@
   function applyStripVisibility() {
     const tiT = $('#strip-text-top'); if (tiT && tiT.value !== state.stripTextTop) tiT.value = state.stripTextTop;
     const tiB = $('#strip-text-bot'); if (tiB && tiB.value !== state.stripTextBot) tiB.value = state.stripTextBot;
+    renderSizeBtns('strip-sizes-top', STRIP_SIZES, state.stripSizeTop, 'striptop');
+    renderSizeBtns('strip-sizes-bot', STRIP_SIZES, state.stripSizeBot, 'stripbot');
     $$('[data-strip]').forEach(s => { const a = s.dataset.strip === state.strip; s.classList.toggle('is-active', a); s.setAttribute('aria-pressed', a); });
-    const splittable = state.strip === 'both';
+    const splittable = state.strip === 'both', split = splittable && state.splitText;
     const tsx = $('#toggle-split-text');
-    if (tsx) { tsx.classList.toggle('off', !splittable); tsx.classList.toggle('is-active', state.splitText && splittable); tsx.setAttribute('aria-pressed', state.splitText && splittable); }
-    $('#strip-text-bot-row')?.classList.toggle('off', !(state.splitText && splittable));
+    if (tsx) { tsx.classList.toggle('off', !splittable); tsx.classList.toggle('is-active', split); tsx.setAttribute('aria-pressed', split); }
+    $('#strip-bot-block')?.classList.toggle('off', !split);
+    $('#strip-top-header')?.classList.toggle('off', !split);
     $('#strip-text-fields')?.classList.toggle('off', state.strip === 'none');
     applyColorsVisibility();
     renderActivePalette();
@@ -325,8 +324,8 @@
   }
   // dół=góra i osobny-napis wynikają ze stanu (np. po wczytaniu share-linku z różną górą/dołem)
   function deriveStripModes() {
-    state.syncStrip = state.stripColorTop === state.stripColorBot && state.bandColorTop === state.bandColorBot && state.stripSizeTop === state.stripSizeBot;
-    state.splitText = state.stripTextTop !== state.stripTextBot;
+    state.syncStrip = state.stripColorTop === state.stripColorBot && state.bandColorTop === state.bandColorBot;
+    state.splitText = state.stripTextTop !== state.stripTextBot || state.stripSizeTop !== state.stripSizeBot;
   }
   // ——— presety + losuj (oba przez applyConfig — jedno źródło prawdy) ———
   function defaultSizeId() { return (state.products.find(p => !p.waitlist) || state.products[0])?.id || null; }
@@ -777,7 +776,7 @@
         const res = await fetch(CONFIG.orderEndpoint, { method: 'POST', headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }, body: JSON.stringify(order) });
         if (!res.ok) throw new Error('send failed');
         let resp = {}; try { resp = await res.json(); } catch {}
-        if (resp.redirect) {                       // płatność online -> przekieruj do bramki (P24)
+        if (resp.redirect) {                       // płatność online -> przekieruj do bramki (PayU)
           cart = []; saveCart(cart);
           window.location.href = resp.redirect;
           return;
@@ -928,14 +927,13 @@
       if (ckind) { state.colorKind = ckind.dataset.colkind; state.palExpanded = false; renderActivePalette(); return; }
       if (e.target.closest('#toggle-sync')) {
         state.syncStrip = !state.syncStrip;
-        if (state.syncStrip) { state.stripColorBot = state.stripColorTop; state.bandColorBot = state.bandColorTop; state.stripSizeBot = state.stripSizeTop; state.colorSide = 'top'; }
+        if (state.syncStrip) { state.stripColorBot = state.stripColorTop; state.bandColorBot = state.bandColorTop; state.colorSide = 'top'; }
         applyColorsVisibility(); renderActivePalette(); renderColorsSummary(); updatePreview(); return;
       }
       if (e.target.closest('#toggle-more-colors') || e.target.closest('[data-morecolors]')) { state.palExpanded = !state.palExpanded; renderActivePalette(); return; }
-      if (e.target.closest('#colors-expand')) { state.colorsOpen = true; applyColorsVisibility(); renderActivePalette(); return; }
       if (e.target.closest('#toggle-split-text')) {
         state.splitText = !state.splitText;
-        if (!state.splitText) { state.stripTextBot = state.stripTextTop; const b = $('#strip-text-bot'); if (b) b.value = state.stripTextBot; }
+        if (!state.splitText) { state.stripTextBot = state.stripTextTop; state.stripSizeBot = state.stripSizeTop; const b = $('#strip-text-bot'); if (b) b.value = state.stripTextBot; }
         applyStripVisibility(); updatePreview(); return;
       }
       const gnav = e.target.closest('[data-gallery-nav]');
@@ -959,7 +957,7 @@
         updatePreview(); return;
       }
       const psT = e.target.closest('[data-size-striptop]');
-      if (psT) { state.stripSizeTop = +psT.dataset.sizeStriptop; if (state.syncStrip) state.stripSizeBot = state.stripSizeTop; $$('[data-size-striptop]').forEach(s => s.classList.toggle('is-active', s === psT)); updatePreview(); return; }
+      if (psT) { state.stripSizeTop = +psT.dataset.sizeStriptop; if (!isSplit()) state.stripSizeBot = state.stripSizeTop; $$('[data-size-striptop]').forEach(s => s.classList.toggle('is-active', s === psT)); updatePreview(); return; }
       const psB = e.target.closest('[data-size-stripbot]');
       if (psB) { state.stripSizeBot = +psB.dataset.sizeStripbot; $$('[data-size-stripbot]').forEach(s => s.classList.toggle('is-active', s === psB)); updatePreview(); return; }
       const bt = e.target.closest('[data-base]');
@@ -1021,7 +1019,7 @@
       const clean = sanitizeText(e.target.value);
       if (clean !== e.target.value) e.target.value = clean;
       state.stripTextTop = clean;
-      if (!state.splitText) { state.stripTextBot = clean; const b = $('#strip-text-bot'); if (b) b.value = clean; }   // tryb prosty: jeden napis na obie strony
+      if (!isSplit()) { state.stripTextBot = clean; const b = $('#strip-text-bot'); if (b) b.value = clean; }   // tryb prosty: jeden napis na obie strony
       updatePreview();
     });
     $('#strip-text-bot')?.addEventListener('input', (e) => {
