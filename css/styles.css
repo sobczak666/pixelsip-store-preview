@@ -203,6 +203,9 @@ button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
 .add-row{display:flex;gap:12px;align-items:center;margin-top:24px}
 
 /* ===== Kreator: skróty (presety+losuj) + zakładki + progressive disclosure ===== */
+.edit-banner{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;background:rgba(255,210,63,.1);border:1px solid rgba(255,210,63,.4);border-radius:12px;padding:12px 16px;margin-bottom:18px;font-size:.92rem;color:var(--txt)}
+.edit-banner.off{display:none}
+.edit-banner #edit-cancel{margin-left:auto}
 .quickstart{display:flex;gap:10px;align-items:center;margin-bottom:24px}
 .quickstart__presets{display:flex;gap:8px;overflow-x:auto;flex:1;padding-bottom:4px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
 .preset{flex:0 0 auto;border:1.5px solid var(--line);border-radius:12px;padding:9px 15px;font-size:.86rem;font-weight:700;color:var(--muted);background:var(--card);transition:.15s;white-space:nowrap;line-height:1.15}
@@ -322,6 +325,8 @@ footer{border-top:1px solid var(--line);background:var(--bg2);padding:56px 0 30p
 .cart-item__img{width:54px;height:54px;border-radius:10px;background-size:cover;background-position:center;image-rendering:pixelated;border:1px solid var(--line)}
 .cart-item__info{display:flex;flex-direction:column;gap:1px;font-size:.9rem}
 .cart-item__price{color:var(--cyan);font-weight:700;font-size:.85rem}
+.cart-item__edit{align-self:start;margin-top:5px;font-size:.78rem;font-weight:600;color:var(--cyan);background:none;border:none;padding:0;cursor:pointer;text-decoration:underline}
+.cart-item__edit:hover{color:var(--txt)}
 .qty{display:flex;align-items:center;gap:8px;grid-column:2;justify-self:start;margin-top:6px}
 .qty button{width:34px;height:34px;border-radius:8px;border:1px solid var(--line);font-weight:800}
 .qty button:hover{border-color:var(--cyan);color:var(--cyan)}

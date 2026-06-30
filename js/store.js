@@ -11,6 +11,8 @@
     currency: 'zł',
     metaPixelId: '',                   // Meta (FB/IG) Pixel ID — puste => piksel nieaktywny
     tiktokPixelId: '',                 // TikTok Pixel ID — puste => nieaktywny
+    inpostGeoToken: 'eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJzQlpXVzFNZzVlQnpDYU1XU3JvTlBjRWFveFpXcW9Ua2FuZVB3X291LWxvIn0.eyJleHAiOjIwOTgyMDA4MjgsImlhdCI6MTc4Mjg0MDgyOCwianRpIjoiMmE0ZTgzMzQtNjViNS00MDQyLTkwMDctZDU3NDhiMDQzZjNiIiwiaXNzIjoiaHR0cHM6Ly9sb2dpbi5pbnBvc3QucGwvYXV0aC9yZWFsbXMvZXh0ZXJuYWwiLCJzdWIiOiJmOjEyNDc1MDUxLTFjMDMtNGU1OS1iYTBjLTJiNDU2OTVlZjUzNTpJMWs4bzIyeGNtN29EbWJhUHEyS0JtaDJ5ZU90bXZUUGdjSXRoaXR3eUhnIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoic2hpcHgiLCJzZXNzaW9uX3N0YXRlIjoiZWFmYjMxZDYtYTk5OS00ZTA2LWE1MTQtMTU4YzdiNWQwMGYwIiwic2NvcGUiOiJvcGVuaWQgYXBpOmFwaXBvaW50cyIsInNpZCI6ImVhZmIzMWQ2LWE5OTktNGUwNi1hNTE0LTE1OGM3YjVkMDBmMCIsImFsbG93ZWRfcmVmZXJyZXJzIjoicGl4ZWxzaXAucGwsd3d3LnBpeGVsc2lwLnBsLHNrbGVwLnBpeGVsc2lwLnBsIiwidXVpZCI6ImQ3MDUwZjJhLWQ3NTMtNDg1Zi1hZWRmLWY5ZjdlYjhhMGZjZCJ9.oXOjIkILU2b7sWeI1W1SBQWwtl7CMfSpkmVobkaRXJcAIDIv2tPg43TQWNfgXdeHLEc-D_-tOeNEExpgLd8jImb6Z40NGluFFCtnyAlnzZgtPo5qZtan3vU90j9OJF4eTPlORoclKh3F_pxr4vcWlqrk9kRHIdAERBscXH-VEDYA7pr-4YMsziGE2aNGFEXPRwPjUsvQCLDaGk-mFEGYd80PX5-lFPTPuf8eKiK7OXFDfzYIWFUIUSDeNAIVhmi_4F6CgmSwKI9EVaHt8-j36PiXJ6AdRn8eWEzHitvtt7cne5goaFMCyqgi-71wtwDSsXn-EeD1ZGGDxGAi_k3rXw',   // PUBLIC token Geowidgetu (allowed_referrers: pixelsip.pl,www,sklep)
+    inpostGeoSandbox: false,           // true => geowidget z sandboxa InPost
   };
 
   const PLN = (v) => `${Number(v).toFixed(2).replace('.', ',')} ${CONFIG.currency}`;
@@ -32,6 +34,7 @@
     syncStrip: true,        // dół taki sam jak góra (kolory + rozmiar)
     splitText: false,       // osobny napis na dole
     palExpanded: false,     // pełna paleta („Więcej kolorów")
+    editingKey: null,       // klucz pozycji koszyka w trybie edycji (null = dodawanie nowej)
     geo: { pattern: 'paski-pion', c1: '#0B0A16', c2: '#22E0E6', n: 10 },
     tile: { emblem: 'water-drop', bg: '#0B0A16', n: 6 },
     emblems: [], embCat: 'all',
@@ -559,10 +562,7 @@
     window.__tumblerWant = { cap: p.capacityMl };
     window.Tumbler?.setSize(p.capacityMl);
     buildTexture();
-    renderColorsSummary(); renderBuildSummary();
-    const priceTxt = `Dodaj do koszyka · ${PLN(p.retailPrice)}`;
-    const pa = $('#preview-add'); if (pa) pa.textContent = priceTxt + ' 🛒';
-    const sa = $('#sticky-add'); if (sa) sa.textContent = priceTxt + ' 🛒';
+    renderColorsSummary(); renderBuildSummary(); refreshCta();
     saveBuild();
   }
 
@@ -682,12 +682,48 @@
     };
     const bc = baseConfig();
     const key = `${p.id}__${JSON.stringify(bc)}__${state.strip}__${cfg.gora_tekst}_${cfg.gora_tlo}_${cfg.dol_tekst}_${cfg.dol_tlo}__${cfg.napis_top}_${cfg.napis_bot}_${cfg.psize_top}_${cfg.psize_bot}`;
+    const editingKey = state.editingKey;
+    let addQty = 1;
+    if (editingKey) {                                    // tryb edycji: usuń starą pozycję, zachowaj ilość
+      const old = cart.find(i => i.key === editingKey);
+      if (old) addQty = old.qty;
+      cart = cart.filter(i => i.key !== editingKey);
+      setEditing(null);
+    }
     const ex = cart.find(i => i.key === key);
-    if (ex) ex.qty += 1;
-    else cart.push({ key, size: p.id, sizeLabel: p.sizeLabel, designName: baseName(), baseCfg: bc, strip: state.strip, cfg, stripDesc: stripDesc(), file: thumbURL(), price: p.retailPrice, qty: 1 });
+    if (ex) ex.qty += addQty;
+    else cart.push({ key, size: p.id, sizeLabel: p.sizeLabel, designName: baseName(), baseCfg: bc, strip: state.strip, cfg, stripDesc: stripDesc(), file: thumbURL(), build: serializeBuild(), price: p.retailPrice, qty: addQty });
     saveCart(cart); renderCart(); openCart();
     track('AddToCart', { content_ids: [baseName()], content_type: 'product', value: p.retailPrice, currency: 'PLN' });
-    toast(`Dodano: ${baseName()} · ${p.sizeLabel}`);
+    toast(editingKey ? 'Zapisano zmiany w koszyku ✓' : `Dodano: ${baseName()} · ${p.sizeLabel}`);
+  }
+  // ——— edycja pozycji koszyka: wczytaj projekt z powrotem do kreatora ———
+  function cartItemCfg(it) {                             // stare pozycje bez tokenu builda -> odtwórz cfg z pól
+    const b = it.baseCfg || {}, c = it.cfg || {};
+    return { base: b.base, design: b.design, wzor: b.wzor, c1: b.c1, c2: b.c2, gn: b.n,
+      emb: b.emblemat, bg: b.tlo, tn: b.n, size: it.size, strip: it.strip,
+      gt: c.gora_tekst, gb: c.gora_tlo, dt: c.dol_tekst, db: c.dol_tlo,
+      txt: c.napis_top, txb: c.napis_bot, pst: c.psize_top, psb: c.psize_bot };
+  }
+  function editCartItem(key) {
+    const it = cart.find(i => i.key === key); if (!it) return;
+    applyConfig(it.build ? parseBuild(it.build) : cartItemCfg(it));   // 1:1 z tokenu, fallback z pól
+    setEditing(key);
+    goTab('design');
+    closeCart();
+    $('#configurator')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    toast('Edytujesz kubek — zmień, co chcesz, i zapisz ✏️');
+  }
+  function setEditing(key) {
+    state.editingKey = key;
+    $('#edit-banner')?.classList.toggle('off', !key);
+    refreshCta();
+  }
+  function refreshCta() {                                // etykieta CTA: „Dodaj…" vs „Zapisz zmiany…"
+    const p = state.prodById[state.size]; if (!p) return;
+    const verb = state.editingKey ? 'Zapisz zmiany' : 'Dodaj do koszyka';
+    const txt = `${verb} · ${PLN(p.retailPrice)} 🛒`;
+    ['#preview-add', '#sticky-add', '#add-to-cart'].forEach(s => { const el = $(s); if (el) el.textContent = txt; });
   }
   function setQty(key, delta) {
     const it = cart.find(i => i.key === key); if (!it) return;
@@ -712,7 +748,7 @@
       wrap.innerHTML = cart.length ? cart.map(i => `
         <li class="cart-item">
           <span class="cart-item__img" style="background-image:url('${esc(i.file)}')"></span>
-          <span class="cart-item__info"><b>${esc(i.designName)}</b><span class="muted">${esc(i.sizeLabel)} · ${esc(i.stripDesc || '')}</span><span class="cart-item__price">${PLN(i.price)}</span></span>
+          <span class="cart-item__info"><b>${esc(i.designName)}</b><span class="muted">${esc(i.sizeLabel)} · ${esc(i.stripDesc || '')}</span><span class="cart-item__price">${PLN(i.price)}</span><button class="cart-item__edit" data-edit="${esc(i.key)}" type="button">✏️ Edytuj projekt</button></span>
           <span class="qty"><button data-q="-1" data-key="${esc(i.key)}" aria-label="zmniejsz ilość">−</button><b>${i.qty}</b><button data-q="1" data-key="${esc(i.key)}" aria-label="zwiększ ilość">+</button></span>
           <button class="cart-item__rm" data-rm="${esc(i.key)}" aria-label="usuń z koszyka">✕</button>
         </li>`).join('') : `<li class="cart-empty">Twój koszyk jest pusty.<br><span class="muted">Czas zdobyć power-up. 🎮</span></li>`;
@@ -739,7 +775,7 @@
     $('#co-total').textContent = PLN(cartTotal());
     const dsel = $('#co-delivery');
     if (dsel) dsel.innerHTML = state.delivery.map((d, idx) => `<option value="${idx}">${esc(d.method)} — ${d.price === 0 ? 'gratis' : PLN(d.price)} (${esc(d.eta)})</option>`).join('');
-    updateGrand();
+    updateGrand(); toggleLockerPicker();
     m.classList.add('open'); $('#overlay')?.classList.add('show'); document.body.style.overflow = 'hidden';
     setTimeout(() => m.querySelector('input,select')?.focus(), 50);
   }
@@ -749,11 +785,78 @@
   }
   function closeCheckout() { $('#checkout-modal')?.classList.remove('open'); if (!$('#cart-drawer')?.classList.contains('open')) { $('#overlay')?.classList.remove('show'); document.body.style.overflow = ''; } }
 
+  // ——————————————————— INPOST GEOWIDGET (wybór paczkomatu) ———————————————————
+  let geoLoaded = false;
+  function deliveryIsLocker() {
+    const d = state.delivery[Number($('#co-delivery')?.value || 0)];
+    return !!(d && /paczkomat/i.test(d.method));
+  }
+  function toggleLockerPicker() {
+    const box = $('#co-locker'); if (!box) return;
+    const show = deliveryIsLocker();
+    box.hidden = !show;
+    if (!show) {                          // zmiana na nie-paczkomat => kasuj wybór
+      const tp = $('#co-target-point'); if (tp) tp.value = '';
+      const ch = $('#co-locker-chosen'); if (ch) ch.hidden = true;
+    }
+  }
+  function loadGeo() {
+    if (geoLoaded) return Promise.resolve();
+    const base = CONFIG.inpostGeoSandbox ? 'https://sandbox-easy-geowidget-sdk.easypack24.net' : 'https://geowidget.inpost.pl';
+    const css = document.createElement('link'); css.rel = 'stylesheet'; css.href = base + '/inpost-geowidget.css'; document.head.appendChild(css);
+    return new Promise((res) => {
+      const s = document.createElement('script'); s.src = base + '/inpost-geowidget.js'; s.defer = true;
+      s.onload = () => { geoLoaded = true; res(); }; s.onerror = () => res();
+      document.head.appendChild(s);
+    });
+  }
+  // mobile: dopasuj wysokość okna widżetu do WIDOCZNEGO obszaru (gdy wyskoczy klawiatura) — inaczej lista paczkomatów chowa się pod klawiaturą
+  function fitGeoToViewport() {
+    const modal = $('#geo-modal'), box = modal && modal.querySelector('.geo-box');
+    if (!box) return;
+    const vv = window.visualViewport, mobile = window.matchMedia('(max-width:640px)').matches;
+    box.style.height = (mobile && !modal.hidden && vv) ? Math.round(vv.height) + 'px' : '';
+  }
+  window.visualViewport?.addEventListener('resize', fitGeoToViewport);
+  window.visualViewport?.addEventListener('scroll', fitGeoToViewport);
+  async function openGeoModal() {
+    if (!CONFIG.inpostGeoToken) { toast('Wybór paczkomatu chwilowo niedostępny'); return; }
+    const modal = $('#geo-modal'), mount = $('#geo-mount'); if (!modal || !mount) return;
+    modal.hidden = false; document.body.style.overflow = 'hidden'; fitGeoToViewport();
+    await loadGeo();
+    mount.innerHTML = '';
+    const w = document.createElement('inpost-geowidget');
+    w.setAttribute('token', CONFIG.inpostGeoToken);
+    w.setAttribute('language', 'pl');
+    w.setAttribute('config', 'parcelCollect');
+    w.setAttribute('onpoint', 'pixelsipOnPoint');   // globalny callback poniżej
+    mount.appendChild(w);
+  }
+  function closeGeoModal() {
+    const modal = $('#geo-modal');
+    if (modal) { modal.hidden = true; const box = modal.querySelector('.geo-box'); if (box) box.style.height = ''; }
+    document.body.style.overflow = $('#checkout-modal')?.classList.contains('open') ? 'hidden' : '';
+  }
+  function applyPoint(point) {
+    const p = point || {}, code = p.name || '';
+    if (!code) return;
+    const tp = $('#co-target-point'); if (tp) tp.value = code;
+    const ch = $('#co-locker-chosen');
+    if (ch) { ch.textContent = '✅ Paczkomat: ' + code + (p.address && p.address.line1 ? ' — ' + p.address.line1 : ''); ch.hidden = false; }
+    closeGeoModal();
+  }
+  window.pixelsipOnPoint = applyPoint;                                   // wskazany w atrybucie onpoint
+  document.addEventListener('onpointselect', (e) => applyPoint((e.detail || e.details)));  // fallback (event)
+
   async function submitOrder(e) {
     e.preventDefault();
     if (isSubmitting) return; isSubmitting = true;
     const f = e.target;
     const d = state.delivery[Number(f.delivery.value) || 0] || { method: '—', price: 0 };
+    const targetPoint = f.target_point ? f.target_point.value : '';
+    if (/paczkomat/i.test(d.method) && !targetPoint) {                   // paczkomat bez wyboru -> blokuj
+      isSubmitting = false; toast('Najpierw wybierz paczkomat'); $('#co-locker-btn')?.focus(); return;
+    }
     const adres = `${f.postal.value} ${f.city.value}, ${f.street.value}`;
     // jeden ciąg configu na pozycję — używany i w mailu, i przez backend do odtworzenia pliku do druku
     const cfgStr = i => `${Object.entries(i.baseCfg).map(([k, v]) => `${k}=${v}`).join(' ')} size=${i.size} strip=${i.strip} gora_tekst=${i.cfg.gora_tekst} gora_tlo=${i.cfg.gora_tlo} dol_tekst=${i.cfg.dol_tekst} dol_tlo=${i.cfg.dol_tlo}${i.cfg.napis_top ? ' napis_top=' + i.cfg.napis_top : ''}${i.cfg.napis_bot ? ' napis_bot=' + i.cfg.napis_bot : ''}${i.cfg.psize_top && i.cfg.psize_top !== 1 ? ' psize_top=' + i.cfg.psize_top : ''}${i.cfg.psize_bot && i.cfg.psize_bot !== 1 ? ' psize_bot=' + i.cfg.psize_bot : ''}`;
@@ -766,7 +869,7 @@
       name: f.name.value, email: f.email.value, phone: f.phone.value, address: adres, notes: f.notes.value,
       currency: 'zł', total: Number((cartTotal() + (d.price || 0)).toFixed(2)),
       fbp: getCookie('_fbp'), fbc: getCookie('_fbc'),   // do Meta CAPI (lepsze dopasowanie)
-      delivery: d.method, delivery_price: d.price,
+      delivery: d.method, delivery_price: d.price, target_point: targetPoint,   // kod paczkomatu InPost
       items: cart.map(i => ({ title: i.designName, size: i.size, qty: i.qty, price: i.price, config: cfgStr(i) })),
     };
     const btn = $('#co-submit'); btn.disabled = true; btn.textContent = 'Wysyłanie…';
@@ -978,6 +1081,8 @@
       if (e.target.closest('#cart-close')) { closeCart(); return; }
       if (e.target.closest('#overlay')) { closeCart(); closeCheckout(); return; }
       const q = e.target.closest('[data-q]'); if (q) { setQty(q.dataset.key, Number(q.dataset.q)); return; }
+      const ed = e.target.closest('[data-edit]'); if (ed) { editCartItem(ed.dataset.edit); return; }
+      if (e.target.closest('#edit-cancel')) { setEditing(null); toast('Anulowano edycję'); return; }
       const rm = e.target.closest('[data-rm]'); if (rm) { removeItem(rm.dataset.rm); return; }
       if (e.target.closest('#cart-checkout')) { closeCart(); openCheckout(); return; }
       if (e.target.closest('#co-close')) { closeCheckout(); return; }
@@ -1028,7 +1133,10 @@
       state.stripTextBot = clean; updatePreview();
     });
     $('#checkout-form')?.addEventListener('submit', submitOrder);
-    $('#co-delivery')?.addEventListener('change', updateGrand);
+    $('#co-delivery')?.addEventListener('change', () => { updateGrand(); toggleLockerPicker(); });
+    $('#co-locker-btn')?.addEventListener('click', openGeoModal);
+    $('#geo-close')?.addEventListener('click', closeGeoModal);
+    $('#geo-modal')?.addEventListener('click', (e) => { if (e.target.id === 'geo-modal') closeGeoModal(); });
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') { closeCart(); closeCheckout(); }
       if (e.key === 'Tab') { const m = $('#checkout-modal'); const dr = $('#cart-drawer');

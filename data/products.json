@@ -129,19 +129,13 @@
   {
    "method": "InPost Paczkomat 24/7",
    "desc": "Najczęstszy wybór — odbiór z paczkomatu o dowolnej porze. Darmowo od 199 zł.",
-   "price": 12.99,
+   "price": 18.49,
    "eta": "1–2 dni robocze"
   },
   {
-   "method": "Kurier InPost / DPD (pod drzwi)",
-   "desc": "Dostawa pod wskazany adres. Darmowo od 199 zł.",
-   "price": 16.99,
-   "eta": "1–2 dni robocze"
-  },
-  {
-   "method": "Kurier — za pobraniem",
-   "desc": "Płatność gotówką lub kartą przy odbiorze przesyłki.",
-   "price": 21.99,
+   "method": "Kurier InPost (pod drzwi)",
+   "desc": "Dostawa kurierem pod wskazany adres. Darmowo od 199 zł.",
+   "price": 20.49,
    "eta": "1–2 dni robocze"
   },
   {

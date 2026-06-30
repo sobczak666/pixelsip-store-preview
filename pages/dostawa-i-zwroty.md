@@ -21,7 +21,6 @@ W przypadku edycji limitowanych lub przedsprzedaży czas może być inny — inf
 |---|---|---|
 | InPost Paczkomat 24/7 | 1–2 dni robocze | 12,99 zł |
 | Kurier InPost / DPD (pod drzwi) | 1–2 dni robocze | 16,99 zł |
-| Kurier — za pobraniem | 1–2 dni robocze | 21,99 zł |
 | Odbiór osobisty | Gotowe do odbioru w 1–2 dni | gratis |
 
 **Darmowa dostawa** od kwoty 199 zł.

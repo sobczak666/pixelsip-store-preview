@@ -51,9 +51,7 @@
 1. Ceny Produktów podane są w złotych polskich (PLN) i są cenami **brutto** (zawierają podatek VAT).
 2. Cena podana przy Produkcie w chwili złożenia Zamówienia jest wiążąca dla obu stron.
 3. Łączna cena, którą Klient zobowiązany jest zapłacić, obejmuje cenę Produktów oraz koszty dostawy. Całkowita kwota do zapłaty jest widoczna przed złożeniem Zamówienia, przed kliknięciem przycisku potwierdzającego.
-4. Sprzedawca udostępnia następujące metody płatności:
-   a) szybka płatność elektroniczna za pośrednictwem operatora **PayU** (PayU S.A.) — BLIK, karta płatnicza, szybki przelew online;
-   b) płatność za pobraniem (przy odbiorze przesyłki) — jeżeli wybrano dostawę kurierską za pobraniem.
+4. Sprzedawca udostępnia płatność online za pośrednictwem operatora **PayU** (PayU S.A.) — BLIK, karta płatnicza, szybki przelew online.
 5. W przypadku płatności z góry Klient zobowiązany jest dokonać płatności w terminie 3 dni robocze od zawarcia Umowy. Brak płatności w tym terminie może skutkować anulowaniem Zamówienia.
 6. Do każdego Zamówienia Sprzedawca wystawia dowód zakupu (paragon lub, na życzenie i po podaniu danych, fakturę).
 
