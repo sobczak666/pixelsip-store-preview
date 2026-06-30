@@ -422,3 +422,26 @@ footer{border-top:1px solid var(--line);background:var(--bg2);padding:56px 0 30p
 .unique-note{margin:0 0 12px;padding:10px 14px;border-left:3px solid var(--cyan);background:rgba(34,224,230,.07);border-radius:8px;font-size:.9rem;line-height:1.5}
 .unique-note b{color:var(--cyan)}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+/* ——————————————————— RUCH / ANIMACJE (scroll-reveal, mikro, marquee) ——————————————————— */
+/* Reveal działa wyłącznie z JS (klasa .anim-ready na <html>) — bez JS treść jest od razu widoczna (no-FOUC). */
+html.anim-ready .reveal{opacity:0;transform:translateY(22px);transition:opacity .55s cubic-bezier(.2,.8,.2,1) var(--rd,0ms),transform .55s cubic-bezier(.2,.8,.2,1) var(--rd,0ms);will-change:opacity,transform}
+html.anim-ready .reveal.is-in{opacity:1;transform:none}
+
+/* Mikro-interakcje: delikatny lift na kartach, które jeszcze go nie miały */
+.summer-card,.spec-card,.faq-item{transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+.summer-card:hover,.spec-card:hover{transform:translateY(-4px);border-color:var(--purple);box-shadow:var(--shadow)}
+.faq-item:hover{border-color:var(--purple)}
+
+/* Marquee pod hero (dekoracyjny pasek marki) */
+.marquee{overflow:hidden;border-block:1px solid var(--line);background:var(--bg2);padding:12px 0}
+.marquee__track{display:flex;width:max-content;animation:psMarquee 34s linear infinite}
+.marquee:hover .marquee__track,.marquee:focus-within .marquee__track{animation-play-state:paused}
+.marquee span{font-family:'Silkscreen',monospace;font-size:.8rem;letter-spacing:.06em;color:var(--muted);white-space:nowrap;text-transform:uppercase}
+.marquee i{color:var(--pink);font-style:normal;padding:0 14px}
+@keyframes psMarquee{to{transform:translateX(-50%)}}
+
+@media(prefers-reduced-motion:reduce){
+  html.anim-ready .reveal{opacity:1!important;transform:none!important}
+  .marquee__track{animation:none!important}
+}

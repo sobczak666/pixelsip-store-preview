@@ -1156,3 +1156,34 @@
 
   if (document.readyState !== 'loading') init(); else document.addEventListener('DOMContentLoaded', init);
 })();
+
+/* ——————————————————— RUCH: scroll-reveal (perf-safe, reduced-motion-aware) ——————————————————— */
+(function () {
+  var root = document.documentElement;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce || !('IntersectionObserver' in window)) return;   // brak JS-reveal -> treść widoczna od razu
+  root.classList.add('anim-ready');
+
+  function run() {
+    // [selektor, krok-staggeru ms] — tylko statyczne, strukturalne elementy
+    var groups = [
+      ['.summer-card', 90], ['.spec-card', 90], ['.life-card', 70],
+      ['.faq-item', 50], ['.step', 90], ['.section .center', 0]
+    ];
+    var io = new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { en.target.classList.add('is-in'); obs.unobserve(en.target); }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    groups.forEach(function (g) {
+      document.querySelectorAll(g[0]).forEach(function (el, i) {
+        if (el.closest('.hero')) return;                 // hero zostawiamy bez reveal
+        el.classList.add('reveal');
+        if (g[1]) el.style.setProperty('--rd', Math.min(i * g[1], 360) + 'ms');
+        io.observe(el);
+      });
+    });
+  }
+  if (document.readyState !== 'loading') run(); else document.addEventListener('DOMContentLoaded', run);
+})();
