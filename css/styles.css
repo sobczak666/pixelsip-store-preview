@@ -441,6 +441,9 @@ html.anim-ready .reveal.is-in{opacity:1;transform:none}
 .marquee i{color:var(--pink);font-style:normal;padding:0 14px}
 @keyframes psMarquee{to{transform:translateX(-50%)}}
 
+/* Globalny, widoczny focus dla nawigacji klawiaturą (a11y) — pola formularzy mają własny focus (border+glow) */
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px;border-radius:4px}
+
 @media(prefers-reduced-motion:reduce){
   html.anim-ready .reveal{opacity:1!important;transform:none!important}
   .marquee__track{animation:none!important}
