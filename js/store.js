@@ -1004,7 +1004,7 @@
     const go = (n) => { i = (n + slides.length) % slides.length;
       slides.forEach((s, k) => s.classList.toggle('is-active', k === i));
       dots.forEach((d, k) => d.classList.toggle('is-active', k === i));
-      if (hero) hero.style.setProperty('--hero-bg', getComputedStyle(slides[i]).backgroundImage); };   // tło = aktywna scena (absolutny URL — względny gubi się w css/)
+      if (hero) hero.style.setProperty('--hero-bg', `url('${slides[i].dataset.amb}')`); };   // ambientowe tło = wzór pixel-art dopasowany do zdjęcia (data-amb, ustawiane w build_index.py)
     go(0);
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const start = () => { if (reduce) return; clearInterval(timer); timer = setInterval(() => go(i + 1), 4200); };
