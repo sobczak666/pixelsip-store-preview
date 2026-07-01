@@ -111,8 +111,12 @@ function init() {
   }
   new ResizeObserver(resize).observe(mount); resize();
 
-  let raf;
-  function animate() { raf = requestAnimationFrame(animate); controls.update(); renderer.render(scene, camera); }
-  animate();
-  document.addEventListener('visibilitychange', () => { if (document.hidden) cancelAnimationFrame(raf); else animate(); });
+  // Pętla renderowania — działa tylko gdy podgląd jest w viewport i karta jest widoczna (oszczędza CPU/GPU/baterię, poprawia INP)
+  let raf = 0, inView = true;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) controls.autoRotate = false;
+  function loop() { raf = requestAnimationFrame(loop); controls.update(); renderer.render(scene, camera); }
+  function sync() { const run = !document.hidden && inView; if (run && !raf) loop(); else if (!run && raf) { cancelAnimationFrame(raf); raf = 0; } }
+  new IntersectionObserver(es => { inView = es[0].isIntersecting; sync(); }, { threshold: 0 }).observe(mount);
+  document.addEventListener('visibilitychange', sync);
+  sync();
 }

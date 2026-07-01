@@ -871,9 +871,10 @@
       fbp: getCookie('_fbp'), fbc: getCookie('_fbc'),   // do Meta CAPI (lepsze dopasowanie)
       delivery: d.method, delivery_price: d.price, target_point: targetPoint,   // kod paczkomatu InPost
       items: cart.map(i => ({ title: i.designName, size: i.size, qty: i.qty, price: i.price, config: cfgStr(i) })),
+      zgody: { regulamin: !!f.terms?.checked, personalizacja: !!f.personalizacja?.checked },
     };
     const btn = $('#co-submit'); btn.disabled = true; btn.textContent = 'Wysyłanie…';
-    const txt = `Zamówienie Pixel Sip\n\n${order.pozycje.join('\n')}\n\nDostawa: ${order.dostawa} (${PLN(order.dostawa_koszt)})\nRAZEM: ${PLN(order.suma_calosc)}\n\nKlient: ${order.klient.imie}\nEmail: ${order.klient.email}\nTel: ${order.klient.telefon}\nAdres: ${order.klient.adres}\nUwagi: ${order.klient.uwagi}`;
+    const txt = `Zamówienie Pixel Sip\n\n${order.pozycje.join('\n')}\n\nDostawa: ${order.dostawa} (${PLN(order.dostawa_koszt)})\nRAZEM: ${PLN(order.suma_calosc)}\n\nKlient: ${order.klient.imie}\nEmail: ${order.klient.email}\nTel: ${order.klient.telefon}\nAdres: ${order.klient.adres}\nUwagi: ${order.klient.uwagi}\n\nZgody: regulamin+polityka [${order.zgody.regulamin ? 'TAK' : 'NIE'}] · personalizacja+utrata prawa odstąpienia [${order.zgody.personalizacja ? 'TAK' : 'NIE'}]`;
     try {
       if (CONFIG.orderEndpoint) {
         const res = await fetch(CONFIG.orderEndpoint, { method: 'POST', headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }, body: JSON.stringify(order) });
