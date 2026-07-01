@@ -15,7 +15,7 @@
    - **Adres do doręczeń:** ul. Radzymińska 2 lok. 26, 03-752 Warszawa
    - **NIP:** 1130115908
    - **REGON:** 011375243
-   - **E-mail:** kontakt@pixelsip.pl
+   - **E-mail:** info@moda-mix.pl
 
    (dalej: **„Sprzedawca"**).
 3. Kontakt ze Sprzedawcą jest możliwy pod wskazanym wyżej adresem e-mail, w dni robocze (poniedziałek–piątek) w godz. 9:00–17:00.
