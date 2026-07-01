@@ -47,7 +47,7 @@ Jeśli tumbler dotarł **uszkodzony, wadliwy, niezgodny z zamówieniem** (zły r
 
 ### Jak zwrócić produkt podlegający zwrotowi
 1. Wyślij oświadczenie o odstąpieniu (e-mail na kontakt@pixelsip.pl lub formularz z dokumentu „Prawo odstąpienia od umowy") w ciągu 14 dni od odbioru.
-2. Odeślij produkt w ciągu 14 dni na adres: ul. Ratuszowa 11, 03-450 Warszawa.
+2. Odeślij produkt w ciągu 14 dni na adres: ul. Ratuszowa 11 lok. 3, 03-450 Warszawa.
 3. Koszt przesyłki zwrotnej pokrywa kupujący.
 4. Pieniądze zwracamy w ciągu 14 dni, tą samą metodą płatności.
 

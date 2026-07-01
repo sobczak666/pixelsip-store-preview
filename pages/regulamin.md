@@ -11,7 +11,8 @@
 1. Niniejszy Regulamin określa zasady korzystania ze sklepu internetowego dostępnego pod adresem https://pixelsip.pl (dalej: **„Sklep"**) oraz zasady zawierania i wykonywania umów sprzedaży za jego pośrednictwem.
 2. Sklep prowadzony jest przez:
    - **Nazwa:** Piotr Sobczyński prowadzący jednoosobową działalność gospodarczą pod firmą „PIOTR SOBCZYŃSKI MODA-MIX SPORT STYLE"
-   - **Adres:** ul. Ratuszowa 11, 03-450 Warszawa
+   - **Adres (stałe miejsce wykonywania działalności):** ul. Ratuszowa 11 lok. 3, 03-450 Warszawa
+   - **Adres do doręczeń:** ul. Radzymińska 2 lok. 26, 03-752 Warszawa
    - **NIP:** 1130115908
    - **REGON:** 011375243
    - **E-mail:** kontakt@pixelsip.pl
@@ -74,7 +75,7 @@
    c) brak zgodności jest na tyle istotny, że uzasadnia obniżenie ceny albo odstąpienie bez uprzedniego żądania naprawy/wymiany;
    d) z oświadczenia Sprzedawcy lub okoliczności wynika, że nie doprowadzi on Produktu do zgodności w rozsądnym czasie lub bez nadmiernych niedogodności.
    Konsument nie może odstąpić od Umowy, jeżeli brak zgodności jest nieistotny.
-5. Reklamację należy zgłosić na adres e-mail kontakt@pixelsip.pl lub pisemnie na adres ul. Ratuszowa 11, 03-450 Warszawa. W zgłoszeniu warto podać: dane Klienta, numer zamówienia, opis niezgodności, żądanie oraz — jeśli to możliwe — zdjęcia.
+5. Reklamację należy zgłosić na adres e-mail kontakt@pixelsip.pl lub pisemnie na adres ul. Ratuszowa 11 lok. 3, 03-450 Warszawa. W zgłoszeniu warto podać: dane Klienta, numer zamówienia, opis niezgodności, żądanie oraz — jeśli to możliwe — zdjęcia.
 6. Sprzedawca ustosunkuje się do reklamacji w terminie **14 dni** od jej otrzymania. Brak odpowiedzi w tym terminie oznacza uznanie reklamacji.
 7. **Uwaga dotycząca personalizacji:** indywidualny charakter nadruku (np. wybrany wzór, kolorystyka, nick) nie stanowi wady. Reklamacja może natomiast obejmować rzeczywiste wady Produktu (np. uszkodzenie tumblera, rozszczelnienie, wyraźnie wadliwy lub niezgodny z zamówieniem nadruk, niewłaściwy rozmiar). Drobne różnice odcieni względem zdjęć na ekranie, wynikające z technologii sublimacji i ustawień wyświetlacza, nie są wadą.
 

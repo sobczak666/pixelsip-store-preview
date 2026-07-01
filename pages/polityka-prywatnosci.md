@@ -11,7 +11,7 @@
 Administratorem Twoich danych osobowych jest:
 
 - **Nazwa:** Piotr Sobczyński prowadzący jednoosobową działalność gospodarczą pod firmą „PIOTR SOBCZYŃSKI MODA-MIX SPORT STYLE"
-- **Adres:** ul. Ratuszowa 11, 03-450 Warszawa
+- **Adres:** ul. Ratuszowa 11 lok. 3, 03-450 Warszawa
 - **NIP:** 1130115908
 - **REGON:** 011375243
 - **E-mail (kontakt w sprawach danych):** kontakt@pixelsip.pl

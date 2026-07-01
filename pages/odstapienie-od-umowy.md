@@ -19,7 +19,7 @@ Prawo odstąpienia od umowy zawartej na odległość przysługuje **Konsumentowi
 3. Do zachowania terminu wystarczy **wysłanie oświadczenia przed jego upływem**.
 4. Oświadczenie można złożyć:
    - na adres e-mail kontakt@pixelsip.pl, lub
-   - pisemnie na adres ul. Ratuszowa 11, 03-450 Warszawa,
+   - pisemnie na adres ul. Ratuszowa 11 lok. 3, 03-450 Warszawa,
    - przy użyciu wzoru formularza zamieszczonego na końcu tego dokumentu (skorzystanie z niego nie jest obowiązkowe).
 
 ## 3. ⚠️ KLUCZOWY WYJĄTEK — produkty personalizowane / na zamówienie
@@ -42,7 +42,7 @@ Prawo odstąpienia od umowy zawartej na odległość przysługuje **Konsumentowi
 
 ## 5. Zwrot Produktu
 
-1. Produkt należy zwrócić niezwłocznie, nie później niż **14 dni** od dnia odstąpienia, na adres: ul. Ratuszowa 11, 03-450 Warszawa.
+1. Produkt należy zwrócić niezwłocznie, nie później niż **14 dni** od dnia odstąpienia, na adres: ul. Ratuszowa 11 lok. 3, 03-450 Warszawa.
 2. Konsument odpowiada za zmniejszenie wartości Produktu wynikające z korzystania z niego w sposób wykraczający poza konieczny do stwierdzenia charakteru, cech i funkcjonowania Produktu.
 
 ## 6. Koszty zwrotu
@@ -60,7 +60,7 @@ Konsument ponosi **bezpośrednie koszty odesłania Produktu** (koszt przesyłki 
 **Adresat:**
 
 PIOTR SOBCZYŃSKI MODA-MIX SPORT STYLE
-ul. Ratuszowa 11, 03-450 Warszawa
+ul. Ratuszowa 11 lok. 3, 03-450 Warszawa
 E-mail: kontakt@pixelsip.pl
 
 Ja/My(*) niniejszym informuję/informujemy(*) o moim/naszym(*) odstąpieniu od umowy sprzedaży następujących rzeczy:
