@@ -247,6 +247,7 @@ button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
 .nl-form{max-width:460px;margin:18px auto 0}.nl-row{display:flex;gap:10px}
 .nl-consent,.co-consent{display:block;position:relative;padding-left:28px;font-size:.78rem;color:var(--muted);margin-top:12px;text-align:left;line-height:1.45}
 .nl-consent input[type=checkbox],.co-consent input[type=checkbox]{position:absolute;left:0;top:2px;width:auto;height:auto;min-width:0;margin:0;flex:none}.nl-consent a,.co-consent a{color:var(--cyan)}.co-consent b{color:var(--txt)}
+.nl-msg{margin:10px 0 0;font-size:.85rem;text-align:center}.nl-msg.ok{color:var(--cyan)}.nl-msg.err{color:#ff8a8a}
 @media(max-width:640px){.delivery-info{grid-template-columns:1fr}.trust-strip{flex-direction:column;gap:10px}.nl-row{flex-direction:column}}
 
 /* ===== Specs / bundles ===== */

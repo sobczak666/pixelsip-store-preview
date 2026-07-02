@@ -23,7 +23,7 @@
 <link rel="icon" href="assets/brand/favicon.png" type="image/png">
 <link rel="preload" href="assets/fonts/Silkscreen-Bold.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/PixelOperator-Bold.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="css/styles.css?v=129ed7cc">
+<link rel="stylesheet" href="css/styles.css?v=97a11459">
 <script type="importmap">{"imports":{"three":"./js/vendor/three.module.js"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "name": "Pixel Sip", "url": "https://pixelsip.pl", "logo": "https://pixelsip.pl/assets/brand/symbol.png", "description": "Premium tumblery 600 i 900 ml ze stali nierdzewnej z nadrukiem pixel-art. 56 wzorów: retro, cyberpunk, neon. Stay Hydrated, Stay Pixelated.", "slogan": "Stay Hydrated, Stay Pixelated", "legalName": "PIOTR SOBCZYŃSKI MODA-MIX SPORT STYLE", "vatID": "PL1130115908", "taxID": "PL1130115908", "email": "kontakt@pixelsip.pl", "address": {"@type": "PostalAddress", "streetAddress": "ul. Ratuszowa 11 lok. 3", "postalCode": "03-450", "addressLocality": "Warszawa", "addressCountry": "PL"}, "contactPoint": {"@type": "ContactPoint", "contactType": "customer support", "email": "kontakt@pixelsip.pl", "areaServed": "PL", "availableLanguage": "pl"}, "sameAs": ["https://www.facebook.com/profile.php?id=61591567704746"]}, {"@type": "Product", "name": "PIXEL SIP Tumbler 600 ml — Stay Hydrated, Stay Pixelated", "image": "assets/products/tumbler-600-12513_1.jpg", "description": "Kompaktowy daily driver na biurko gracza — 600 ml stali, podwójna ścianka i nadruk pixel-art, który pasuje do każdego loadoutu.", "sku": "BW34PS-600WT", "brand": {"@type": "Brand", "name": "Pixel Sip"}, "offers": {"@type": "Offer", "priceCurrency": "PLN", "price": 109, "availability": "https://schema.org/InStock", "itemCondition": "https://schema.org/NewCondition"}}, {"@type": "Product", "name": "PIXEL SIP Tumbler 900 ml — Stay Hydrated, Stay Pixelated", "image": "assets/products/tumbler-900-12514_1.jpg", "description": "Maksymalny zapas many na cały raid — 900 ml stali, podwójna ścianka i pixel-art, który należy do Twojego setupu, a nie do szafki z gadżetami.", "sku": "BW34PS-900WT", "brand": {"@type": "Brand", "name": "Pixel Sip"}, "offers": {"@type": "Offer", "priceCurrency": "PLN", "price": 129, "availability": "https://schema.org/PreOrder", "itemCondition": "https://schema.org/NewCondition"}}]}</script>
 </head>
@@ -239,9 +239,10 @@
     <span class="kicker">Nie przegap dropu</span>
     <h2 style="margin:.2em 0">Następny drop tylko na liście</h2>
     <p class="lead" style="margin:0 auto">Nowe wzory lecą limitowanymi dropami i potrafią zniknąć szybciej niż loot legendarny. Zapisz się, a dostaniesz early access do kolekcji, zniżki dla zapisanych i pierwszeństwo, zanim reszta party się zorientuje.</p>
-    <form class="nl-form" onsubmit="event.preventDefault();this.querySelector('button').textContent='Zapisano! 🎮'">
-      <div class="nl-row"><input type="email" required placeholder="twój@email.pl" aria-label="adres e-mail"><button class="btn btn--primary" type="submit">Zapisz się na dropy</button></div>
-      <label class="nl-consent"><input type="checkbox" required> Zgadzam się na otrzymywanie newslettera (info o dropach i promocjach). Zgodę mogę wycofać w każdej chwili. <a href="pages/polityka-prywatnosci.html">Polityka prywatności</a>.</label>
+    <form class="nl-form" id="nl-form">
+      <div class="nl-row"><input type="email" name="email" required placeholder="twój@email.pl" aria-label="adres e-mail"><button class="btn btn--primary" type="submit">Zapisz się na dropy</button></div>
+      <label class="nl-consent"><input type="checkbox" name="consent" required> Zgadzam się na otrzymywanie newslettera (info o dropach i promocjach). Zgodę mogę wycofać w każdej chwili. <a href="pages/polityka-prywatnosci.html">Polityka prywatności</a>.</label>
+      <p class="nl-msg" id="nl-msg" role="status" aria-live="polite" hidden></p>
     </form>
   </div>
 </div></section>
@@ -348,6 +349,6 @@ const _t3d=document.getElementById('tumbler3d');
 if(_t3d){const _io=new IntersectionObserver((es,o)=>{if(es.some(x=>x.isIntersecting)){o.disconnect();import('./js/tumbler3d.js?v=58f99d76');}},{rootMargin:'400px'});_io.observe(_t3d);}
 </script>
 <script>window.__DV='6a08c821'</script>
-<script src="js/store.js?v=6db758b0"></script>
+<script src="js/store.js?v=b2bf400b"></script>
 </body>
 </html>

@@ -7,6 +7,8 @@
   const CONFIG = {
     orderEndpoint: 'https://api.pixelsip.pl/api/orders',   // backend Pixel Sip (OVH Warszawa) — zamówienia wpadają do panelu /admin. Pusty => fallback mailto+kopiuj
     waitlistEndpoint: 'https://api.pixelsip.pl/api/waitlist',  // zapisy na niedostępne rozmiary (np. 900 ml)
+    newsletterEndpoint: 'https://api.pixelsip.pl/api/newsletter',  // zapis na newsletter (double opt-in, adresy zbierane u nas). Pusty => formularz nieaktywny
+
     shopEmail: 'kontakt@pixelsip.pl',
     currency: 'zł',
     metaPixelId: '',                   // Meta (FB/IG) Pixel ID — puste => piksel nieaktywny
@@ -150,7 +152,7 @@
     deriveStripModes();                   // dół=góra / osobny-napis z wczytanego stanu
     renderGallery(); renderSizes(); renderPresets(); renderPalettes(); applyStripVisibility();
     renderGeoControls(); renderEmblems(); applyBaseVisibility(); applyTabVisibility();
-    renderDelivery(); updatePreview(); bindUI(); renderCart(); cookieBanner(); initHeroCarousel();
+    renderDelivery(); updatePreview(); bindUI(); renderCart(); cookieBanner(); initHeroCarousel(); initNewsletter();
     if (window.__fromShareLink) toast('Wczytano udostępniony projekt ✨');
   }
 
@@ -1013,6 +1015,40 @@
     wrap?.addEventListener('mouseenter', stop);
     wrap?.addEventListener('mouseleave', start);
     start();
+  }
+
+  // ——————————————————— NEWSLETTER (double opt-in, zapis u nas) ———————————————————
+  function initNewsletter() {
+    const form = $('#nl-form');
+    if (!form) return;
+    const msg = $('#nl-msg'), btn = form.querySelector('button[type=submit]');
+    const show = (t, ok) => { if (msg) { msg.hidden = false; msg.textContent = t; msg.className = 'nl-msg ' + (ok ? 'ok' : 'err'); } };
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();                                   // native required (email + zgoda) już przeszło
+      if (!CONFIG.newsletterEndpoint) { show('Zapis chwilowo niedostępny.', false); return; }
+      const email = (form.email?.value || '').trim();
+      const orig = btn.textContent;
+      btn.disabled = true; btn.textContent = 'Zapisuję…';
+      try {
+        const r = await fetch(CONFIG.newsletterEndpoint, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, source: 'newsletter',
+            consent_text: 'Zgoda na newsletter (info o dropach i promocjach) — sekcja newsletter na stronie.' })
+        });
+        const j = await r.json().catch(() => ({}));
+        if (r.ok && j.ok) {
+          form.reset();
+          btn.textContent = 'Zapisano! 🎮';                 // zostaje disabled, żeby nie dublować
+          show('📬 Sprawdź skrzynkę i kliknij link, żeby potwierdzić zapis.', true);
+        } else {
+          btn.disabled = false; btn.textContent = orig;
+          show('Nie udało się zapisać — spróbuj ponownie za chwilę.', false);
+        }
+      } catch (_) {
+        btn.disabled = false; btn.textContent = orig;
+        show('Brak połączenia — spróbuj ponownie za chwilę.', false);
+      }
+    });
   }
 
   // ——————————————————— UI BINDING ———————————————————
