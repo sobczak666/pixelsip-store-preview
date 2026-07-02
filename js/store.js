@@ -315,13 +315,23 @@
   // ——— zakładki kreatora ———
   const TAB_ORDER = ['design', 'strip', 'colors', 'size'];
   const NEXT_LBL = { design: 'Dalej: Napis →', strip: 'Dalej: Kolory →', colors: 'Dalej: Rozmiar →' };
+  let inConfig = false;   // czy konfigurator jest na ekranie (steruje sticky barem: Start vs Dalej)
   function applyTabVisibility() {
     $$('[data-tabpanel]').forEach(p => p.classList.toggle('is-active', p.dataset.tabpanel === state.tab));
     $$('[data-tab]').forEach(t => { const a = t.dataset.tab === state.tab; t.classList.toggle('is-active', a); t.setAttribute('aria-selected', a); });
     const last = state.tab === 'size';
-    $('#sticky-next')?.classList.toggle('off', last);
-    $('#sticky-add')?.classList.toggle('off', !last);
-    const nx = $('#sticky-next'); if (nx) nx.textContent = NEXT_LBL[state.tab] || 'Dalej →';
+    const editing = !!state.editingKey;   // edycja: TYLKO „Zapisz zmiany" (bez „Dalej" — edytor nie przechodzi flow, zakładki i tak klikalne)
+    const nx = $('#sticky-next');
+    if (!inConfig && !editing) {
+      // nad konfiguratorem: jeden przycisk „Start" (skok do edytora), bez „Dodaj/Dalej"
+      $('#sticky-next')?.classList.toggle('off', false);
+      $('#sticky-add')?.classList.toggle('off', true);
+      if (nx) nx.textContent = 'Start ✨';
+    } else {
+      $('#sticky-next')?.classList.toggle('off', last || editing);
+      $('#sticky-add')?.classList.toggle('off', !last && !editing);
+      if (nx) nx.textContent = NEXT_LBL[state.tab] || 'Dalej →';
+    }
   }
   function goTab(tab) { state.tab = tab; applyTabVisibility(); }
   function renderBuildSummary() {
@@ -722,6 +732,7 @@
     state.editingKey = key;
     $('#edit-banner')?.classList.toggle('off', !key);
     refreshCta();
+    applyTabVisibility();   // pokaż/ukryj „Zapisz zmiany" w sticky barze wg trybu edycji
   }
   function refreshCta() {                                // etykieta CTA: „Dodaj…" vs „Zapisz zmiany…"
     const p = state.prodById[state.size]; if (!p) return;
@@ -1103,11 +1114,23 @@
 
   // ——————————————————— UI BINDING ———————————————————
   function bindUI() {
+    // sticky bar: „Start" dopóki konfigurator poza ekranem, „Dalej" gdy się pojawi
+    const cfgEl = $('#configurator');
+    if (cfgEl && 'IntersectionObserver' in window) {
+      new IntersectionObserver((entries) => {
+        inConfig = entries[0].isIntersecting;
+        applyTabVisibility();
+      }, { rootMargin: '0px 0px -70% 0px' }).observe(cfgEl);   // „w edytorze" gdy jego góra wjedzie w górne 30% ekranu
+    }
     document.addEventListener('click', (e) => {
       // ——— zakładki / skróty / panel kolorów (nowy flow) ———
       const tab = e.target.closest('[data-tab]');
       if (tab) { goTab(tab.dataset.tab); $('#config-tabs')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); return; }
-      if (e.target.closest('#sticky-next')) { const i = TAB_ORDER.indexOf(state.tab); goTab(TAB_ORDER[Math.min(TAB_ORDER.length - 1, i + 1)]); $('#configurator')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+      if (e.target.closest('#sticky-next')) {
+        if (!inConfig) { $('#configurator')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }   // „Start" -> skok do edytora
+        const i = TAB_ORDER.indexOf(state.tab); goTab(TAB_ORDER[Math.min(TAB_ORDER.length - 1, i + 1)]);
+        $('#configurator')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); return;
+      }
       const preset = e.target.closest('[data-preset]');
       if (preset) { applyPreset(+preset.dataset.preset); return; }
       if (e.target.closest('#btn-random')) { randomBuild(); return; }
@@ -1227,6 +1250,11 @@
       if (v.length > 2) v = v.slice(0, 2) + '-' + v.slice(2);
       e.target.value = v;
     });
+    // zgody: „Zaznacz wszystkie" (tylko wymagane zgody kasy; newsletter jest osobno) + synchronizacja etykiety
+    const consentBoxes = () => $$('#checkout-form .co-consent input[type=checkbox][required]');
+    const syncConsentAll = () => { const b = $('#co-consent-all'); if (!b) return; const bx = consentBoxes(); b.textContent = bx.length && bx.every(x => x.checked) ? 'Odznacz wszystkie' : 'Zaznacz wszystkie'; };
+    $('#co-consent-all')?.addEventListener('click', () => { const bx = consentBoxes(); const allOn = bx.length && bx.every(x => x.checked); bx.forEach(x => { x.checked = !allOn; }); syncConsentAll(); });
+    consentBoxes().forEach(x => x.addEventListener('change', syncConsentAll));
     $('#co-promo-apply')?.addEventListener('click', applyPromo);
     $('#co-promo-code')?.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); applyPromo(); } });
     $('#co-promo-code')?.addEventListener('input', () => {   // edycja kodu po zastosowaniu => wymagaj ponownego „Zastosuj"

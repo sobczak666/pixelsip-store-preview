@@ -24,7 +24,7 @@
 <link rel="icon" href="assets/brand/favicon.png" type="image/png">
 <link rel="preload" href="assets/fonts/Silkscreen-Bold.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/PixelOperator-Bold.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="css/styles.css?v=93075932">
+<link rel="stylesheet" href="css/styles.css?v=2747107c">
 <script type="importmap">{"imports":{"three":"./js/vendor/three.module.js"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "name": "Pixel Sip", "url": "https://pixelsip.pl", "logo": "https://pixelsip.pl/assets/brand/symbol.png", "description": "Premium tumblery 600 i 900 ml ze stali nierdzewnej z nadrukiem pixel-art. 56 wzorów: retro, cyberpunk, neon. Stay Hydrated, Stay Pixelated.", "slogan": "Stay Hydrated, Stay Pixelated", "legalName": "PIOTR SOBCZYŃSKI MODA-MIX SPORT STYLE", "vatID": "PL1130115908", "taxID": "PL1130115908", "email": "kontakt@pixelsip.pl", "address": {"@type": "PostalAddress", "streetAddress": "ul. Ratuszowa 11 lok. 3", "postalCode": "03-450", "addressLocality": "Warszawa", "addressCountry": "PL"}, "contactPoint": {"@type": "ContactPoint", "contactType": "customer support", "email": "kontakt@pixelsip.pl", "areaServed": "PL", "availableLanguage": "pl"}, "sameAs": ["https://www.facebook.com/profile.php?id=61591567704746"]}, {"@type": "Product", "name": "PIXEL SIP Tumbler 600 ml — Stay Hydrated, Stay Pixelated", "image": "assets/products/tumbler-600-12513_1.jpg", "description": "Kompaktowy daily driver na biurko gracza — 600 ml stali, podwójna ścianka i nadruk pixel-art, który pasuje do każdego loadoutu.", "sku": "BW34PS-600WT", "brand": {"@type": "Brand", "name": "Pixel Sip"}, "offers": {"@type": "Offer", "priceCurrency": "PLN", "price": 109, "availability": "https://schema.org/InStock", "itemCondition": "https://schema.org/NewCondition"}}, {"@type": "Product", "name": "PIXEL SIP Tumbler 900 ml — Stay Hydrated, Stay Pixelated", "image": "assets/products/tumbler-900-12514_1.jpg", "description": "Maksymalny zapas many na cały raid — 900 ml stali, podwójna ścianka i pixel-art, który należy do Twojego setupu, a nie do szafki z gadżetami.", "sku": "BW34PS-900WT", "brand": {"@type": "Brand", "name": "Pixel Sip"}, "offers": {"@type": "Offer", "priceCurrency": "PLN", "price": 129, "availability": "https://schema.org/PreOrder", "itemCondition": "https://schema.org/NewCondition"}}]}</script>
 </head>
@@ -305,8 +305,9 @@
       <div class="grid2"><div><label>Telefon</label><input name="phone" required autocomplete="tel" inputmode="tel"></div><div><label>Kod pocztowy</label><input name="postal" required autocomplete="postal-code" inputmode="numeric" pattern="[0-9]{2}-[0-9]{3}" placeholder="00-001" maxlength="6"></div></div>
       <div class="grid2"><div><label>Miasto</label><input name="city" required autocomplete="address-level2"></div><div><label>Ulica i numer</label><input name="street" required autocomplete="street-address"></div></div>
       <label>Uwagi (opcjonalnie)</label><textarea name="notes" rows="2"></textarea>
-      <label class="co-consent"><input type="checkbox" name="terms" required> Zamawiam z obowiązkiem zapłaty i akceptuję <a href="pages/regulamin.html">regulamin</a> oraz <a href="pages/polityka-prywatnosci.html">politykę prywatności</a>.</label>
-      <label class="co-consent"><input type="checkbox" name="personalizacja" required> Przyjmuję do wiadomości, że zamawiam <b>produkt personalizowany</b> wykonywany na moje życzenie i że po spełnieniu świadczenia przez Sprzedawcę <b>tracę prawo odstąpienia</b> od umowy w terminie 14 dni (art. 38 pkt 3 ustawy o prawach konsumenta). <a href="pages/odstapienie-od-umowy.html">Więcej o prawie odstąpienia</a>.</label>
+      <div class="co-consents__head"><span class="co-consents__title">Zgody wymagane do złożenia zamówienia</span><button type="button" id="co-consent-all" class="co-consent-all">Zaznacz wszystkie</button></div>
+      <label class="co-consent"><input type="checkbox" name="terms" required> <span class="req-pill">Wymagane</span> Zamawiam z obowiązkiem zapłaty i akceptuję <a href="pages/regulamin.html">regulamin</a> oraz <a href="pages/polityka-prywatnosci.html">politykę prywatności</a>.</label>
+      <label class="co-consent"><input type="checkbox" name="personalizacja" required> <span class="req-pill">Wymagane</span> Przyjmuję do wiadomości, że zamawiam <b>produkt personalizowany</b> wykonywany na moje życzenie i że po spełnieniu świadczenia przez Sprzedawcę <b>tracę prawo odstąpienia</b> od umowy w terminie 14 dni (art. 38 pkt 3 ustawy o prawach konsumenta). <a href="pages/odstapienie-od-umowy.html">Więcej o prawie odstąpienia</a>.</label>
       <button id="co-submit" class="btn btn--primary btn--block btn--lg" type="submit" style="margin-top:16px">Zamawiam z obowiązkiem zapłaty</button>
       <p class="muted" style="font-size:.78rem;margin-top:10px">💳 Płatność: BLIK / karta / szybki przelew przez PayU — finalizowana zaraz po złożeniu zamówienia.</p>
     </form>
@@ -357,6 +358,6 @@ const _t3d=document.getElementById('tumbler3d');
 if(_t3d){const _io=new IntersectionObserver((es,o)=>{if(es.some(x=>x.isIntersecting)){o.disconnect();import('./js/tumbler3d.js?v=58f99d76');}},{rootMargin:'400px'});_io.observe(_t3d);}
 </script>
 <script>window.__DV='6a08c821'</script>
-<script src="js/store.js?v=1ceb178a"></script>
+<script src="js/store.js?v=6fae030b"></script>
 </body>
 </html>
