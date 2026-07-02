@@ -4,6 +4,7 @@
 @font-face{font-family:'PixelSipFont';src:url('../assets/fonts/PixelOperator-Bold.woff2') format('woff2'),url('../assets/fonts/PixelOperator-Bold.ttf') format('truetype');font-display:swap}
 
 :root{
+  color-scheme:dark;   /* strona jest ciemna z założenia — przeglądarka NIE ma jej auto-inwertować (Chrome/Samsung „Auto Dark"); natywne kontrolki (inputy, scrollbary, select) ciemne */
   --bg:#0B0A16; --bg2:#120F22; --card:#171228; --card2:#1E1838; --line:#2A2348;
   --cyan:#22E0E6; --pink:#FF2E97; --purple:#9B5DE5; --yellow:#FFD23F; --green:#5DF7A0;
   --txt:#F2F2FA; --muted:#9D9BB8; --muted2:#6E6B90;
@@ -339,7 +340,15 @@ footer{border-top:1px solid var(--line);background:var(--bg2);padding:56px 0 30p
 .checkout__body{padding:22px}
 #co-summary{list-style:none;margin-bottom:16px}#co-summary li{padding:6px 0;border-bottom:1px solid var(--line);font-size:.92rem}
 .co-total{display:flex;justify-content:space-between;align-items:baseline;gap:14px;font-size:1.15rem;font-weight:800;margin:10px 0}
+.co-total[hidden]{display:none}   /* atrybut hidden musi wygrać z display:flex powyżej */
 .co-total span{font-size:.92rem;color:var(--muted);font-weight:600}.co-total b{white-space:nowrap}
+.co-promo{display:flex;gap:8px;margin:14px 0 0;align-items:stretch}
+.co-promo input{flex:1;text-transform:uppercase;letter-spacing:1px}
+.co-promo input::placeholder{letter-spacing:normal;text-transform:none}
+.co-promo .btn{flex:none;width:auto;padding:.55em 1.1em;white-space:nowrap}
+.co-promo.ok input{border-color:#22c98a}
+.co-promo-msg{font-size:.8rem;margin:7px 0 0}
+.co-promo-msg.err{color:#ff6b6b}.co-promo-msg.ok{color:#22c98a}
 .checkout label{display:block;font-size:.85rem;color:var(--muted);margin:12px 0 5px}
 .checkout input,.checkout textarea,.checkout select{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:.7em .9em;color:var(--txt)}
 .checkout input:focus,.checkout textarea:focus,.checkout select:focus{outline:none;border-color:var(--cyan)}

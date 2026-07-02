@@ -8,6 +8,7 @@
     orderEndpoint: 'https://api.pixelsip.pl/api/orders',   // backend Pixel Sip (OVH Warszawa) — zamówienia wpadają do panelu /admin. Pusty => fallback mailto+kopiuj
     waitlistEndpoint: 'https://api.pixelsip.pl/api/waitlist',  // zapisy na niedostępne rozmiary (np. 900 ml)
     newsletterEndpoint: 'https://api.pixelsip.pl/api/newsletter',  // zapis na newsletter (double opt-in, adresy zbierane u nas). Pusty => formularz nieaktywny
+    promoEndpoint: 'https://api.pixelsip.pl/api/promo/validate',  // walidacja kodu rabatowego (serwer autorytatywnie przelicza zniżkę przy zamówieniu). Pusty => pole kodu nieaktywne
 
     shopEmail: 'kontakt@pixelsip.pl',
     currency: 'zł',
@@ -42,6 +43,7 @@
     emblems: [], embCat: 'all',
     cat: 'all', q: '',
     freeShip: 199, delivery: [], bundles: [], lastFocus: null,
+    promo: null,   // {code, percent, discount} po pozytywnej walidacji kodu rabatowego (serwer i tak przelicza finalnie)
   };
   // wzory tilują się na szwie (cell = szerokość / n, bez obrotów)
   const GEO_PATTERNS = [
@@ -775,6 +777,7 @@
     $('#checkout-form').hidden = false; $('#co-success').hidden = true;   // reset
     $('#co-summary').innerHTML = cart.map(i => `<li>${i.qty}× <b>${esc(i.designName)}</b> (${esc(i.sizeLabel)}, ${esc(i.stripDesc || '')}) — ${PLN(i.price * i.qty)}</li>`).join('');
     $('#co-total').textContent = PLN(cartTotal());
+    resetPromo();   // kod trzeba zastosować od nowa (koszyk mógł się zmienić od ostatniego otwarcia)
     const dsel = $('#co-delivery');
     if (dsel) dsel.innerHTML = state.delivery.map((d, idx) => `<option value="${idx}">${esc(d.method)} — ${d.price === 0 ? 'gratis' : PLN(d.price)} (${esc(d.eta)})</option>`).join('');
     updateGrand(); toggleLockerPicker();
@@ -783,7 +786,48 @@
   }
   function updateGrand() {
     const idx = Number($('#co-delivery')?.value || 0); const d = state.delivery[idx] || { price: 0 };
-    const g = $('#co-grand'); if (g) g.textContent = PLN(cartTotal() + (d.price || 0));
+    const sub = cartTotal();
+    const disc = state.promo ? state.promo.discount : 0;
+    const freeShip = state.freeShip > 0 && sub >= state.freeShip;   // darmowa dostawa od progu (jak liczy serwer)
+    const ship = freeShip ? 0 : (d.price || 0);
+    const sl = $('#co-ship');
+    if (sl) sl.textContent = ship === 0 ? (freeShip ? `gratis (od ${PLN(state.freeShip)})` : 'gratis') : PLN(ship);
+    const g = $('#co-grand'); if (g) g.textContent = PLN(Math.max(0, sub - disc) + ship);
+  }
+  function resetPromo() {
+    state.promo = null;
+    const inp = $('#co-promo-code'); if (inp) inp.value = '';
+    $('#co-promo')?.classList.remove('ok');
+    const row = $('#co-discount-row'); if (row) row.hidden = true;
+    const msg = $('#co-promo-msg'); if (msg) { msg.hidden = true; msg.textContent = ''; msg.className = 'co-promo-msg'; }
+  }
+  async function applyPromo() {
+    const inp = $('#co-promo-code'); const msg = $('#co-promo-msg'); const btn = $('#co-promo-apply');
+    if (!inp || !msg) return;
+    const code = inp.value.trim();
+    const show = (cls, txt) => { msg.hidden = false; msg.className = 'co-promo-msg ' + cls; msg.textContent = txt; };
+    if (!code) { state.promo = null; updateGrand(); $('#co-discount-row').hidden = true; $('#co-promo')?.classList.remove('ok'); show('err', 'Wpisz kod rabatowy.'); return; }
+    if (!CONFIG.promoEndpoint) { show('err', 'Kody rabatowe chwilowo niedostępne.'); return; }
+    btn.disabled = true; const old = btn.textContent; btn.textContent = '…';
+    try {
+      const r = await fetch(CONFIG.promoEndpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code, subtotal: Number(cartTotal().toFixed(2)) }) });
+      const j = await r.json();
+      if (j.ok) {
+        state.promo = { code: j.code, percent: j.percent, discount: Number(j.discount) || 0 };
+        $('#co-promo')?.classList.add('ok');
+        const tag = $('#co-promo-tag'); if (tag) tag.textContent = '(' + j.code + ' · −' + j.percent + '%)';
+        const dv = $('#co-discount'); if (dv) dv.textContent = '−' + PLN(state.promo.discount);
+        $('#co-discount-row').hidden = false;
+        show('ok', '✅ Kod „' + j.code + '” zastosowany.');
+      } else {
+        state.promo = null; $('#co-promo')?.classList.remove('ok'); $('#co-discount-row').hidden = true;
+        show('err', j.reason || 'Kod nieprawidłowy.');
+      }
+    } catch (e) {
+      state.promo = null; show('err', 'Nie udało się sprawdzić kodu — spróbuj ponownie.');
+    }
+    updateGrand();
+    btn.disabled = false; btn.textContent = old;
   }
   function closeCheckout() { $('#checkout-modal')?.classList.remove('open'); if (!$('#cart-drawer')?.classList.contains('open')) { $('#overlay')?.classList.remove('show'); document.body.style.overflow = ''; } }
 
@@ -860,23 +904,29 @@
       isSubmitting = false; toast('Najpierw wybierz paczkomat'); $('#co-locker-btn')?.focus(); return;
     }
     const adres = `${f.postal.value} ${f.city.value}, ${f.street.value}`;
+    const promoCode = state.promo ? state.promo.code : '';
+    const discount = state.promo ? state.promo.discount : 0;   // podgląd; SERWER przelicza zniżkę finalnie
+    const freeShip = state.freeShip > 0 && cartTotal() >= state.freeShip;   // darmowa dostawa od progu (serwer też tak liczy)
+    const shipCost = freeShip ? 0 : (d.price || 0);
+    const grandTotal = Number((Math.max(0, cartTotal() - discount) + shipCost).toFixed(2));
     // jeden ciąg configu na pozycję — używany i w mailu, i przez backend do odtworzenia pliku do druku
     const cfgStr = i => `${Object.entries(i.baseCfg).map(([k, v]) => `${k}=${v}`).join(' ')} size=${i.size} strip=${i.strip} gora_tekst=${i.cfg.gora_tekst} gora_tlo=${i.cfg.gora_tlo} dol_tekst=${i.cfg.dol_tekst} dol_tlo=${i.cfg.dol_tlo}${i.cfg.napis_top ? ' napis_top=' + i.cfg.napis_top : ''}${i.cfg.napis_bot ? ' napis_bot=' + i.cfg.napis_bot : ''}${i.cfg.psize_top && i.cfg.psize_top !== 1 ? ' psize_top=' + i.cfg.psize_top : ''}${i.cfg.psize_bot && i.cfg.psize_bot !== 1 ? ' psize_bot=' + i.cfg.psize_bot : ''}`;
     const order = {
       klient: { imie: f.name.value, email: f.email.value, telefon: f.phone.value, adres, uwagi: f.notes.value },
-      dostawa: d.method, dostawa_koszt: d.price,
+      dostawa: d.method, dostawa_koszt: shipCost,
       pozycje: cart.map(i => `${i.qty}× ${i.designName} (${i.sizeLabel}, ${i.stripDesc || ''}) = ${(i.price * i.qty).toFixed(2)} zł\n   [config: ${cfgStr(i)}]`),
-      suma_produkty: cartTotal().toFixed(2), suma_calosc: (cartTotal() + (d.price || 0)).toFixed(2),
+      suma_produkty: cartTotal().toFixed(2), suma_calosc: grandTotal.toFixed(2),
       // pola, które czyta backend Pixel Sip (panel + druk); generyczne endpointy je zignorują
       name: f.name.value, email: f.email.value, phone: f.phone.value, address: adres, notes: f.notes.value,
-      currency: 'zł', total: Number((cartTotal() + (d.price || 0)).toFixed(2)),
+      currency: 'zł', total: grandTotal,
+      promo_code: promoCode,   // sam KOD — serwer waliduje, przelicza zniżkę i sumę autorytatywnie (klient nie ustala kwoty)
       fbp: getCookie('_fbp'), fbc: getCookie('_fbc'),   // do Meta CAPI (lepsze dopasowanie)
-      delivery: d.method, delivery_price: d.price, target_point: targetPoint,   // kod paczkomatu InPost
+      delivery: d.method, delivery_price: shipCost, target_point: targetPoint,   // kod paczkomatu InPost (delivery_price poglądowe — serwer liczy sam)
       items: cart.map(i => ({ title: i.designName, size: i.size, qty: i.qty, price: i.price, config: cfgStr(i) })),
       zgody: { regulamin: !!f.terms?.checked, personalizacja: !!f.personalizacja?.checked },
     };
     const btn = $('#co-submit'); btn.disabled = true; btn.textContent = 'Wysyłanie…';
-    const txt = `Zamówienie Pixel Sip\n\n${order.pozycje.join('\n')}\n\nDostawa: ${order.dostawa} (${PLN(order.dostawa_koszt)})\nRAZEM: ${PLN(order.suma_calosc)}\n\nKlient: ${order.klient.imie}\nEmail: ${order.klient.email}\nTel: ${order.klient.telefon}\nAdres: ${order.klient.adres}\nUwagi: ${order.klient.uwagi}\n\nZgody: regulamin+polityka [${order.zgody.regulamin ? 'TAK' : 'NIE'}] · personalizacja+utrata prawa odstąpienia [${order.zgody.personalizacja ? 'TAK' : 'NIE'}]`;
+    const txt = `Zamówienie Pixel Sip\n\n${order.pozycje.join('\n')}\n\nDostawa: ${order.dostawa} (${PLN(order.dostawa_koszt)})${promoCode ? `\nKod rabatowy: ${promoCode} (−${PLN(discount)})` : ''}\nRAZEM: ${PLN(order.suma_calosc)}\n\nKlient: ${order.klient.imie}\nEmail: ${order.klient.email}\nTel: ${order.klient.telefon}\nAdres: ${order.klient.adres}\nUwagi: ${order.klient.uwagi}\n\nZgody: regulamin+polityka [${order.zgody.regulamin ? 'TAK' : 'NIE'}] · personalizacja+utrata prawa odstąpienia [${order.zgody.personalizacja ? 'TAK' : 'NIE'}]`;
     try {
       if (CONFIG.orderEndpoint) {
         const res = await fetch(CONFIG.orderEndpoint, { method: 'POST', headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }, body: JSON.stringify(order) });
@@ -1171,6 +1221,17 @@
     });
     $('#checkout-form')?.addEventListener('submit', submitOrder);
     $('#co-delivery')?.addEventListener('change', () => { updateGrand(); toggleLockerPicker(); });
+    // kod pocztowy: wpisujesz same cyfry (klawiatura numeryczna na mobile), myślnik wstawia się sam -> 00-001
+    $('#checkout-form [name=postal]')?.addEventListener('input', (e) => {
+      let v = e.target.value.replace(/\D/g, '').slice(0, 5);
+      if (v.length > 2) v = v.slice(0, 2) + '-' + v.slice(2);
+      e.target.value = v;
+    });
+    $('#co-promo-apply')?.addEventListener('click', applyPromo);
+    $('#co-promo-code')?.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); applyPromo(); } });
+    $('#co-promo-code')?.addEventListener('input', () => {   // edycja kodu po zastosowaniu => wymagaj ponownego „Zastosuj"
+      if (state.promo) { state.promo = null; $('#co-promo')?.classList.remove('ok'); $('#co-discount-row').hidden = true; const m = $('#co-promo-msg'); if (m) { m.hidden = true; } updateGrand(); }
+    });
     $('#co-locker-btn')?.addEventListener('click', openGeoModal);
     $('#geo-close')?.addEventListener('click', closeGeoModal);
     $('#geo-modal')?.addEventListener('click', (e) => { if (e.target.id === 'geo-modal') closeGeoModal(); });
