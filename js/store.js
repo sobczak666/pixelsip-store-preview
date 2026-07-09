@@ -941,8 +941,12 @@
     try {
       if (CONFIG.orderEndpoint) {
         const res = await fetch(CONFIG.orderEndpoint, { method: 'POST', headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }, body: JSON.stringify(order) });
-        if (!res.ok) throw new Error('send failed');
         let resp = {}; try { resp = await res.json(); } catch {}
+        if (resp && resp.ok === false) {           // błąd biznesowy (kod wyczerpany / płatność / za dużo żądań) -> pokaż, zachowaj koszyk
+          toast(resp.error || 'Nie udało się złożyć zamówienia. Spróbuj ponownie.');
+          return;
+        }
+        if (!res.ok) throw new Error('send failed');
         if (resp.redirect) {                       // płatność online -> przekieruj do bramki (PayU)
           cart = []; saveCart(cart);
           window.location.href = resp.redirect;
