@@ -25,7 +25,7 @@
 <link rel="icon" href="assets/brand/favicon.png" type="image/png">
 <link rel="preload" href="assets/fonts/Silkscreen-Bold.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/PixelOperator-Bold.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="css/styles.css?v=f2ef70bc">
+<link rel="stylesheet" href="css/styles.css?v=ee579aed">
 <script type="importmap">{"imports":{"three":"./js/vendor/three.module.js"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "name": "Pixel Sip", "url": "https://pixelsip.pl", "logo": "https://pixelsip.pl/assets/brand/symbol.png", "description": "Premium tumblery 600 i 900 ml ze stali nierdzewnej z nadrukiem pixel-art. 56 wzorów: retro, cyberpunk, neon. Stay Hydrated, Stay Pixelated.", "slogan": "Stay Hydrated, Stay Pixelated", "legalName": "PIOTR SOBCZYŃSKI MODA-MIX SPORT STYLE", "vatID": "PL1130115908", "taxID": "PL1130115908", "email": "kontakt@pixelsip.pl", "address": {"@type": "PostalAddress", "streetAddress": "ul. Ratuszowa 11 lok. 3", "postalCode": "03-450", "addressLocality": "Warszawa", "addressCountry": "PL"}, "contactPoint": {"@type": "ContactPoint", "contactType": "customer support", "email": "kontakt@pixelsip.pl", "areaServed": "PL", "availableLanguage": "pl"}, "sameAs": ["https://www.facebook.com/profile.php?id=61591567704746"]}, {"@type": "Product", "name": "PIXEL SIP Tumbler 600 ml — Stay Hydrated, Stay Pixelated", "image": "assets/products/tumbler-600-12513_1.jpg", "description": "Kompaktowy daily driver na biurko gracza — 600 ml stali, podwójna ścianka i nadruk pixel-art, który pasuje do każdego loadoutu.", "sku": "BW34PS-600WT", "brand": {"@type": "Brand", "name": "Pixel Sip"}, "offers": {"@type": "Offer", "priceCurrency": "PLN", "price": 109, "availability": "https://schema.org/InStock", "itemCondition": "https://schema.org/NewCondition"}}, {"@type": "Product", "name": "PIXEL SIP Tumbler 900 ml — Stay Hydrated, Stay Pixelated", "image": "assets/products/tumbler-900-12514_1.jpg", "description": "Maksymalny zapas many na cały raid — 900 ml stali, podwójna ścianka i pixel-art, który należy do Twojego setupu, a nie do szafki z gadżetami.", "sku": "BW34PS-900WT", "brand": {"@type": "Brand", "name": "Pixel Sip"}, "offers": {"@type": "Offer", "priceCurrency": "PLN", "price": 129, "availability": "https://schema.org/OutOfStock", "itemCondition": "https://schema.org/NewCondition"}}]}</script>
 </head>
@@ -39,7 +39,7 @@
     <a href="#configurator">Zaprojektuj</a><a href="#kolekcja">Wzory</a><a href="#produkty">Produkty</a><a href="#jak-to-dziala">Jak to działa</a><a href="#faq">FAQ</a>
   </nav>
   <div class="hdr-actions">
-    <button id="nav-toggle" class="icon-btn" aria-label="menu">☰</button>
+    <button id="nav-toggle" class="icon-btn" aria-label="Otwórz menu" aria-controls="nav" aria-expanded="false">☰</button>
     <button id="cart-toggle" class="icon-btn" aria-label="koszyk">🛒<span class="cart-count" hidden>0</span></button>
   </div>
 </div></header>
@@ -105,14 +105,14 @@
     <div class="config__panel">
       <!-- Zakładki kreatora -->
       <nav class="tabs" id="config-tabs" role="tablist" aria-label="Kroki konfiguratora">
-        <button class="tab is-active" data-tab="design" role="tab" aria-selected="true">Wzór</button>
-        <button class="tab" data-tab="strip" role="tab" aria-selected="false">Napis</button>
-        <button class="tab" data-tab="colors" role="tab" aria-selected="false">Kolory</button>
-        <button class="tab" data-tab="size" role="tab" aria-selected="false">Rozmiar</button>
+        <button id="tab-design" class="tab is-active" data-tab="design" role="tab" aria-selected="true" aria-controls="tabpanel-design" tabindex="0">Wzór</button>
+        <button id="tab-strip" class="tab" data-tab="strip" role="tab" aria-selected="false" aria-controls="tabpanel-strip" tabindex="-1">Napis</button>
+        <button id="tab-colors" class="tab" data-tab="colors" role="tab" aria-selected="false" aria-controls="tabpanel-colors" tabindex="-1">Kolory</button>
+        <button id="tab-size" class="tab" data-tab="size" role="tab" aria-selected="false" aria-controls="tabpanel-size" tabindex="-1">Rozmiar</button>
       </nav>
 
       <!-- ZAKŁADKA: WZÓR -->
-      <div class="tab-content is-active" data-tabpanel="design" role="tabpanel">
+      <div id="tabpanel-design" class="tab-content is-active" data-tabpanel="design" role="tabpanel" aria-labelledby="tab-design">
         <div class="base-tabs">
           <button class="base-tab is-active" data-base="scene" aria-pressed="true">🖼️ Scena</button>
           <button class="base-tab" data-base="tile" aria-pressed="false">🎯 Emblemat</button>
@@ -132,7 +132,7 @@
             <div class="gallery" id="design-gallery" role="region" aria-label="Wzory tumblera" tabindex="0"></div>
             <button class="gallery-nav gallery-nav--next" data-gallery-nav="1" aria-label="Następne wzory"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
           </div>
-          <p class="muted" style="font-size:.82rem;margin-top:8px"><span id="gallery-count">0</span> wzorów</p>
+          <p class="gallery-status muted"><span id="gallery-position"></span><span id="gallery-total"><span id="gallery-count">0</span> wzorów</span></p>
         </div>
         <div class="base-panel off" id="panel-tile">
           <div class="chips" id="emblem-cats"></div>
@@ -143,7 +143,7 @@
       </div>
 
       <!-- ZAKŁADKA: NAPIS -->
-      <div class="tab-content" data-tabpanel="strip" role="tabpanel">
+      <div id="tabpanel-strip" class="tab-content" data-tabpanel="strip" role="tabpanel" aria-labelledby="tab-strip">
         <p class="tab-banner">✦ Masz już gotowy pasek <b>PIXEL SIP</b> — zmień tylko, jeśli chcesz.</p>
         <div class="field"><label>Gdzie pasek?</label>
           <div class="strip-opts" id="strip-options">
@@ -169,7 +169,7 @@
       </div>
 
       <!-- ZAKŁADKA: KOLORY -->
-      <div class="tab-content" data-tabpanel="colors" role="tabpanel">
+      <div id="tabpanel-colors" class="tab-content" data-tabpanel="colors" role="tabpanel" aria-labelledby="tab-colors">
         <p class="tab-banner off" id="colors-none">Pasek wyłączony — włącz go w zakładce „Napis", żeby dobrać kolory.</p>
         <div id="colors-panel">
           <button class="linkrow is-active" id="toggle-sync" type="button" aria-pressed="true">🔁 Dół taki sam jak góra</button>
@@ -187,7 +187,7 @@
       </div>
 
       <!-- ZAKŁADKA: ROZMIAR + GOTOWE -->
-      <div class="tab-content" data-tabpanel="size" role="tabpanel">
+      <div id="tabpanel-size" class="tab-content" data-tabpanel="size" role="tabpanel" aria-labelledby="tab-size">
         <div class="field"><label>Pojemność</label><div class="size-opts" id="size-options"></div></div>
         <div class="build-summary" id="build-summary">—</div>
         <p class="unique-note">✦ <b>Tylko Twój.</b> Każdy kubek powstaje pod konkretne zamówienie — z Twoim wzorem i napisem. Drugiego takiego nie ma nikt.</p>
@@ -214,7 +214,7 @@
 <!-- PRODUKTY / SPECYFIKACJA -->
 <section class="section" id="produkty"><div class="wrap">
   <div class="center" style="margin-bottom:30px"><span class="kicker">Produkty</span><h2>Dwa rozmiary, jedna jakość</h2><p class="lead">Stal nierdzewna, podwójna ścianka, słomka i pokrywka w zestawie. Wybierasz tylko ile many ma się zmieścić.</p></div>
-  <div class="specs"><article class="spec-card"><div class="prod-photo"><img src="assets/products/tumbler-600-12513_1.jpg" alt="Tumbler 600 ml ze stali nierdzewnej, biały" loading="lazy"></div><h3>600 ml <span class="cap">tumbler</span></h3><div class="price">109,00 zł </div><p class="muted" style="margin-bottom:14px">Kompaktowy daily driver na biurko gracza — 600 ml stali, podwójna ścianka i nadruk pixel-art, który pasuje do każdego loadoutu.</p><table class="spec-table"><tr><td>Pojemność</td><td>600 ml</td></tr><tr><td>Materiał</td><td>Stal nierdzewna, podwójna ścianka (zewn. 304 / wewn. 201)</td></tr><tr><td>Wymiary</td><td>Ø 7,5 × 21,3 cm</td></tr><tr><td>Kolor</td><td>Biały matowy</td></tr><tr><td>Pokrywka i słomka</td><td>Pokrywka + metalowa słomka wielokrotnego użytku</td></tr><tr><td>Nadruk</td><td>Sublimacyjny pixel-art, full-wrap, na całej powierzchni</td></tr><tr><td>Izolacja</td><td>Termiczna (double-wall) — utrzymuje temperaturę napoju</td></tr><tr><td>SKU</td><td>BW34PS-600WT</td></tr></table><a href="#configurator" class="btn btn--ghost btn--block" style="margin-top:18px">Wybierz wzór w tym rozmiarze</a></article><article class="spec-card"><div class="prod-photo"><img src="assets/products/tumbler-900-12514_1.jpg" alt="Tumbler 900 ml ze stali nierdzewnej, biały" loading="lazy"></div><h3>900 ml <span class="cap">tumbler</span><span style="display:inline-block;margin-left:8px;padding:2px 8px;border:1px solid var(--cyan);border-radius:6px;font-size:.6rem;letter-spacing:.04em;color:var(--cyan);vertical-align:middle">WKRÓTCE</span></h3><div class="price muted" style="font-size:.95rem">Cena docelowo 129,00 zł — produkt jeszcze niedostępny</div><p class="muted" style="margin-bottom:14px">Maksymalny zapas many na cały raid — 900 ml stali, podwójna ścianka i pixel-art, który należy do Twojego setupu, a nie do szafki z gadżetami.</p><table class="spec-table"><tr><td>Pojemność</td><td>900 ml</td></tr><tr><td>Materiał</td><td>Stal nierdzewna, podwójna ścianka (zewn. 304 / wewn. 201)</td></tr><tr><td>Wymiary</td><td>Ø 7,5 × 25,4 cm</td></tr><tr><td>Kolor</td><td>Biały matowy</td></tr><tr><td>Pokrywka i słomka</td><td>Przezroczysta pokrywka + metalowa słomka wielokrotnego użytku</td></tr><tr><td>Nadruk</td><td>Sublimacyjny pixel-art, full-wrap, na całej powierzchni</td></tr><tr><td>Izolacja</td><td>Termiczna (double-wall) — zimne zostaje zimne, ciepłe ciepłe</td></tr><tr><td>SKU</td><td>BW34PS-900WT</td></tr></table><a href="#configurator" class="btn btn--ghost btn--block" style="margin-top:18px">Zapisz się na listę →</a></article></div>
+  <div class="specs"><article class="spec-card"><div class="prod-gallery prod-gallery--3" aria-label="Galeria produktu 600 ml"><a class="prod-photo" href="assets/products/tumbler-600-12513_1.jpg" target="_blank" rel="noopener" aria-label="Powiększ zdjęcie 1 tumblera 600 ml"><img src="assets/products/tumbler-600-12513_1.jpg" alt="Tumbler 600 ml — widok 1" loading="lazy" decoding="async"></a><a class="prod-photo" href="assets/products/tumbler-600-12513_2.jpg" target="_blank" rel="noopener" aria-label="Powiększ zdjęcie 2 tumblera 600 ml"><img src="assets/products/tumbler-600-12513_2.jpg" alt="Tumbler 600 ml — widok 2" loading="lazy" decoding="async"></a><a class="prod-photo" href="assets/products/tumbler-600-12513_3.jpg" target="_blank" rel="noopener" aria-label="Powiększ zdjęcie 3 tumblera 600 ml"><img src="assets/products/tumbler-600-12513_3.jpg" alt="Tumbler 600 ml — widok 3" loading="lazy" decoding="async"></a></div><h3>600 ml <span class="cap">tumbler</span></h3><div class="price">109,00 zł </div><p class="muted" style="margin-bottom:14px">Kompaktowy daily driver na biurko gracza — 600 ml stali, podwójna ścianka i nadruk pixel-art, który pasuje do każdego loadoutu.</p><table class="spec-table"><tr><td>Pojemność</td><td>600 ml</td></tr><tr><td>Materiał</td><td>Stal nierdzewna, podwójna ścianka (zewn. 304 / wewn. 201)</td></tr><tr><td>Wymiary</td><td>Ø 7,5 × 21,3 cm</td></tr><tr><td>Kolor</td><td>Biały matowy</td></tr><tr><td>Pokrywka i słomka</td><td>Pokrywka + metalowa słomka wielokrotnego użytku</td></tr><tr><td>Nadruk</td><td>Sublimacyjny pixel-art, full-wrap, na całej powierzchni</td></tr><tr><td>Izolacja</td><td>Termiczna (double-wall) — utrzymuje temperaturę napoju</td></tr><tr><td>SKU</td><td>BW34PS-600WT</td></tr></table><a href="#configurator" class="btn btn--ghost btn--block" style="margin-top:18px">Wybierz wzór w tym rozmiarze</a></article><article class="spec-card"><div class="prod-gallery prod-gallery--1" aria-label="Galeria produktu 900 ml"><a class="prod-photo" href="assets/products/tumbler-900-12514_1.jpg" target="_blank" rel="noopener" aria-label="Powiększ zdjęcie 1 tumblera 900 ml"><img src="assets/products/tumbler-900-12514_1.jpg" alt="Tumbler 900 ml — widok 1" loading="lazy" decoding="async"></a></div><h3>900 ml <span class="cap">tumbler</span><span style="display:inline-block;margin-left:8px;padding:2px 8px;border:1px solid var(--cyan);border-radius:6px;font-size:.6rem;letter-spacing:.04em;color:var(--cyan);vertical-align:middle">WKRÓTCE</span></h3><div class="price muted" style="font-size:.95rem">Cena docelowo 129,00 zł — produkt jeszcze niedostępny</div><p class="muted" style="margin-bottom:14px">Maksymalny zapas many na cały raid — 900 ml stali, podwójna ścianka i pixel-art, który należy do Twojego setupu, a nie do szafki z gadżetami.</p><table class="spec-table"><tr><td>Pojemność</td><td>900 ml</td></tr><tr><td>Materiał</td><td>Stal nierdzewna, podwójna ścianka (zewn. 304 / wewn. 201)</td></tr><tr><td>Wymiary</td><td>Ø 7,5 × 25,4 cm</td></tr><tr><td>Kolor</td><td>Biały matowy</td></tr><tr><td>Pokrywka i słomka</td><td>Przezroczysta pokrywka + metalowa słomka wielokrotnego użytku</td></tr><tr><td>Nadruk</td><td>Sublimacyjny pixel-art, full-wrap, na całej powierzchni</td></tr><tr><td>Izolacja</td><td>Termiczna (double-wall) — zimne zostaje zimne, ciepłe ciepłe</td></tr><tr><td>SKU</td><td>BW34PS-900WT</td></tr></table><a href="#configurator" class="btn btn--ghost btn--block" style="margin-top:18px">Zapisz się na listę →</a></article></div>
   
   <div class="delivery-info">
     <div><h3>Dostawa</h3><ul id="delivery-list" class="delivery-ul"></ul></div>
@@ -362,6 +362,6 @@ const _t3d=document.getElementById('tumbler3d');
 if(_t3d){const _io=new IntersectionObserver((es,o)=>{if(es.some(x=>x.isIntersecting)){o.disconnect();import('./js/tumbler3d.js?v=58f99d76');}},{rootMargin:'400px'});_io.observe(_t3d);}
 </script>
 <script>window.__DV='51c5caea'</script>
-<script src="js/store.js?v=fd1db840"></script>
+<script src="js/store.js?v=a710e75a"></script>
 </body>
 </html>

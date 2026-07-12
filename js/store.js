@@ -22,6 +22,7 @@
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+  const fold = (s) => String(s || '').normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase();
 
   const state = {
     products: [], designs: [], byId: {}, prodById: {},
@@ -163,18 +164,23 @@
     const grid = $('#design-gallery'); if (!grid) return;
     const items = state.designs.filter(d =>
       (state.cat === 'all' || d.category === state.cat) &&
-      (!state.q || (d.name + ' ' + (d.tags || []).join(' ') + ' ' + d.blurb).toLowerCase().includes(state.q))
+      (!state.q || fold(d.id + ' ' + d.name + ' ' + (d.tags || []).join(' ') + ' ' + d.blurb).includes(state.q))
     );
     const gc = $('#gallery-count'); if (gc) gc.textContent = String(items.length);
     grid.innerHTML = items.map(d => `
       <button class="design-card${d.id === state.designId ? ' is-active' : ''}" data-design="${esc(d.id)}" aria-pressed="${d.id === state.designId}" aria-label="Wybierz wzór: ${esc(d.name)}">
-        <img class="design-card__img" src="${esc(d.file)}" alt="Wzór ${esc(d.name)}" loading="lazy" decoding="async" width="600" height="375">
+        <span class="design-card__media"><img class="design-card__img" src="${esc(d.file)}" alt="Wzór ${esc(d.name)}" loading="lazy" decoding="async" width="600" height="375"></span>
         <span class="design-card__meta">
           <span class="design-card__name">${esc(d.name)}</span>
           <span class="design-card__cat">${esc(d.categoryLabel || '')}</span>
         </span>
       </button>`).join('') || `<p class="muted">Brak wzorów dla tego filtra.</p>`;
-    grid.scrollLeft = 0; updateGalleryNav();
+    $$('.design-card__img', grid).forEach(img => {
+      const done = () => img.closest('.design-card__media')?.classList.add('is-loaded');
+      if (img.complete) done(); else { img.addEventListener('load', done, { once: true }); img.addEventListener('error', done, { once: true }); }
+    });
+    grid.scrollLeft = 0;
+    requestAnimationFrame(() => { updateGalleryNav(); updateGalleryPosition(); preloadGalleryAhead(); });
   }
   function updateGalleryNav() {                                   // chowaj strzałki na krańcach
     const g = $('#design-gallery'); if (!g) return;
@@ -188,6 +194,32 @@
     g.style.scrollSnapType = 'none';                              // snap blokuje smooth scrollBy — wyłącz na czas animacji
     g.scrollBy({ left: dir * Math.max(220, g.clientWidth * 0.85), behavior: 'smooth' });
     clearTimeout(scrollGallery._t); scrollGallery._t = setTimeout(() => { g.style.scrollSnapType = ''; updateGalleryNav(); }, 500);
+  }
+  function updateGalleryPosition() {
+    const g = $('#design-gallery'), pos = $('#gallery-position'); if (!g || !pos) return;
+    const cards = $$('.design-card', g);
+    if (!cards.length) { pos.textContent = '0 z 0'; return; }
+    const gr = g.getBoundingClientRect();
+    const visible = cards.map((card, i) => ({ i, r: card.getBoundingClientRect() }))
+      .filter(x => x.r.right > gr.left + 4 && x.r.left < gr.right - 4);
+    const first = visible.length ? visible[0].i + 1 : 1;
+    const last = visible.length ? visible[visible.length - 1].i + 1 : Math.min(4, cards.length);
+    pos.textContent = `${first}–${last} z ${cards.length}`;
+  }
+  function preloadGalleryAhead() {
+    const g = $('#design-gallery'); if (!g || !matchMedia('(max-width:640px)').matches) return;
+    const gr = g.getBoundingClientRect(), ahead = g.clientWidth * 2;
+    $$('.design-card', g).forEach(card => {
+      const r = card.getBoundingClientRect();
+      if (r.right > gr.left - ahead && r.left < gr.right + ahead) {
+        const img = $('.design-card__img', card); if (img && img.loading !== 'eager') img.loading = 'eager';
+      }
+    });
+  }
+  let galleryFrame = 0;
+  function scheduleGalleryUpdate() {
+    if (galleryFrame) return;
+    galleryFrame = requestAnimationFrame(() => { galleryFrame = 0; updateGalleryNav(); updateGalleryPosition(); preloadGalleryAhead(); });
   }
 
   function renderSizes() {
@@ -319,7 +351,7 @@
   function applyTabVisibility() {
     const configurator = $('#configurator'); if (configurator) configurator.dataset.activeTab = state.tab;
     $$('[data-tabpanel]').forEach(p => p.classList.toggle('is-active', p.dataset.tabpanel === state.tab));
-    $$('[data-tab]').forEach(t => { const a = t.dataset.tab === state.tab; t.classList.toggle('is-active', a); t.setAttribute('aria-selected', a); });
+    $$('[data-tab]').forEach(t => { const a = t.dataset.tab === state.tab; t.classList.toggle('is-active', a); t.setAttribute('aria-selected', a); t.tabIndex = a ? 0 : -1; });
     const last = state.tab === 'size';
     const editing = !!state.editingKey;   // edycja: TYLKO „Zapisz zmiany" (bez „Dalej" — edytor nie przechodzi flow, zakładki i tak klikalne)
     const nx = $('#sticky-next');
@@ -1163,6 +1195,13 @@
         applyTabVisibility();
       }, { rootMargin: '0px 0px -70% 0px' }).observe(cfgEl);   // „w edytorze" gdy jego góra wjedzie w górne 30% ekranu
     }
+    const setNavOpen = (open, focusFirst = false) => {
+      const nav = $('#nav'), toggle = $('#nav-toggle'); if (!nav || !toggle) return;
+      nav.classList.toggle('open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Zamknij menu' : 'Otwórz menu');
+      if (open && focusFirst) setTimeout(() => $('a', nav)?.focus(), 50);
+    };
     document.addEventListener('click', (e) => {
       // ——— zakładki / skróty / panel kolorów (nowy flow) ———
       const tab = e.target.closest('[data-tab]');
@@ -1245,10 +1284,17 @@
       if (e.target.closest('#cart-checkout')) { closeCart(); openCheckout(); return; }
       if (e.target.closest('#co-close')) { closeCheckout(); return; }
       const fq = e.target.closest('.faq-q'); if (fq) { const it = fq.parentElement; it.classList.toggle('open'); fq.setAttribute('aria-expanded', it.classList.contains('open')); return; }
-      if (e.target.closest('#nav-toggle')) { $('#nav')?.classList.toggle('open'); return; }
-      if (e.target.closest('#nav a')) { $('#nav')?.classList.remove('open'); }
+      if (e.target.closest('#nav-toggle')) { const open = !$('#nav')?.classList.contains('open'); setNavOpen(open, open); return; }
+      if (e.target.closest('#nav a')) { setNavOpen(false); }
     });
-    $('#design-search')?.addEventListener('input', (e) => { state.q = e.target.value.toLowerCase().trim(); renderGallery(); });
+    $('#design-search')?.addEventListener('input', (e) => { state.q = fold(e.target.value.trim()); renderGallery(); });
+    $('#config-tabs')?.addEventListener('keydown', (e) => {
+      if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
+      const tabs = $$('[role="tab"]', e.currentTarget), current = tabs.indexOf(document.activeElement); if (current < 0) return;
+      e.preventDefault();
+      let next = e.key === 'Home' ? 0 : e.key === 'End' ? tabs.length - 1 : (current + (e.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+      goTab(tabs[next].dataset.tab); tabs[next].focus(); tabs[next].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+    });
     document.addEventListener('input', (e) => {                    // własny kolor (picker) — live, bez re-renderu
       const ci = e.target.closest('[data-palcustom]'); if (!ci) return;
       const pal = ci.dataset.palcustom;
@@ -1276,8 +1322,8 @@
       if (Math.abs(e.deltaX) >= Math.abs(e.deltaY)) return;       // gest już poziomy (touchpad) — zostaw
       el.scrollLeft += e.deltaY; e.preventDefault();
     }, { passive: false });
-    $('#design-gallery')?.addEventListener('scroll', updateGalleryNav, { passive: true });
-    window.addEventListener('resize', updateGalleryNav, { passive: true });
+    $('#design-gallery')?.addEventListener('scroll', scheduleGalleryUpdate, { passive: true });
+    window.addEventListener('resize', scheduleGalleryUpdate, { passive: true });
     $('#strip-text-top')?.addEventListener('input', (e) => {
       const clean = sanitizeText(e.target.value);
       if (clean !== e.target.value) e.target.value = clean;
@@ -1312,7 +1358,11 @@
     $('#geo-close')?.addEventListener('click', closeGeoModal);
     $('#geo-modal')?.addEventListener('click', (e) => { if (e.target.id === 'geo-modal') closeGeoModal(); });
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') { closeCart(); closeCheckout(); }
+      if (e.key === 'Escape') {
+        const navOpen = $('#nav')?.classList.contains('open');
+        if (navOpen) { e.preventDefault(); setNavOpen(false); $('#nav-toggle')?.focus(); }
+        closeCart(); closeCheckout();
+      }
       if (e.key === 'Tab') { const m = $('#checkout-modal'); const dr = $('#cart-drawer');
         if (m?.classList.contains('open')) trapFocus(m, e); else if (dr?.classList.contains('open')) trapFocus(dr, e); }
     });
