@@ -42,7 +42,7 @@
     tile: { emblem: 'water-drop', bg: '#0B0A16', n: 6 },
     emblems: [], embCat: 'all',
     cat: 'all', q: '',
-    freeShip: 199, delivery: [], bundles: [], lastFocus: null,
+    freeShip: 199, delivery: [], bundles: [], lastFocus: null, checkoutLastFocus: null,
     promo: null,   // {code, percent, discount} po pozytywnej walidacji kodu rabatowego (serwer i tak przelicza finalnie)
   };
   // wzory tilują się na szwie (cell = szerokość / n, bez obrotów)
@@ -317,6 +317,7 @@
   const NEXT_LBL = { design: 'Dalej: Napis →', strip: 'Dalej: Kolory →', colors: 'Dalej: Rozmiar →' };
   let inConfig = false;   // czy konfigurator jest na ekranie (steruje sticky barem: Start vs Dalej)
   function applyTabVisibility() {
+    const configurator = $('#configurator'); if (configurator) configurator.dataset.activeTab = state.tab;
     $$('[data-tabpanel]').forEach(p => p.classList.toggle('is-active', p.dataset.tabpanel === state.tab));
     $$('[data-tab]').forEach(t => { const a = t.dataset.tab === state.tab; t.classList.toggle('is-active', a); t.setAttribute('aria-selected', a); });
     const last = state.tab === 'size';
@@ -777,13 +778,30 @@
     if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
     else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   };
-  function openCart() { state.lastFocus = document.activeElement; $('#cart-drawer')?.classList.add('open'); $('#overlay')?.classList.add('show'); document.body.style.overflow = 'hidden'; setTimeout(() => $('#cart-close')?.focus(), 50); }
-  function closeCart() { $('#cart-drawer')?.classList.remove('open'); if (!$('#checkout-modal')?.classList.contains('open')) { $('#overlay')?.classList.remove('show'); document.body.style.overflow = ''; } state.lastFocus?.focus?.(); }
+  function setDialogState(el, open) {
+    if (!el) return;
+    el.classList.toggle('open', open);
+    el.setAttribute('aria-hidden', String(!open));
+    el.inert = !open;
+  }
+  function openCart() {
+    state.lastFocus = document.activeElement;
+    setDialogState($('#cart-drawer'), true);
+    $('#overlay')?.classList.add('show'); document.body.style.overflow = 'hidden';
+    setTimeout(() => $('#cart-close')?.focus(), 50);
+  }
+  function closeCart() {
+    const drawer = $('#cart-drawer'), wasOpen = drawer?.classList.contains('open');
+    setDialogState(drawer, false);
+    if (!$('#checkout-modal')?.classList.contains('open')) { $('#overlay')?.classList.remove('show'); document.body.style.overflow = ''; }
+    if (wasOpen) state.lastFocus?.focus?.();
+  }
 
   // ——————————————————— CHECKOUT ———————————————————
   function openCheckout() {
     if (!cart.length) return;
     const m = $('#checkout-modal'); if (!m) return;
+    state.checkoutLastFocus = document.activeElement;
     track('InitiateCheckout', { value: cartTotal(), currency: 'PLN', num_items: cart.reduce((s, i) => s + i.qty, 0), content_ids: cart.map(i => i.designName) });
     $('#checkout-form').hidden = false; $('#co-success').hidden = true;   // reset
     $('#co-summary').innerHTML = cart.map(i => `<li>${i.qty}× <b>${esc(i.designName)}</b> (${esc(i.sizeLabel)}, ${esc(i.stripDesc || '')}) — ${PLN(i.price * i.qty)}</li>`).join('');
@@ -791,8 +809,8 @@
     resetPromo();   // kod trzeba zastosować od nowa (koszyk mógł się zmienić od ostatniego otwarcia)
     const dsel = $('#co-delivery');
     if (dsel) dsel.innerHTML = state.delivery.map((d, idx) => `<option value="${idx}">${esc(d.method)} — ${d.price === 0 ? 'gratis' : PLN(d.price)} (${esc(d.eta)})</option>`).join('');
-    updateGrand(); toggleLockerPicker();
-    m.classList.add('open'); $('#overlay')?.classList.add('show'); document.body.style.overflow = 'hidden';
+    updateGrand(); toggleLockerPicker(); toggleAddressFields();
+    setDialogState(m, true); $('#overlay')?.classList.add('show'); document.body.style.overflow = 'hidden';
     setTimeout(() => m.querySelector('input,select')?.focus(), 50);
   }
   function updateGrand() {
@@ -840,7 +858,12 @@
     updateGrand();
     btn.disabled = false; btn.textContent = old;
   }
-  function closeCheckout() { $('#checkout-modal')?.classList.remove('open'); if (!$('#cart-drawer')?.classList.contains('open')) { $('#overlay')?.classList.remove('show'); document.body.style.overflow = ''; } }
+  function closeCheckout() {
+    const modal = $('#checkout-modal'), wasOpen = modal?.classList.contains('open');
+    setDialogState(modal, false);
+    if (!$('#cart-drawer')?.classList.contains('open')) { $('#overlay')?.classList.remove('show'); document.body.style.overflow = ''; }
+    if (wasOpen) state.checkoutLastFocus?.focus?.();
+  }
 
   // ——————————————————— INPOST GEOWIDGET (wybór paczkomatu) ———————————————————
   let geoLoaded = false;
@@ -856,6 +879,18 @@
       const tp = $('#co-target-point'); if (tp) tp.value = '';
       const ch = $('#co-locker-chosen'); if (ch) ch.hidden = true;
     }
+  }
+  function deliveryNeedsAddress() {
+    const d = state.delivery[Number($('#co-delivery')?.value || 0)];
+    return !!(d && /kurier/i.test(d.method) && !/paczkomat/i.test(d.method));
+  }
+  function toggleAddressFields() {
+    const box = $('#co-address-fields'), required = deliveryNeedsAddress();
+    if (box) box.hidden = !required;
+    ['postal', 'city', 'street'].forEach(name => {
+      const input = $(`#checkout-form [name="${name}"]`);
+      if (input) input.required = required;
+    });
   }
   function loadGeo() {
     if (geoLoaded) return Promise.resolve();
@@ -914,7 +949,9 @@
     if (/paczkomat/i.test(d.method) && !targetPoint) {                   // paczkomat bez wyboru -> blokuj
       isSubmitting = false; toast('Najpierw wybierz paczkomat'); $('#co-locker-btn')?.focus(); return;
     }
-    const adres = `${f.postal.value} ${f.city.value}, ${f.street.value}`;
+    const adres = deliveryNeedsAddress()
+      ? `${f.postal.value} ${f.city.value}, ${f.street.value}`
+      : (targetPoint ? `Paczkomat ${targetPoint}` : 'Odbiór osobisty');
     const promoCode = state.promo ? state.promo.code : '';
     const discount = state.promo ? state.promo.discount : 0;   // podgląd; SERWER przelicza zniżkę finalnie
     const freeShip = state.freeShip > 0 && cartTotal() >= state.freeShip;   // darmowa dostawa od progu (serwer też tak liczy)
@@ -1133,7 +1170,7 @@
       if (e.target.closest('#sticky-next')) {
         if (!inConfig) { $('#configurator')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }   // „Start" -> skok do edytora
         const i = TAB_ORDER.indexOf(state.tab); goTab(TAB_ORDER[Math.min(TAB_ORDER.length - 1, i + 1)]);
-        $('#configurator')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); return;
+        $('#config-tabs')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); return;
       }
       const preset = e.target.closest('[data-preset]');
       if (preset) { applyPreset(+preset.dataset.preset); return; }
@@ -1156,7 +1193,14 @@
       const gnav = e.target.closest('[data-gallery-nav]');
       if (gnav) { scrollGallery(+gnav.dataset.galleryNav); return; }
       const card = e.target.closest('[data-design]');
-      if (card) { state.designId = card.dataset.design; renderGallery(); renderPalettes(); updatePreview(); $('#configurator')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); return; }
+      if (card) {
+        state.designId = card.dataset.design;
+        $$('.design-card', $('#design-gallery')).forEach(c => {
+          const active = c.dataset.design === state.designId;
+          c.classList.toggle('is-active', active); c.setAttribute('aria-pressed', active);
+        });
+        renderPalettes(); updatePreview(); return;
+      }
       const sz = e.target.closest('[data-size]');
       if (sz) { state.size = sz.dataset.size; renderSizes(); updatePreview(); return; }
       const wl = e.target.closest('[data-waitlist]');
@@ -1247,7 +1291,7 @@
       state.stripTextBot = clean; updatePreview();
     });
     $('#checkout-form')?.addEventListener('submit', submitOrder);
-    $('#co-delivery')?.addEventListener('change', () => { updateGrand(); toggleLockerPicker(); });
+    $('#co-delivery')?.addEventListener('change', () => { updateGrand(); toggleLockerPicker(); toggleAddressFields(); });
     // kod pocztowy: wpisujesz same cyfry (klawiatura numeryczna na mobile), myślnik wstawia się sam -> 00-001
     $('#checkout-form [name=postal]')?.addEventListener('input', (e) => {
       let v = e.target.value.replace(/\D/g, '').slice(0, 5);
