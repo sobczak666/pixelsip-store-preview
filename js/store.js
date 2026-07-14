@@ -24,8 +24,18 @@
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
   const fold = (s) => String(s || '').normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase();
 
+  // Pierwszy ekran galerii jest kuratorowany niezależnie od kolejności katalogu.
+  // Reszta wzorów zachowuje kolejność z designs.json, więc presety i linki nie zmieniają znaczenia.
+  const DEFAULT_DESIGN_ID = 'cloud-city';
+  const CURATED_DESIGN_IDS = [
+    'cloud-city', 'sakura-shrine', 'forest-camp', 'waterfall-temple',
+    'neon-city', 'mountain-lofi', 'gameroom-rgb', 'maluch-vaporwave',
+    'floating-island', 'solarpunk-greenhouse', 'piksel-rycerz', 'rpg-tavern',
+    'rooftop-night', 'neon-waves', 'arcade-corner', 'snowy-cabin',
+  ];
+
   const state = {
-    products: [], designs: [], byId: {}, prodById: {},
+    products: [], designs: [], galleryDesigns: [], byId: {}, prodById: {},
     size: null, designId: null, strip: 'both',
     stripColorTop: 'glitch', bandColorTop: '#000000', stripColorBot: 'glitch', bandColorBot: '#000000',
     stripTextTop: '', stripTextBot: '',  // '' = domyślny „PIXEL SIP"; inaczej własny napis (góra/dół osobno)
@@ -145,10 +155,16 @@
       state.delivery = p.delivery || [];
       state.bundles = p.bundles || [];
       state.designs = d || [];
+      const curatedRank = new Map(CURATED_DESIGN_IDS.map((id, i) => [id, i]));
+      const sourceRank = new Map(state.designs.map((design, i) => [design.id, i]));
+      state.galleryDesigns = [...state.designs].sort((a, b) =>
+        (curatedRank.get(a.id) ?? CURATED_DESIGN_IDS.length + sourceRank.get(a.id)) -
+        (curatedRank.get(b.id) ?? CURATED_DESIGN_IDS.length + sourceRank.get(b.id))
+      );
       state.prodById = Object.fromEntries(state.products.map(x => [x.id, x]));
       state.byId = Object.fromEntries(state.designs.map(x => [x.id, x]));
       state.size = (state.products.find(p => !p.waitlist) || state.products[0])?.id || null;
-      state.designId = state.designs[0]?.id || null;
+      state.designId = defaultDesignId();
     } catch (e) { console.error('Błąd ładowania danych', e); const g = $('#design-gallery'); if (g) g.innerHTML = '<p class="muted">Nie udało się załadować wzorów. Odśwież stronę.</p>'; return; }
 
     restoreBuild();                       // link #k=... albo autozapis -> ustawia state przed renderem
@@ -162,7 +178,7 @@
   // ——————————————————— GALERIA ———————————————————
   function renderGallery() {
     const grid = $('#design-gallery'); if (!grid) return;
-    const items = state.designs.filter(d =>
+    const items = state.galleryDesigns.filter(d =>
       (state.cat === 'all' || d.category === state.cat) &&
       (!state.q || fold(d.id + ' ' + d.name + ' ' + (d.tags || []).join(' ') + ' ' + d.blurb).includes(state.q))
     );
@@ -378,6 +394,7 @@
     state.splitText = state.stripTextTop !== state.stripTextBot || state.stripSizeTop !== state.stripSizeBot;
   }
   // ——— presety + losuj (oba przez applyConfig — jedno źródło prawdy) ———
+  function defaultDesignId() { return state.byId[DEFAULT_DESIGN_ID] ? DEFAULT_DESIGN_ID : (state.designs[0]?.id || null); }
   function defaultSizeId() { return (state.products.find(p => !p.waitlist) || state.products[0])?.id || null; }
   function presetList() {
     const ds = state.designs; if (!ds.length) return [];
@@ -394,7 +411,7 @@
   }
   function renderPresets() {
     const w = $('#presets'); if (!w) return;
-    const isStartActive = state.base === 'scene' && state.designId === (state.designs[0]?.id);
+    const isStartActive = state.base === 'scene' && state.designId === defaultDesignId();
     w.innerHTML = presetList().map((p, i) => `
       <button class="preset${p.start && isStartActive ? ' is-active' : ''}" data-preset="${i}" type="button">
         ${p.start ? '<span class="preset__star">★ start</span>' : ''}${esc(p.label)}
@@ -403,7 +420,7 @@
   function applyPreset(i) {
     const p = presetList()[i]; if (!p) return;
     if (p.start) {
-      applyConfig({ base: 'scene', design: state.designs[0]?.id, size: defaultSizeId(), strip: 'both',
+      applyConfig({ base: 'scene', design: defaultDesignId(), size: defaultSizeId(), strip: 'both',
         gt: 'glitch', gb: '#000000', dt: 'glitch', db: '#000000', txt: '', txb: '', pst: 1, psb: 1 });
       toast('Wczytano zestaw startowy ✨');
     } else {
