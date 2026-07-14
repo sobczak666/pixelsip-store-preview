@@ -167,7 +167,9 @@
       state.designId = defaultDesignId();
     } catch (e) { console.error('Błąd ładowania danych', e); const g = $('#design-gallery'); if (g) g.innerHTML = '<p class="muted">Nie udało się załadować wzorów. Odśwież stronę.</p>'; return; }
 
-    restoreBuild();                       // link #k=... albo autozapis -> ustawia state przed renderem
+    const restoredBuild = restoreBuild(); // link #k=... albo autozapis -> ustawia state przed renderem
+    const startPreset = presetList()[0];
+    if (!restoredBuild && startPreset) setStateFromConfig(presetConfig(startPreset, true));
     deriveStripModes();                   // dół=góra / osobny-napis z wczytanego stanu
     renderGallery(); renderSizes(); renderPresets(); renderPalettes(); applyStripVisibility();
     renderGeoControls(); renderEmblems(); applyBaseVisibility(); applyTabVisibility();
@@ -397,37 +399,37 @@
   function defaultDesignId() { return state.byId[DEFAULT_DESIGN_ID] ? DEFAULT_DESIGN_ID : (state.designs[0]?.id || null); }
   function defaultSizeId() { return (state.products.find(p => !p.waitlist) || state.products[0])?.id || null; }
   function presetList() {
-    const ds = state.designs; if (!ds.length) return [];
-    const at = f => ds[Math.min(ds.length - 1, Math.max(0, Math.round(f)))].id;
-    const combos = [
-      { label: 'Twój start', start: true },
-      { label: 'Neon', gt: 'glitch', gb: '#0B0A16', n: 1, design: at(ds.length * 0.12) },
-      { label: 'Vapor', gt: '#FFFFFF', gb: '#7C3BFF', n: 1, design: at(ds.length * 0.25) },
-      { label: 'Mono', gt: '#FFFFFF', gb: '#000000', n: 0.8, design: at(ds.length * 0.45) },
-      { label: 'Sunset', gt: '#0B0A16', gb: '#FF8A3D', n: 1.25, design: at(ds.length * 0.65) },
-      { label: 'Mięta', gt: '#0B0A16', gb: '#5DF7A0', n: 1, design: at(ds.length * 0.85) },
+    if (!state.designs.length) return [];
+    const design = id => state.byId[id] ? id : defaultDesignId();
+    return [
+      { label: 'Twój start', start: true, design: design('cloud-city'), gt: '#28195D', gb: 'grad:A8D6F7:E9A3D4', n: 0.8 },
+      { label: 'Neon', design: design('neon-city'), gt: 'glitch', gb: '#090216', n: 0.8 },
+      { label: 'Vapor', design: design('sakura-shrine'), gt: '#FFFFFF', gb: 'grad:7C3BFF:FF2E97', n: 0.8 },
+      { label: 'Mono', design: design('hex-mesh'), gt: '#FFFFFF', gb: '#0B0A16', n: 0.8 },
+      { label: 'Sunset', design: design('mountain-lofi'), gt: '#0B0A16', gb: 'grad:FF8A3D:FF2E97', n: 0.8 },
+      { label: 'Mięta', design: design('solarpunk-greenhouse'), gt: '#0B0A16', gb: 'grad:5DF7A0:3BA7FF', n: 0.8 },
     ];
-    return combos;
+  }
+  function presetConfig(p, resetSize = false) {
+    return { base: 'scene', design: p.design, size: resetSize ? defaultSizeId() : state.size, strip: 'both',
+      gt: p.gt, gb: p.gb, dt: p.gt, db: p.gb, txt: '', txb: '', pst: p.n, psb: p.n };
+  }
+  function presetIsActive(p) {
+    return state.base === 'scene' && state.designId === p.design && state.strip === 'both' &&
+      state.stripColorTop === p.gt && state.bandColorTop === p.gb && state.stripColorBot === p.gt && state.bandColorBot === p.gb &&
+      state.stripSizeTop === p.n && state.stripSizeBot === p.n && !state.stripTextTop && !state.stripTextBot;
   }
   function renderPresets() {
     const w = $('#presets'); if (!w) return;
-    const isStartActive = state.base === 'scene' && state.designId === defaultDesignId();
     w.innerHTML = presetList().map((p, i) => `
-      <button class="preset${p.start && isStartActive ? ' is-active' : ''}" data-preset="${i}" type="button">
+      <button class="preset${presetIsActive(p) ? ' is-active' : ''}" data-preset="${i}" type="button">
         ${p.start ? '<span class="preset__star">★ start</span>' : ''}${esc(p.label)}
       </button>`).join('');
   }
   function applyPreset(i) {
     const p = presetList()[i]; if (!p) return;
-    if (p.start) {
-      applyConfig({ base: 'scene', design: defaultDesignId(), size: defaultSizeId(), strip: 'both',
-        gt: 'glitch', gb: '#000000', dt: 'glitch', db: '#000000', txt: '', txb: '', pst: 1, psb: 1 });
-      toast('Wczytano zestaw startowy ✨');
-    } else {
-      applyConfig({ base: 'scene', design: p.design, strip: 'both',
-        gt: p.gt, gb: p.gb, dt: p.gt, db: p.gb, pst: p.n, psb: p.n });
-      toast(`Zestaw: ${p.label} ✨`);
-    }
+    applyConfig(presetConfig(p, p.start));
+    toast(p.start ? 'Wczytano zestaw startowy ✨' : `Zestaw: ${p.label} ✨`);
   }
   function randomBuild() {
     const ds = state.designs; if (!ds.length) return;
@@ -722,6 +724,7 @@
       try { history.replaceState(null, '', location.pathname + location.search); } catch {}
       window.__fromShareLink = true;
     }
+    return !!src;
   }
   async function shareBuild() {
     const url = location.origin + location.pathname + '#k=' + serializeBuild();
